@@ -3,8 +3,25 @@
 
 #include "pch.h"
 #include "framework.h"
+#include "LinearAlgebraLibrary.h"
 
-// TODO: This is an example of a library function
-void fnLinearAlgebraLibrary()
-{
+LinearAlgebraLibrary::Matrix::Matrix(int m, int n) {
+	rows = m;
+	columns = n;
+	// Set all values to Zero by defualt
+}
+
+LinearAlgebraLibrary::Matrix::Matrix(int n) {
+	rows = n;
+	columns = n;
+	// Set all values to Zero by defualt
+}
+
+const double* LinearAlgebraLibrary::Matrix::getValue(int rowNum, int colNum) { 
+	return matrixData[rowNum][colNum];
+	// throw out of range exception
+}
+
+void LinearAlgebraLibrary::Matrix::setValue(double* value, int rowNum, int colNum) {
+	matrixData[rowNum][colNum] = (double*)value;
 }
