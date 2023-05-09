@@ -9,6 +9,7 @@ namespace LinearAlgebraLibrary {
 		int rows;
 		int columns;
 		std::vector<std::vector<double*>> matrixData;
+		typedef double* (*callback_function)(double*);
 
 	public:
 
@@ -111,6 +112,9 @@ namespace LinearAlgebraLibrary {
 		// Compute and return the Reduced Row Echelon Form of the matrix
 		Matrix rref();
 
+		// Takes this matrix and raises it to a power (must be square?)
+		Matrix power(int exp);
+
 		// Print the Matrix (cout)
 		void print(); //needed?
 
@@ -135,14 +139,25 @@ namespace LinearAlgebraLibrary {
 		// rotate 270 degrees clockwise
 		Matrix rot270();
 
-	};
+		// apply a function to each element in matrix to modify it, fn must take in double* and return double*
+		void apply(callback_function fn);
 
-	Matrix createIdentity(int size);
+		// set upper right triangle to values and bottom left values to 0, must be square
+		void setUpperTriangle();
+
+		// set lower left triangle to values and uper right values to 0, must be square
+		void setLowerTriangle();
+
+		// returns true if matrix is a upper right or lower left special triangle
+		const bool isSpecialTriangle();
+
+	};
 
 	class Vec {
 
 		int size;
 		std::vector<double*> vecData;
+		typedef double* (*callback_function)(double*);
 
 	public:
 
@@ -152,30 +167,69 @@ namespace LinearAlgebraLibrary {
 		// Constructor with given data
 		Vec(std::vector<double*> data);
 
-		double* dot(Vec vector);
+		// computers the dot product and returns it as a double pointer
+		double dot(Vec vector);
 
+		// computes cross product with another vector, must be in R3
 		Vec cross(Vec vector);
 
+		// returns magnitude of vector
 		double getMag();
 
+		// gets the unit vector of this vector
 		Vec getUnitVec();
 
+		// add two vectors
 		Vec add(Vec vector);
 
+		// subtracts two vectors
 		Vec sub(Vec vector);
 
-		double* getValue(int pos);
+		// Set full vector filled with 1s
+		void setOnes();
 
-		double* getFirst();
+		// Set full vector filled with 0s
+		void setZeros();
 
-		double* getLast();
+		void scale(int scalarMultiple);
 
-		double* getMax();
+		// gets value at pos (1 indexed)
+		const double* getValue(int pos);
 
-		double* getMin();
+		// returns first value of vector
+		const double getFirst();
+
+		// returns last value of vector
+		const double getLast();
+
+		// gets the max value in vector
+		const double getMax();
+
+		// gets the min value in vector
+		const double getMin();
+
+		// returns true if vector is a unit vector
+		const bool isUnitVec();
+
+		// computes the project of this vector onto vectorOn
+		Vec proj(Vec vectorOn);
 
 		void print(); //needed?
 
+		// apply a function to each element in vector to modify it, fn must take in double* and return double*
+		void apply(callback_function fn);
+
 	};
+
+	// Creates and returns and Identity matrix of size
+	Matrix createIdentity(int size);
+
+	// computes the triple scalar product between 3 vectors
+	Vec tripleScalarProduct(Vec vector1, Vec vector2, Vec vector3);
+
+	// Computes the least-squares solution
+	// mat must be mxn, vect b must be mx1
+	// returns a px1 matrix
+	Matrix leastSquares(Matrix mat, Vec b);
 
 }
