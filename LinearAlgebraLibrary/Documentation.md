@@ -5,3 +5,5 @@ Documentation for all methods for the library. As of right now, only _doubles_ a
 ## Matrix Class
 
 ## Vec Class
+
+## Other Methods

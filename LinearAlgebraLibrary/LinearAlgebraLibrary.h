@@ -1,15 +1,18 @@
 // LinearAlgebraLibrary.h
 #pragma once
+#include <functional>
 #include <vector>
+#include <stdlib.h>
 
 namespace LinearAlgebraLibrary {
 
 	class Matrix {
 
+	private:
+
 		int rows;
 		int columns;
-		std::vector<std::vector<double*>> matrixData;
-		typedef double* (*callback_function)(double*);
+		std::vector<std::vector<double>> matrixData;
 
 	public:
 
@@ -20,16 +23,16 @@ namespace LinearAlgebraLibrary {
 		Matrix(int n);
 
 		// Constructor with given values
-		Matrix(std::vector<std::vector<double*>> data);
+		Matrix(std::vector<std::vector<double>> data);
 
 		// Get value from pos
-		const double* getValue(int rowNum, int colNum);
+		const double getValue(int rowNum, int colNum);
 
 		// get number of elements in matrix
 		const int getNumElem();
 
 		// Set value at pos
-		void setValue(double* value, int rowNum, int colNum);
+		void setValue(double value, int rowNum, int colNum);
 
 		// Set full matrix filled with 1s
 		void setOnes();
@@ -37,7 +40,7 @@ namespace LinearAlgebraLibrary {
 		// Set full matrix filled with 0s
 		void setZeros();
 
-		// Set full matrix filled with random integers
+		// Set full matrix filled with random double from 0.0 to 100.0
 		void setRandom();
 
 		// Resize matrix to new dimensions, if larger->new values are 0s
@@ -139,8 +142,8 @@ namespace LinearAlgebraLibrary {
 		// rotate 270 degrees clockwise
 		Matrix rot270();
 
-		// apply a function to each element in matrix to modify it, fn must take in double* and return double*
-		void apply(callback_function fn);
+		// apply a function to each element in matrix to modify it, fn must take in double and return double
+		void apply(std::function<double(double)> fn);
 
 		// set upper right triangle to values and bottom left values to 0, must be square
 		void setUpperTriangle();
@@ -155,9 +158,10 @@ namespace LinearAlgebraLibrary {
 
 	class Vec {
 
+	private:
+
 		int size;
-		std::vector<double*> vecData;
-		typedef double* (*callback_function)(double*);
+		std::vector<double> vecData;
 
 	public:
 
@@ -165,7 +169,7 @@ namespace LinearAlgebraLibrary {
 		Vec(int size);
 
 		// Constructor with given data
-		Vec(std::vector<double*> data);
+		Vec(std::vector<double> data);
 
 		// computers the dot product and returns it as a double pointer
 		double dot(Vec vector);
@@ -175,6 +179,9 @@ namespace LinearAlgebraLibrary {
 
 		// returns magnitude of vector
 		double getMag();
+
+		// returns # of elements in vector
+		int getSize();
 
 		// gets the unit vector of this vector
 		Vec getUnitVec();
@@ -194,7 +201,7 @@ namespace LinearAlgebraLibrary {
 		void scale(int scalarMultiple);
 
 		// gets value at pos (1 indexed)
-		const double* getValue(int pos);
+		const double getValue(int pos);
 
 		// returns first value of vector
 		const double getFirst();
@@ -216,8 +223,8 @@ namespace LinearAlgebraLibrary {
 
 		void print(); //needed?
 
-		// apply a function to each element in vector to modify it, fn must take in double* and return double*
-		void apply(callback_function fn);
+		// apply a function to each element in vector to modify it, fn must take in double and return double
+		void apply(std::function<double(double)> fn);
 
 	};
 
