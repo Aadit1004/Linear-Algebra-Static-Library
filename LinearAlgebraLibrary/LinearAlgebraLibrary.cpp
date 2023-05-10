@@ -20,7 +20,7 @@ LinearAlgebraLibrary::Matrix::Matrix(int m, int n) {
 			}
 		}
 	}
-}
+} 
 
 LinearAlgebraLibrary::Matrix::Matrix(int n) {
 	if (n < 0) {
@@ -53,8 +53,8 @@ LinearAlgebraLibrary::Matrix::Matrix(std::vector<std::vector<double>> data) {
 	if (notBox) {
 		throw LinearAlgebraLibException("Given matrix is not an mxn dimension matrix.");
 	} else {
-		rows = (int)data.size();
-		columns = (int)data[0].size();
+		rows = (int) data.size();
+		columns = (int) data[0].size();
 		matrixData = data;
 	}
 }
@@ -107,7 +107,30 @@ void LinearAlgebraLibrary::Matrix::setRandom() {
 }
 
 void LinearAlgebraLibrary::Matrix::setSize(int m, int n) {
-	// To do
+	if (m < 0 || n < 0) {
+		throw LinearAlgebraLibException("Dimension cannot be negative.");
+	}
+	else {
+		if (m < rows) rows = m;
+		if (n < columns) columns = n;
+		if (m > rows) {
+			for (int i = rows; i < m; i++) {
+				matrixData.push_back(std::vector<double>());
+				for (int j = 0; j < columns; j++) {
+					matrixData[i].push_back(0.0);
+				}
+			}
+			rows = m;
+		}
+		if (n > columns) {
+			for (int i = 0; i < rows; i++) {
+				for (int j = columns; j < n; j++) {
+					matrixData[i].push_back(0.0);
+				}
+			}
+			columns = n;
+		}
+	}
 }
 
 void LinearAlgebraLibrary::Matrix::setSize(int n) {
@@ -256,7 +279,12 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::power(int exp) {
 }
 
 void LinearAlgebraLibrary::Matrix::print() {
-	//
+	for (int i = 0; i < rows; i++) {
+		std::cout << std::endl;
+		for (int j = 0; j < columns; j++) {
+			std::cout << matrixData[i][j] << " ";
+		}
+	}
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::refY() {
