@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <exception>
 #include <string>
+#include <iostream>
 
 namespace LinearAlgebraLibrary {
 
@@ -63,19 +64,19 @@ namespace LinearAlgebraLibrary {
 		void setIdentity();
 
 		// Get number of rows
-		const int getRows();
+		const int getNumRows();
 
 		// Get number of columns
-		const int getColumns();
+		const int getNumColumns();
 
 		// Get determinant if a square matrix
-		const int getDeterminant();
+		const double getDeterminant();
 
 		// Returns largest value in matrix
-		const int getLargestValue();
+		const double getLargestValue();
 
 		// returns smallest value in matrix
-		const int getSmallestValue();
+		const double getSmallestValue();
 
 		// returns the rank of the matrix (dimension of Col space)
 		const int getRank();
@@ -122,9 +123,6 @@ namespace LinearAlgebraLibrary {
 		// Compute and return the Row Echelon Form of the matrix
 		Matrix ref();
 
-		// Compute and return the Reduced Row Echelon Form of the matrix
-		Matrix rref();
-
 		// Takes this matrix and raises it to a power (must be square?)
 		Matrix power(int exp);
 
@@ -155,14 +153,20 @@ namespace LinearAlgebraLibrary {
 		// apply a function to each element in matrix to modify it, fn must take in double and return double
 		void apply(std::function<double(double)> fn);
 
-		// set upper right triangle to values and bottom left values to 0, must be square
-		void setUpperTriangle();
+		// set upper right triangle to values and bottom left values to 0, must be square // triangular matrix
+		void setUpperTriangular();
 
-		// set lower left triangle to values and uper right values to 0, must be square
-		void setLowerTriangle();
+		// set lower left triangle to values and uper right values to 0, must be square // triangular matrix
+		void setLowerTriangular();
 
-		// returns true if matrix is a upper right or lower left special triangle
-		const bool isSpecialTriangle();
+		// returns true if matrix is a upper right or lower left special triangle // triangular matrix
+		const bool isTriangularMatrix();
+
+		// return the given row (0 indexed) as a matrix
+		Matrix getRow(int row);
+
+		// return the given column (0 indexed) as a matrix
+		Matrix getColumn(int column);
 
 	};
 

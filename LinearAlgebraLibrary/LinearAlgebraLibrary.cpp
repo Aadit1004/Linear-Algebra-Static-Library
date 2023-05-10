@@ -6,13 +6,18 @@
 #include "LinearAlgebraLibrary.h"
 
 LinearAlgebraLibrary::Matrix::Matrix(int m, int n) {
-	rows = m;
-	columns = n;
-	// Set all values to Zero by defualt
-	for (int i = 0; i < m; i++) {
-		matrixData.push_back(std::vector<double>());
-		for (int j = 0; j < n; j++) {
-			matrixData[i].push_back(0.0);
+	if (n < 0 || m < 0) {
+		throw LinearAlgebraLibException("Given dimension cannot be negative.");
+	}
+	else {
+		rows = m;
+		columns = n;
+		// Set all values to Zero by defualt
+		for (int i = 0; i < m; i++) {
+			matrixData.push_back(std::vector<double>());
+			for (int j = 0; j < n; j++) {
+				matrixData[i].push_back(0.0);
+			}
 		}
 	}
 }
@@ -76,7 +81,6 @@ void LinearAlgebraLibrary::Matrix::setValue(double value, int rowNum, int colNum
 	}
 }
 
-
 void LinearAlgebraLibrary::Matrix::setOnes() {
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < columns; j++) {
@@ -84,7 +88,6 @@ void LinearAlgebraLibrary::Matrix::setOnes() {
 		}
 	}
 }
-
 
 void LinearAlgebraLibrary::Matrix::setZeros() {
 	for (int i = 0; i < rows; i++) {
@@ -101,4 +104,219 @@ void LinearAlgebraLibrary::Matrix::setRandom() {
 			matrixData[i][j] = (double) temp;
 		}
 	}
+}
+
+void LinearAlgebraLibrary::Matrix::setSize(int m, int n) {
+	// To do
+}
+
+void LinearAlgebraLibrary::Matrix::setSize(int n) {
+	// To do
+}
+
+void LinearAlgebraLibrary::Matrix::setIdentity() {
+	int temp = (rows < columns) ? rows : columns;
+	rows = temp;
+	columns = temp;
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			matrixData[i][j] = (i == j) ? 1.0 : 0.0;
+		}
+	}
+}
+
+const int LinearAlgebraLibrary::Matrix::getNumRows() {
+	return rows;
+}
+
+const int LinearAlgebraLibrary::Matrix::getNumColumns() {
+	return columns;
+}
+
+const double LinearAlgebraLibrary::Matrix::getDeterminant() {
+	if (rows != columns) {
+		throw LinearAlgebraLibException("Matrix must be square matrix");
+	} else {
+		// compute determinant
+	}
+}
+
+const double LinearAlgebraLibrary::Matrix::getLargestValue() {
+	double tempMax = -1000000.0;
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			tempMax = (matrixData[i][j] < tempMax) ? matrixData[i][j] : tempMax;
+		}
+	}
+	return tempMax;
+}
+
+const double LinearAlgebraLibrary::Matrix::getSmallestValue() {
+	double tempMin = 1000000.0;
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			tempMin = (matrixData[i][j] < tempMin) ? matrixData[i][j] : tempMin;
+		}
+	}
+	return tempMin;
+}
+
+const int LinearAlgebraLibrary::Matrix::getRank() {
+	//
+}
+
+
+const int LinearAlgebraLibrary::Matrix::getNullity() {
+	//
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getCol() {
+	//
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getNul() {
+	//
+}
+
+const bool LinearAlgebraLibrary::Matrix::isSquareMatrix() {
+	return rows == columns;
+}
+
+const bool LinearAlgebraLibrary::Matrix::isDiagonalizable() {
+	//
+}
+
+const bool LinearAlgebraLibrary::Matrix::isLinearInd() {
+	//
+}
+
+const bool LinearAlgebraLibrary::Matrix::isVector() {
+	return (rows == 1 || columns == 1);
+}
+
+const bool LinearAlgebraLibrary::Matrix::isInvertible() {
+	//
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getTranspose() {
+	//
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getInverse() {
+	//
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::add(Matrix mat) {
+	if (this->rows != mat.rows || this->columns != mat.columns) {
+		throw LinearAlgebraLibException("Matrices are not the same dimensions.");
+	}
+	else {
+		std::vector<std::vector<double>> temp;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				temp[i][j] = this->matrixData[i][j] + mat.matrixData[i][j];
+			}
+		}
+		LinearAlgebraLibrary::Matrix retMat(temp);
+		return retMat;
+	}
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::sub(Matrix mat) {
+	if (this->rows != mat.rows || this->columns != mat.columns) {
+		throw LinearAlgebraLibException("Matrices are not the same dimensions.");
+	}
+	else {
+		std::vector<std::vector<double>> temp;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				temp[i][j] = this->matrixData[i][j] - mat.matrixData[i][j];
+			}
+		}
+		LinearAlgebraLibrary::Matrix retMat(temp);
+		return retMat;
+	}
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::mul(Matrix mat) {
+	//
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::ref() {
+	//
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::power(int exp) {
+	if (rows != columns) {
+		throw LinearAlgebraLibException("Matrix must be square matrix");
+	}
+	else {
+		
+	}
+}
+
+void LinearAlgebraLibrary::Matrix::print() {
+	//
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::refY() {
+	//
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::refX() {
+	//
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::refYX() {
+	//
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::rot90() {
+	//
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::rot180() {
+	//
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::rot270() {
+	//
+}
+
+void LinearAlgebraLibrary::Matrix::apply(std::function<double(double)> fn) {
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			matrixData[i][j] = fn(matrixData[i][j]);
+		}
+	}
+}
+
+void LinearAlgebraLibrary::Matrix::setUpperTriangular() {
+	if (rows != columns) {
+		throw LinearAlgebraLibException("Matrix must be square matrix");
+	}
+	else {
+
+	}
+}
+
+void LinearAlgebraLibrary::Matrix::setLowerTriangular() {
+	if (rows != columns) {
+		throw LinearAlgebraLibException("Matrix must be square matrix");
+	}
+	else {
+
+	}
+}
+
+const bool LinearAlgebraLibrary::Matrix::isTriangularMatrix() {
+	//
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getRow(int row) {
+	//
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getColumn(int column) {
+	//
 }
