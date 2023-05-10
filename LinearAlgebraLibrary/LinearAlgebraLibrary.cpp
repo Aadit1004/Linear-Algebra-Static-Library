@@ -40,7 +40,7 @@ LinearAlgebraLibrary::Matrix::Matrix(int n) {
 }
 
 LinearAlgebraLibrary::Matrix::Matrix(std::vector<std::vector<double>> data) {
-	int tempSize = data[0].size();
+	int tempSize = (int) data[0].size();
 	bool notBox = false;
 	int i = 0;
 	while (i < data.size()) {
@@ -95,6 +95,28 @@ void LinearAlgebraLibrary::Matrix::setZeros() {
 			matrixData[i][j] = 0.0;
 		}
 	}
+}
+
+const bool LinearAlgebraLibrary::Matrix::allZeros() {
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			if (matrixData[i][j] != 0.0) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+const bool LinearAlgebraLibrary::Matrix::allOnes() {
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			if (matrixData[i][j] != 1.0) {
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 void LinearAlgebraLibrary::Matrix::setRandom() {
@@ -161,6 +183,7 @@ const double LinearAlgebraLibrary::Matrix::getDeterminant() {
 		throw LinearAlgebraLibException("Matrix must be square matrix");
 	} else {
 		// compute determinant
+		return 0.0; //stub
 	}
 }
 
@@ -185,20 +208,22 @@ const double LinearAlgebraLibrary::Matrix::getSmallestValue() {
 }
 
 const int LinearAlgebraLibrary::Matrix::getRank() {
-	//
+	return 0; // stub
 }
 
 
 const int LinearAlgebraLibrary::Matrix::getNullity() {
-	//
+	return 0; // stub
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getCol() {
-	//
+	LinearAlgebraLibrary::Matrix stub(1, 1);
+	return stub;
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getNul() {
-	//
+	LinearAlgebraLibrary::Matrix stub(1, 1);
+	return stub;
 }
 
 const bool LinearAlgebraLibrary::Matrix::isSquareMatrix() {
@@ -206,11 +231,11 @@ const bool LinearAlgebraLibrary::Matrix::isSquareMatrix() {
 }
 
 const bool LinearAlgebraLibrary::Matrix::isDiagonalizable() {
-	//
+	return false; // stub
 }
 
 const bool LinearAlgebraLibrary::Matrix::isLinearInd() {
-	//
+	return false; // stub
 }
 
 const bool LinearAlgebraLibrary::Matrix::isVector() {
@@ -218,15 +243,17 @@ const bool LinearAlgebraLibrary::Matrix::isVector() {
 }
 
 const bool LinearAlgebraLibrary::Matrix::isInvertible() {
-	//
+	return false; // stub
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getTranspose() {
-	//
+	LinearAlgebraLibrary::Matrix stub(1, 1);
+	return stub;
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getInverse() {
-	//
+	LinearAlgebraLibrary::Matrix stub(1, 1);
+	return stub;
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::add(Matrix mat) {
@@ -240,7 +267,8 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::add(Matrix mat) {
 				temp[i][j] = this->matrixData[i][j] + mat.matrixData[i][j];
 			}
 		}
-		LinearAlgebraLibrary::Matrix retMat(temp);
+		//LinearAlgebraLibrary::Matrix retMat(temp);
+		LinearAlgebraLibrary::Matrix retMat(1, 1);
 		return retMat;
 	}
 }
@@ -256,17 +284,20 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::sub(Matrix mat) {
 				temp[i][j] = this->matrixData[i][j] - mat.matrixData[i][j];
 			}
 		}
-		LinearAlgebraLibrary::Matrix retMat(temp);
+		//LinearAlgebraLibrary::Matrix retMat(temp);
+		LinearAlgebraLibrary::Matrix retMat(1, 1);
 		return retMat;
 	}
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::mul(Matrix mat) {
-	//
+	LinearAlgebraLibrary::Matrix stub(1, 1);
+	return stub;
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::ref() {
-	//
+	LinearAlgebraLibrary::Matrix stub(1, 1);
+	return stub;
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::power(int exp) {
@@ -274,7 +305,8 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::power(int exp) {
 		throw LinearAlgebraLibException("Matrix must be square matrix");
 	}
 	else {
-		
+		LinearAlgebraLibrary::Matrix stub(1, 1);
+		return stub;
 	}
 }
 
@@ -288,27 +320,33 @@ void LinearAlgebraLibrary::Matrix::print() {
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::refY() {
-	//
+	LinearAlgebraLibrary::Matrix stub(1, 1);
+	return stub;
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::refX() {
-	//
+	LinearAlgebraLibrary::Matrix stub(1, 1);
+	return stub;
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::refYX() {
-	//
+	LinearAlgebraLibrary::Matrix stub(1, 1);
+	return stub;
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::rot90() {
-	//
+	LinearAlgebraLibrary::Matrix stub(1, 1);
+	return stub;
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::rot180() {
-	//
+	LinearAlgebraLibrary::Matrix stub(1, 1);
+	return stub;
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::rot270() {
-	//
+	LinearAlgebraLibrary::Matrix stub(1, 1);
+	return stub;
 }
 
 void LinearAlgebraLibrary::Matrix::apply(std::function<double(double)> fn) {
@@ -338,13 +376,15 @@ void LinearAlgebraLibrary::Matrix::setLowerTriangular() {
 }
 
 const bool LinearAlgebraLibrary::Matrix::isTriangularMatrix() {
-	//
+	return false; // stub
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getRow(int row) {
-	//
+	LinearAlgebraLibrary::Matrix stub(1, 1);
+	return stub;
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getColumn(int column) {
-	//
+	LinearAlgebraLibrary::Matrix stub(1, 1);
+	return stub;
 }

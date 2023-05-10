@@ -69,6 +69,12 @@ namespace LinearAlgebraLibrary {
 		// Get number of columns
 		const int getNumColumns();
 
+		// returns true if every element is zero
+		const bool allZeros();
+
+		// returns true if every element is one
+		const bool allOnes();
+
 		// Get determinant if a square matrix
 		const double getDeterminant();
 
