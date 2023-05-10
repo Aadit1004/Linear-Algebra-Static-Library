@@ -32,6 +32,17 @@ namespace LinearAlgebraLibraryUnitTests
 			}
 		}
 
+		TEST_METHOD(MatrixConstructor1ZeroCase)
+		{
+			try {
+				LinearAlgebraLibrary::Matrix testMatrix(0, 2);
+				Assert::Fail();
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				// Exception should have been caught
+			}
+		}
+
 		TEST_METHOD(MatrixConstructor2Normal)
 		{
 			try {
@@ -56,6 +67,16 @@ namespace LinearAlgebraLibraryUnitTests
 			}
 		}
 
+		TEST_METHOD(MatrixConstructor2ZeroCase)
+		{
+			try {
+				LinearAlgebraLibrary::Matrix testMatrix(0);
+				Assert::Fail();
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				// Exception should have been caught
+			}
+		}
 		TEST_METHOD(MatrixConstructor3SquareMatrix)
 		{
 			std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} };
@@ -77,13 +98,48 @@ namespace LinearAlgebraLibraryUnitTests
 		TEST_METHOD(MatrixConstructor3ExceptionCase)
 		{
 			std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {4.0, 5.0, 6.0}, {7.0, 8.0} , {10.0, 11.0, 12.0} };
-			
 			try {
 				LinearAlgebraLibrary::Matrix testMatrix(testVec);
 				Assert::Fail();
 			} catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
 				// Exception should have been caught
 			}
+		}
+
+		TEST_METHOD(MatrixConstructor3oneVecZeroCase)
+		{
+			std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {} , {7.0, 8.0} , {10.0, 11.0, 12.0} };
+			try {
+				LinearAlgebraLibrary::Matrix testMatrix(testVec);
+				Assert::Fail();
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				// Exception should have been caught
+			}
+		}
+
+		TEST_METHOD(MatrixConstructor3ZeroCase)
+		{
+			std::vector<std::vector<double>> testVec{ };
+			try {
+				LinearAlgebraLibrary::Matrix testMatrix(testVec);
+				Assert::Fail();
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				// Exception should have been caught
+			}
+		}
+
+		TEST_METHOD(MatrixGetNumElemsSquareMatrix)
+		{
+			LinearAlgebraLibrary::Matrix testMatrix(3);
+			Assert::AreEqual(9, testMatrix.getNumElem());
+		}
+
+		TEST_METHOD(MatrixGetNumElemsNonSquareMatrix)
+		{
+			LinearAlgebraLibrary::Matrix testMatrix(2,5);
+			Assert::AreEqual(10, testMatrix.getNumElem());
 		}
 	};
 }

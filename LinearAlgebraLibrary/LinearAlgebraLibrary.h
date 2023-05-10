@@ -27,20 +27,20 @@ namespace LinearAlgebraLibrary {
 
 	public:
 
-		// Constructor
+		// Constructor (must be > 0)
 		Matrix(int m, int n);
 
-		// Constructor for Square Matrix
+		// Constructor for Square Matrix (must be > 0)
 		Matrix(int n);
 
-		// Constructor with given values
+		// Constructor with given values (must be > 0)
 		Matrix(std::vector<std::vector<double>> data);
-
-		// Get value from pos (0 indexed)
-		const double getValue(int rowNum, int colNum);
 
 		// get number of elements in matrix
 		const int getNumElem();
+
+		// Get value from pos (0 indexed)
+		const double getValue(int rowNum, int colNum);
 
 		// Set value at pos
 		void setValue(double value, int rowNum, int colNum);

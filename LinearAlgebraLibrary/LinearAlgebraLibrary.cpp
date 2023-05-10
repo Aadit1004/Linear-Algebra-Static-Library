@@ -6,8 +6,8 @@
 #include "LinearAlgebraLibrary.h"
 
 LinearAlgebraLibrary::Matrix::Matrix(int m, int n) {
-	if (n < 0 || m < 0) {
-		throw LinearAlgebraLibException("Given dimension cannot be negative.");
+	if (n <= 0 || m <= 0) {
+		throw LinearAlgebraLibException("Given dimension must be positive real number.");
 	}
 	else {
 		rows = m;
@@ -23,8 +23,8 @@ LinearAlgebraLibrary::Matrix::Matrix(int m, int n) {
 } 
 
 LinearAlgebraLibrary::Matrix::Matrix(int n) {
-	if (n < 0) {
-		throw LinearAlgebraLibException("Given dimension cannot be negative.");
+	if (n <= 0) {
+		throw LinearAlgebraLibException("Given dimension must be positive real number.");
 	}
 	else {
 		rows = n;
@@ -40,6 +40,16 @@ LinearAlgebraLibrary::Matrix::Matrix(int n) {
 }
 
 LinearAlgebraLibrary::Matrix::Matrix(std::vector<std::vector<double>> data) {
+	if (data.size() == 0) {
+		throw LinearAlgebraLibException("Given data must have size > 0");
+	}
+	else {
+		for (std::vector<double> vec : data) {
+			if (vec.size() == 0) {
+				throw LinearAlgebraLibException("Given data must have size > 0");
+			}
+		}
+	}
 	int tempSize = (int) data[0].size();
 	bool notBox = false;
 	int i = 0;
