@@ -40,6 +40,7 @@ LinearAlgebraLibrary::Matrix::Matrix(int n) {
 }
 
 LinearAlgebraLibrary::Matrix::Matrix(std::vector<std::vector<double>> data) {
+	// check if any vectors are size 0
 	if (data.size() == 0) {
 		throw LinearAlgebraLibException("Given data must have size > 0");
 	}
@@ -54,7 +55,7 @@ LinearAlgebraLibrary::Matrix::Matrix(std::vector<std::vector<double>> data) {
 	bool notBox = false;
 	int i = 0;
 	while (i < data.size()) {
-		if (data[i].size() != tempSize) {
+		if (data[i].size() != tempSize) { // check if given data is a mxn dim matrix
 			notBox = true;
 			break;
 		}
@@ -69,17 +70,17 @@ LinearAlgebraLibrary::Matrix::Matrix(std::vector<std::vector<double>> data) {
 	}
 }
 
-const double LinearAlgebraLibrary::Matrix::getValue(int rowNum, int colNum) { 
+const int LinearAlgebraLibrary::Matrix::getNumElem() {
+	return rows * columns;
+}
+
+const double LinearAlgebraLibrary::Matrix::getValue(int rowNum, int colNum) {
 	if (rowNum >= rows || colNum >= columns || rowNum < 0 || colNum < 0) {
 		throw LinearAlgebraLibException("Position out of bounds of Matrix.");
 	}
 	else {
 		return matrixData[rowNum][colNum];
 	}
-}
-
-const int LinearAlgebraLibrary::Matrix::getNumElem() {
-	return rows * columns;
 }
 
 void LinearAlgebraLibrary::Matrix::setValue(double value, int rowNum, int colNum) {
@@ -139,8 +140,8 @@ void LinearAlgebraLibrary::Matrix::setRandom() {
 }
 
 void LinearAlgebraLibrary::Matrix::setSize(int m, int n) {
-	if (m < 0 || n < 0) {
-		throw LinearAlgebraLibException("Dimension cannot be negative.");
+	if (m <= 0 || n <= 0) {
+		throw LinearAlgebraLibException("Dimension cannot be negative or zero.");
 	}
 	else {
 		if (m < rows) rows = m;
@@ -166,7 +167,12 @@ void LinearAlgebraLibrary::Matrix::setSize(int m, int n) {
 }
 
 void LinearAlgebraLibrary::Matrix::setSize(int n) {
-	// To do
+	if (n <= 0) {
+		throw LinearAlgebraLibException("Dimension cannot be negative or zero.");
+	}
+	else {
+
+	}
 }
 
 void LinearAlgebraLibrary::Matrix::setIdentity() {
@@ -322,10 +328,10 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::power(int exp) {
 
 void LinearAlgebraLibrary::Matrix::print() {
 	for (int i = 0; i < rows; i++) {
-		std::cout << std::endl;
 		for (int j = 0; j < columns; j++) {
 			std::cout << matrixData[i][j] << " ";
 		}
+		std::cout << std::endl;
 	}
 }
 
