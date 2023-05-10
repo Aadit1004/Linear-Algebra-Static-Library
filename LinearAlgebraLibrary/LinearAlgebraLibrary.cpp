@@ -18,27 +18,49 @@ LinearAlgebraLibrary::Matrix::Matrix(int m, int n) {
 }
 
 LinearAlgebraLibrary::Matrix::Matrix(int n) {
-	rows = n;
-	columns = n;
-	// Set all values to Zero by defualt
-	for (int i = 0; i < n; i++) {
-		matrixData.push_back(std::vector<double>());
-		for (int j = 0; j < n; j++) {
-			matrixData[i].push_back(1.0);
+	if (n < 0) {
+		throw LinearAlgebraLibException("Given dimension cannot be negative.");
+	}
+	else {
+		rows = n;
+		columns = n;
+		// Set all values to Zero by defualt
+		for (int i = 0; i < n; i++) {
+			matrixData.push_back(std::vector<double>());
+			for (int j = 0; j < n; j++) {
+				matrixData[i].push_back(0.0);
+			}
 		}
 	}
 }
 
 LinearAlgebraLibrary::Matrix::Matrix(std::vector<std::vector<double>> data) {
-	rows = (int) data.size();
-	columns = (int) data[1].size();
-	matrixData = data;
-	// add a check if it is a box matrix or not
+	int tempSize = data[0].size();
+	bool notBox = false;
+	int i = 0;
+	while (i < data.size()) {
+		if (data[i].size() != tempSize) {
+			notBox = true;
+			break;
+		}
+		i++;
+	}
+	if (notBox) {
+		throw LinearAlgebraLibException("Given matrix is not an mxn dimension matrix.");
+	} else {
+		rows = (int)data.size();
+		columns = (int)data[0].size();
+		matrixData = data;
+	}
 }
 
 const double LinearAlgebraLibrary::Matrix::getValue(int rowNum, int colNum) { 
-	return matrixData[rowNum][colNum];
-	// throw out of range exception
+	if (rowNum >= rows || colNum >= columns || rowNum < 0 || colNum < 0) {
+		throw LinearAlgebraLibException("Position out of bounds of Matrix.");
+	}
+	else {
+		return matrixData[rowNum][colNum];
+	}
 }
 
 const int LinearAlgebraLibrary::Matrix::getNumElem() {
@@ -46,8 +68,12 @@ const int LinearAlgebraLibrary::Matrix::getNumElem() {
 }
 
 void LinearAlgebraLibrary::Matrix::setValue(double value, int rowNum, int colNum) {
-	matrixData[rowNum][colNum] = (double) value;
-	// throw out of range exception
+	if (rowNum >= rows || colNum >= columns || rowNum < 0 || colNum < 0) {
+		throw LinearAlgebraLibException("Position out of bounds of Matrix.");
+	}
+	else {
+		matrixData[rowNum][colNum] = (double) value;
+	}
 }
 
 

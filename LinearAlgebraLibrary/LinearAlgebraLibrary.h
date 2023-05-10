@@ -3,8 +3,18 @@
 #include <functional>
 #include <vector>
 #include <stdlib.h>
+#include <exception>
+#include <string>
 
 namespace LinearAlgebraLibrary {
+
+	class LinearAlgebraLibException : public std::exception {
+	private:
+		std::string message;
+	public:
+		LinearAlgebraLibException(std::string msg) : message(msg) {}
+		std::string what() { return message;}
+	};
 
 	class Matrix {
 
@@ -25,7 +35,7 @@ namespace LinearAlgebraLibrary {
 		// Constructor with given values
 		Matrix(std::vector<std::vector<double>> data);
 
-		// Get value from pos
+		// Get value from pos (0 indexed)
 		const double getValue(int rowNum, int colNum);
 
 		// get number of elements in matrix
