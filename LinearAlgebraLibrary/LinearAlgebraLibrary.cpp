@@ -171,19 +171,57 @@ void LinearAlgebraLibrary::Matrix::setSize(int n) {
 		throw LinearAlgebraLibException("Dimension cannot be negative or zero.");
 	}
 	else {
-
+		if (n < rows) rows = n;
+		if (n < columns) columns = n;
+		if (n > rows) {
+			for (int i = rows; i < n; i++) {
+				matrixData.push_back(std::vector<double>());
+				for (int j = 0; j < columns; j++) {
+					matrixData[i].push_back(0.0);
+				}
+			}
+			rows = n;
+		}
+		if (n > columns) {
+			for (int i = 0; i < rows; i++) {
+				for (int j = columns; j < n; j++) {
+					matrixData[i].push_back(0.0);
+				}
+			}
+			columns = n;
+		}
 	}
 }
 
 void LinearAlgebraLibrary::Matrix::setIdentity() {
-	int temp = (rows < columns) ? rows : columns;
-	rows = temp;
-	columns = temp;
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < columns; j++) {
-			matrixData[i][j] = (i == j) ? 1.0 : 0.0;
+	if (!this->isIdentity()) {
+		int temp = (rows < columns) ? rows : columns;
+		rows = temp;
+		columns = temp;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				matrixData[i][j] = (i == j) ? 1.0 : 0.0;
+			}
 		}
 	}
+}
+
+const bool LinearAlgebraLibrary::Matrix::isIdentity() {
+	if (rows != columns) return false; // must be square
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			if (i == j) {
+				if (matrixData[i][j] != 1.0) {
+					return false;
+				}
+			} else {
+				if (matrixData[i][j] != 0.0) {
+					return false;
+				}
+			}
+		}
+	}
+	return true;
 }
 
 const int LinearAlgebraLibrary::Matrix::getNumRows() {
@@ -192,15 +230,6 @@ const int LinearAlgebraLibrary::Matrix::getNumRows() {
 
 const int LinearAlgebraLibrary::Matrix::getNumColumns() {
 	return columns;
-}
-
-const double LinearAlgebraLibrary::Matrix::getDeterminant() {
-	if (rows != columns) {
-		throw LinearAlgebraLibException("Matrix must be square matrix");
-	} else {
-		// compute determinant
-		return 0.0; //stub
-	}
 }
 
 const double LinearAlgebraLibrary::Matrix::getLargestValue() {
@@ -223,6 +252,16 @@ const double LinearAlgebraLibrary::Matrix::getSmallestValue() {
 	return tempMin;
 }
 
+const double LinearAlgebraLibrary::Matrix::getDeterminant() {
+	if (rows != columns) {
+		throw LinearAlgebraLibException("Matrix must be square matrix");
+	}
+	else {
+		// compute determinant
+		return 0.0; //stub
+	}
+}
+
 const int LinearAlgebraLibrary::Matrix::getRank() {
 	return 0; // stub
 }
@@ -233,12 +272,12 @@ const int LinearAlgebraLibrary::Matrix::getNullity() {
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getCol() {
-	LinearAlgebraLibrary::Matrix stub(1, 1);
+	LinearAlgebraLibrary::Matrix stub(1);
 	return stub;
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getNul() {
-	LinearAlgebraLibrary::Matrix stub(1, 1);
+	LinearAlgebraLibrary::Matrix stub(1);
 	return stub;
 }
 
@@ -255,7 +294,7 @@ const bool LinearAlgebraLibrary::Matrix::isLinearInd() {
 }
 
 const bool LinearAlgebraLibrary::Matrix::isVector() {
-	return (rows == 1 || columns == 1);
+	return (rows == 1 || columns == 1); // test is rowvec,colvec, & not vec
 }
 
 const bool LinearAlgebraLibrary::Matrix::isInvertible() {

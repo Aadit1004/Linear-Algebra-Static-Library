@@ -99,6 +99,9 @@ namespace LinearAlgebraLibrary {
 		// Is matrix a square nxn matrix
 		const bool isSquareMatrix();
 
+		// Is matrix an identity matrix
+		const bool isIdentity();
+
 		// Is matrix diagonalizable
 		const bool isDiagonalizable();
 

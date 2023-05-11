@@ -257,5 +257,154 @@ namespace LinearAlgebraLibraryUnitTests
 				// Exception shoild have been caught
 			}
 		}
+
+		TEST_METHOD(MatrixSetSize1SetLargerCase)
+		{
+			try {
+				LinearAlgebraLibrary::Matrix testMatrix(3);
+				Assert::AreEqual(3, testMatrix.getNumRows());
+				Assert::AreEqual(3, testMatrix.getNumColumns());
+				testMatrix.setSize(4, 5);
+				Assert::AreEqual(4, testMatrix.getNumRows());
+				Assert::AreEqual(5, testMatrix.getNumColumns());
+				Assert::AreEqual(0.0, testMatrix.getValue(3, 4));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e1) {
+				Assert::Fail();
+			}
+		}
+
+		TEST_METHOD(MatrixSetSize2IncorrectDimCase)
+		{
+			try {
+				LinearAlgebraLibrary::Matrix testMatrix(3);
+				testMatrix.setSize(-2);
+				Assert::Fail();
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				// Exception should have been caught
+			}
+		}
+
+		TEST_METHOD(MatrixSetSize2SquaretoSmallerSquareCase)
+		{
+			try {
+				LinearAlgebraLibrary::Matrix testMatrix(4);
+				Assert::AreEqual(4, testMatrix.getNumRows());
+				Assert::AreEqual(4, testMatrix.getNumColumns());
+				testMatrix.setSize(2);
+				Assert::AreEqual(2, testMatrix.getNumRows());
+				Assert::AreEqual(2, testMatrix.getNumColumns());
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+			try {
+				LinearAlgebraLibrary::Matrix testMatrix(4);
+				Assert::AreEqual(0.0, testMatrix.getValue(3, 3));
+				testMatrix.setSize(2);
+				double test = testMatrix.getValue(3, 3);
+				Assert::Fail(); // Should not be able to access element after resizing
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e2) {
+				// Exception shoild have been caught
+			}
+		}
+
+		TEST_METHOD(MatrixSetSize2SquaretoLargerSquareCase)
+		{
+			try {
+				LinearAlgebraLibrary::Matrix testMatrix(4);
+				Assert::AreEqual(4, testMatrix.getNumRows());
+				Assert::AreEqual(4, testMatrix.getNumColumns());
+				testMatrix.setSize(6);
+				Assert::AreEqual(6, testMatrix.getNumRows());
+				Assert::AreEqual(6, testMatrix.getNumColumns());
+				Assert::AreEqual(0.0, testMatrix.getValue(5, 5));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+		}
+
+		TEST_METHOD(MatrixSetSize2NonSquareToSquareCase)
+		{
+			try {
+				LinearAlgebraLibrary::Matrix testMatrix(4, 6);
+				Assert::AreEqual(4, testMatrix.getNumRows());
+				Assert::AreEqual(6, testMatrix.getNumColumns());
+				testMatrix.setSize(5);
+				Assert::AreEqual(5, testMatrix.getNumRows());
+				Assert::AreEqual(5, testMatrix.getNumColumns());
+				Assert::IsTrue(testMatrix.isSquareMatrix());
+				Assert::AreEqual(0.0, testMatrix.getValue(4, 4));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+			try {
+				LinearAlgebraLibrary::Matrix testMatrix(4, 6);
+				Assert::AreEqual(4, testMatrix.getNumRows());
+				Assert::AreEqual(6, testMatrix.getNumColumns());
+				testMatrix.setSize(5);
+				Assert::AreEqual(5, testMatrix.getNumRows());
+				Assert::AreEqual(5, testMatrix.getNumColumns());
+				Assert::IsTrue(testMatrix.isSquareMatrix());
+				double test = testMatrix.getValue(1, 5);
+				Assert::Fail();
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				// Exception should have been caught
+			}
+		}
+
+		TEST_METHOD(MatrixSetIdentityNonSquare)
+		{
+			LinearAlgebraLibrary::Matrix testMatrix(3, 5);
+			Assert::IsFalse(testMatrix.isIdentity());
+			testMatrix.setIdentity();
+			Assert::AreEqual(3, testMatrix.getNumRows());
+			Assert::AreEqual(3, testMatrix.getNumColumns());
+			Assert::IsTrue(testMatrix.isSquareMatrix());
+			Assert::IsTrue(testMatrix.isIdentity());
+		}
+
+		TEST_METHOD(MatrixSetIdentityNormalSquare)
+		{
+			LinearAlgebraLibrary::Matrix testMatrix(3);
+			Assert::IsFalse(testMatrix.isIdentity());
+			testMatrix.setIdentity();
+			Assert::AreEqual(3, testMatrix.getNumRows());
+			Assert::AreEqual(3, testMatrix.getNumColumns());
+			Assert::IsTrue(testMatrix.isSquareMatrix());
+			Assert::IsTrue(testMatrix.isIdentity());
+		}
+
+		TEST_METHOD(MatrixGetLargestValue)
+		{
+			std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} };
+			LinearAlgebraLibrary::Matrix testMatrix(testVec);
+			Assert::AreEqual(9.0, testMatrix.getLargestValue());
+		}
+
+		TEST_METHOD(MatrixGetSmallestValue)
+		{
+			std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} };
+			LinearAlgebraLibrary::Matrix testMatrix(testVec);
+			Assert::AreEqual(1.0, testMatrix.getSmallestValue());
+		}
+
+		TEST_METHOD(MatrixGetDeterminantNonSquare) 
+		{
+			try {
+				LinearAlgebraLibrary::Matrix testMatrix(4, 5);
+				double testDet = testMatrix.getDeterminant();
+				Assert::Fail();
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				// Exception should have been caught
+			}
+			
+		}
 	};
 }
