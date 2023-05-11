@@ -585,7 +585,7 @@ namespace LinearAlgebraLibraryUnitTests
 		TEST_METHOD(MatrixGetDeterminant5x5Square)
 		{
 			try {
-				std::vector<std::vector<double>> testVec{ {3.0, 0.0, 0.0, 3.0, 0.0}, {-3.0, 0.0, 2.0, 0.0, 0.0},
+				std::vector<std::vector<double>> testVec{ {3.0, 0.0, 0.0, 3.0, 0.0}, {-3.0, 0.0, -2.0, 0.0, 0.0},
 					{0.0, -1.0, 0.0, 0.0, -3.0}, {0.0, 0.0, 0.0, 3.0, 3.0}, {0.0, -1.0, 2.0, 0.0, 1.0} };
 				LinearAlgebraLibrary::Matrix testMatrix(testVec);
 				Assert::AreEqual(-18.0, getDeterminant(testMatrix));
