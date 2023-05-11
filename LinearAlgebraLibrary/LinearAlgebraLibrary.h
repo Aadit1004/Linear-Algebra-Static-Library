@@ -102,9 +102,6 @@ namespace LinearAlgebraLibrary {
 		// Is matrix an identity matrix
 		const bool isIdentity();
 
-		// Is matrix diagonalizable
-		const bool isDiagonalizable();
-
 		// Returns true if matrix rows are linearly independent, false otherwise
 		const bool isLinearInd();
 
@@ -116,9 +113,6 @@ namespace LinearAlgebraLibrary {
 
 		// Get transpose of matrix
 		Matrix getTranspose();
-
-		// Get inverse of matrix
-		Matrix getInverse();
 
 		// Return the addition from this matrix and mat if possible
 		Matrix add(Matrix mat);
@@ -176,6 +170,9 @@ namespace LinearAlgebraLibrary {
 
 		// return the given column (0 indexed) as a matrix
 		Matrix getColumn(int column);
+
+		// returs true if this and mat are same dim and all elems are the same
+		const bool areEqual(LinearAlgebraLibrary::Matrix mat);
 
 	};
 

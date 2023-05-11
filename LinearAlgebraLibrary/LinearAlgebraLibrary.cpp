@@ -233,17 +233,17 @@ const int LinearAlgebraLibrary::Matrix::getNumColumns() {
 }
 
 const double LinearAlgebraLibrary::Matrix::getLargestValue() {
-	double tempMax = -1000000.0;
+	double tempMax = matrixData[0][0];
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < columns; j++) {
-			tempMax = (matrixData[i][j] < tempMax) ? matrixData[i][j] : tempMax;
+			tempMax = (matrixData[i][j] > tempMax) ? matrixData[i][j] : tempMax;
 		}
 	}
 	return tempMax;
 }
 
 const double LinearAlgebraLibrary::Matrix::getSmallestValue() {
-	double tempMin = 1000000.0;
+	double tempMin = matrixData[0][0];
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < columns; j++) {
 			tempMin = (matrixData[i][j] < tempMin) ? matrixData[i][j] : tempMin;
@@ -257,23 +257,27 @@ const double LinearAlgebraLibrary::Matrix::getDeterminant() {
 		throw LinearAlgebraLibException("Matrix must be square matrix");
 	}
 	else {
-		// compute determinant
+		if (this->allZeros()) return 0.0;
+		if (rows == 1) return matrixData[0][0];
+		if (rows == 2) return ((matrixData[0][0] * matrixData[1][1]) - (matrixData[0][1] * matrixData[1][0]));
+		// compute determinant using laplace expansion for more 2x2 matrices
 		return 0.0; //stub
 	}
 }
 
 const int LinearAlgebraLibrary::Matrix::getRank() {
-	return 0; // stub
+	return this->getCol().getNumColumns();
 }
 
 
 const int LinearAlgebraLibrary::Matrix::getNullity() {
-	return 0; // stub
+	return this->getNul().getNumColumns();
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getCol() {
 	LinearAlgebraLibrary::Matrix stub(1);
 	return stub;
+	// throw exception ?
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getNul() {
@@ -285,20 +289,17 @@ const bool LinearAlgebraLibrary::Matrix::isSquareMatrix() {
 	return rows == columns;
 }
 
-const bool LinearAlgebraLibrary::Matrix::isDiagonalizable() {
-	return false; // stub
-}
-
-const bool LinearAlgebraLibrary::Matrix::isLinearInd() {
-	return false; // stub
-}
-
 const bool LinearAlgebraLibrary::Matrix::isVector() {
 	return (rows == 1 || columns == 1); // test is rowvec,colvec, & not vec
 }
 
-const bool LinearAlgebraLibrary::Matrix::isInvertible() {
+const bool LinearAlgebraLibrary::Matrix::isLinearInd() {
+	if (columns > rows) return false;
 	return false; // stub
+}
+
+const bool LinearAlgebraLibrary::Matrix::isInvertible() {
+	return (this->getDeterminant() != 0.0);
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getTranspose() {
@@ -306,20 +307,15 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getTranspose() {
 	return stub;
 }
 
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getInverse() {
-	LinearAlgebraLibrary::Matrix stub(1, 1);
-	return stub;
-}
-
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::add(Matrix mat) {
-	if (this->rows != mat.rows || this->columns != mat.columns) {
+	if (this->rows != mat.getNumRows() || this->columns != mat.getNumColumns()) {
 		throw LinearAlgebraLibException("Matrices are not the same dimensions.");
 	}
 	else {
 		std::vector<std::vector<double>> temp;
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
-				temp[i][j] = this->matrixData[i][j] + mat.matrixData[i][j];
+				temp[i][j] = this->matrixData[i][j] + mat.getValue(i, j);
 			}
 		}
 		//LinearAlgebraLibrary::Matrix retMat(temp);
@@ -329,14 +325,14 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::add(Matrix mat) {
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::sub(Matrix mat) {
-	if (this->rows != mat.rows || this->columns != mat.columns) {
+	if (this->rows != mat.getNumRows() || this->columns != mat.getNumColumns()) {
 		throw LinearAlgebraLibException("Matrices are not the same dimensions.");
 	}
 	else {
 		std::vector<std::vector<double>> temp;
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
-				temp[i][j] = this->matrixData[i][j] - mat.matrixData[i][j];
+				temp[i][j] = this->matrixData[i][j] - mat.getValue(i, j);
 			}
 		}
 		//LinearAlgebraLibrary::Matrix retMat(temp);
@@ -442,4 +438,14 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getRow(int row) {
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getColumn(int column) {
 	LinearAlgebraLibrary::Matrix stub(1, 1);
 	return stub;
+}
+
+const bool LinearAlgebraLibrary::Matrix::areEqual(LinearAlgebraLibrary::Matrix mat) {
+	if (this->getNumRows() != mat.getNumRows() || this->getNumColumns() != mat.getNumColumns()) return false;
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			if (matrixData[i][j] != mat.getValue(i, j)) return false;
+		}
+	}
+	return true;
 }
