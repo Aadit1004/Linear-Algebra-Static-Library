@@ -6,6 +6,7 @@
 #include <exception>
 #include <string>
 #include <iostream>
+#include <math.h>
 
 namespace LinearAlgebraLibrary {
 
@@ -74,9 +75,6 @@ namespace LinearAlgebraLibrary {
 
 		// returns true if every element is one
 		const bool allOnes();
-
-		// Get determinant if a square matrix
-		const double getDeterminant();
 
 		// Returns largest value in matrix
 		const double getLargestValue();
@@ -247,6 +245,12 @@ namespace LinearAlgebraLibrary {
 		void apply(std::function<double(double)> fn);
 
 	};
+
+	// Get determinant if a square matrix
+	double getDeterminant(Matrix mat);
+
+	// helper to get matrix without row and column
+	Matrix getSubMatrix(Matrix& origMatrix, int rowToExclude, int columnToExclude);
 
 	// Creates and returns and Identity matrix of size
 	Matrix createIdentity(int size);

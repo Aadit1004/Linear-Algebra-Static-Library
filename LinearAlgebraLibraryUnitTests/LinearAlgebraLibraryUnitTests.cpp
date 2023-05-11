@@ -394,59 +394,6 @@ namespace LinearAlgebraLibraryUnitTests
 			Assert::AreEqual(1.0, testMatrix.getSmallestValue());
 		}
 
-		TEST_METHOD(MatrixGetDeterminantNonSquare) 
-		{
-			try {
-				LinearAlgebraLibrary::Matrix testMatrix(4, 5);
-				double testDet = testMatrix.getDeterminant();
-				Assert::Fail();
-			}
-			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
-				// Exception should have been caught
-			}
-			
-		}
-
-		TEST_METHOD(MatrixGetDeterminant2x2Square)
-		{
-			try {
-				std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {3.0, 4.0} };
-				LinearAlgebraLibrary::Matrix testMatrix(testVec);
-				Assert::AreEqual(-2.0, testMatrix.getDeterminant());
-			}
-			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
-				Assert::Fail();
-			}
-
-		}
-
-		TEST_METHOD(MatrixGetDeterminant3x3Square)
-		{
-			try {
-				std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} };
-				LinearAlgebraLibrary::Matrix testMatrix(testVec);
-				Assert::AreEqual(0.0, testMatrix.getDeterminant());
-			}
-			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
-				Assert::Fail();
-			}
-
-		}
-
-		TEST_METHOD(MatrixGetDeterminant5x5Square)
-		{
-			try {
-				std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0, 4.0, 5.0}, {6.0, 7.0, 8.0, 9.0, 10.0}, 
-					{11.0, 12.0, 13.0, 14.0, 15.0}, {16.0, 17.0, 18.0, 19.0, 20.0}, {21.0, 22.0, 23.0, 24.0, 25.0} };
-				LinearAlgebraLibrary::Matrix testMatrix(testVec);
-				Assert::AreEqual(0.0, testMatrix.getDeterminant());
-			}
-			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
-				Assert::Fail();
-			}
-
-		}
-
 		TEST_METHOD(MatrixGetRankLinInd)
 		{
 			std::vector<std::vector<double>> testVec{ {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0} };
@@ -539,7 +486,7 @@ namespace LinearAlgebraLibraryUnitTests
 			try {
 				std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {3.0, 4.0} };
 				LinearAlgebraLibrary::Matrix testMatrix(testVec);
-				Assert::AreEqual(-2.0, testMatrix.getDeterminant());
+				Assert::AreEqual(-2.0, getDeterminant(testMatrix));
 				Assert::IsTrue(testMatrix.isInvertible());
 			}
 			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
@@ -575,7 +522,78 @@ namespace LinearAlgebraLibraryUnitTests
 			LinearAlgebraLibrary::Matrix testMatrix1(testVec1);
 			std::vector<std::vector<double>> testVec2{ {1.0, 3.0, 5.0}, {2.0, 4.0, 6.0} };
 			LinearAlgebraLibrary::Matrix testMatrix2(testVec2);
-			Assert::IsTrue(testMatrix1.getTranspose().areEqual(testMatrix2);
+			Assert::IsTrue(testMatrix1.getTranspose().areEqual(testMatrix2));
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		TEST_METHOD(MatrixGetDeterminantNonSquare)
+		{
+			try {
+				LinearAlgebraLibrary::Matrix testMatrix(4, 5);
+				double testDet = getDeterminant(testMatrix);
+				Assert::Fail();
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				// Exception should have been caught
+			}
+
+		}
+
+		TEST_METHOD(MatrixGetDeterminant2x2Square)
+		{
+			try {
+				std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {3.0, 4.0} };
+				LinearAlgebraLibrary::Matrix testMatrix(testVec);
+				Assert::AreEqual(-2.0, getDeterminant(testMatrix));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+
+		}
+
+		TEST_METHOD(MatrixGetDeterminant3x3Square)
+		{
+			try {
+				std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} };
+				LinearAlgebraLibrary::Matrix testMatrix(testVec);
+				Assert::AreEqual(0.0, getDeterminant(testMatrix));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+
+		}
+
+		TEST_METHOD(MatrixGetDeterminant5x5Square)
+		{
+			try {
+				std::vector<std::vector<double>> testVec{ {3.0, 0.0, 0.0, 3.0, 0.0}, {-3.0, 0.0, 2.0, 0.0, 0.0},
+					{0.0, -1.0, 0.0, 0.0, -3.0}, {0.0, 0.0, 0.0, 3.0, 3.0}, {0.0, -1.0, 2.0, 0.0, 1.0} };
+				LinearAlgebraLibrary::Matrix testMatrix(testVec);
+				Assert::AreEqual(-18.0, getDeterminant(testMatrix));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+
 		}
 	};
 }

@@ -252,19 +252,6 @@ const double LinearAlgebraLibrary::Matrix::getSmallestValue() {
 	return tempMin;
 }
 
-const double LinearAlgebraLibrary::Matrix::getDeterminant() {
-	if (rows != columns) {
-		throw LinearAlgebraLibException("Matrix must be square matrix");
-	}
-	else {
-		if (this->allZeros()) return 0.0;
-		if (rows == 1) return matrixData[0][0];
-		if (rows == 2) return ((matrixData[0][0] * matrixData[1][1]) - (matrixData[0][1] * matrixData[1][0]));
-		// compute determinant using laplace expansion for more 2x2 matrices
-		return 0.0; //stub
-	}
-}
-
 const int LinearAlgebraLibrary::Matrix::getRank() {
 	return this->getCol().getNumColumns();
 }
@@ -299,7 +286,10 @@ const bool LinearAlgebraLibrary::Matrix::isLinearInd() {
 }
 
 const bool LinearAlgebraLibrary::Matrix::isInvertible() {
-	return (this->getDeterminant() != 0.0);
+	std::vector<std::vector<double>> temp = matrixData;
+	Matrix tempMat(temp);
+	double tempDet = getDeterminant(tempMat);
+	return (tempDet != 0.0);
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getTranspose() {
@@ -448,4 +438,50 @@ const bool LinearAlgebraLibrary::Matrix::areEqual(LinearAlgebraLibrary::Matrix m
 		}
 	}
 	return true;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+double LinearAlgebraLibrary::getDeterminant(Matrix mat) {
+	if (mat.getNumRows() != mat.getNumColumns()) {
+		throw LinearAlgebraLibException("Matrix must be square matrix.");
+	}
+	else {
+		if (mat.allZeros()) return 0.0;
+		if (mat.getNumRows() == 1) return mat.getValue(0, 0);
+		if (mat.getNumRows() == 2) return ((mat.getValue(0, 0) * mat.getValue(1, 1)) - (mat.getValue(0, 1) * mat.getValue(1, 0)));
+		// compute determinant using laplace expansion for greater than 2x2 matrices
+		double retval = 0.0;
+		for (int j = 0; j < mat.getNumColumns(); j++) {
+			getSubMatrix(mat, 0, j);
+			retval += ((j % 2 == 0) ? 1.0 : -1.0) * mat.getValue(0, j) * getDeterminant(getSubMatrix(mat, 0, j));
+		}
+		return retval;
+	}
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::getSubMatrix(Matrix& origMatrix, int rowToExclude, int columnToExclude) {
+	std::vector<std::vector<double>> submatrixData;
+	for (int i = 0; i < origMatrix.getNumRows(); i++) {
+		if (i != rowToExclude) {
+			std::vector<double> temp;
+			for (int j = 0; j < origMatrix.getNumColumns(); j++) {
+				if (j != columnToExclude) {
+					temp.push_back(origMatrix.getValue(i, j));
+				}
+			}
+			submatrixData.push_back(temp);
+		}
+	}
+	Matrix subMatrix(submatrixData);
+	return subMatrix;
 }
