@@ -49,7 +49,7 @@ namespace LinearAlgebraLibrary {
 		void setValue(double value, int rowNum, int colNum);
 
 		// Set full matrix filled with 1s
-		void setOnes();
+		void setOnes(); 
 
 		// Set full matrix filled with 0s
 		void setZeros();
@@ -82,7 +82,7 @@ namespace LinearAlgebraLibrary {
 		const double getLargestValue();
 
 		// returns smallest value in matrix
-		const double getSmallestValue();
+		const double getSmallestValue(); 
 
 		// returns the rank of the matrix (dimension of Col space)
 		const int getRank();
@@ -90,10 +90,10 @@ namespace LinearAlgebraLibrary {
 		// returns the nullity of the matrix (dimension of the Null space)
 		const int getNullity();
 
-		// Returns the Column Space of the matrix
+		// Returns the Column Space of the matrix, worst case -> top left is only pivot
 		Matrix getColSpace();
 
-		// Returns the Null Space of the matrix
+		// Returns the Null Space of the matrix, returns 1 x 1 matrix of 0 if not existance
 		Matrix getNulSpace();
 
 		// returns true if matrix is a row or column vector, false otherwise
@@ -115,7 +115,7 @@ namespace LinearAlgebraLibrary {
 		Matrix getTranspose();
 
 		// Return the addition from this matrix and mat if possible
-		Matrix add(Matrix& mat);
+		Matrix add(Matrix& mat); 
 
 		// Return the subtraction from this matrix and mat if possible
 		Matrix sub(Matrix& mat);
@@ -151,7 +151,7 @@ namespace LinearAlgebraLibrary {
 		Matrix getColumn(int column);
 
 		// returs true if this and mat are same dim and all elems are the same
-		const bool areEqual(LinearAlgebraLibrary::Matrix& mat);
+		const bool areEqual(Matrix& mat);
 
 	};
 
@@ -165,23 +165,23 @@ namespace LinearAlgebraLibrary {
 
 	public:
 
-		// Constructor 
+		// Constructor, must be size greater than or equal to 0
 		Vec(int size);
 
-		// Constructor with given data
+		// Constructor with given data, must be size greater than or equal to 0
 		Vec(std::vector<double> data);
 
 		// computers the dot product and returns it as a double pointer
 		double dot(Vec vector);
 
+		// Returns size of Vec
+		int getSize();
+
 		// computes cross product with another vector, must be in R3
 		Vec cross(Vec vector);
 
-		// returns magnitude of vector
+		// returns magnitude of vector, rounds to 2 decimal places
 		double getMag();
-
-		// returns # of elements in vector
-		int getSize();
 
 		// gets the unit vector of this vector
 		Vec getUnitVec();
@@ -192,7 +192,7 @@ namespace LinearAlgebraLibrary {
 		// subtracts two vectors
 		Vec sub(Vec vector);
 
-		// remove last element
+		// remove last element, must be size >= 1
 		void removeLast();
 
 		// Set full vector filled with 1s
@@ -201,10 +201,14 @@ namespace LinearAlgebraLibrary {
 		// Set full vector filled with 0s
 		void setZeros();
 
-		void scale(int scalarMultiple);
+		// multiplies all elements by scalarMultiple
+		void scalar(double scalarMultiple);
 
-		// gets value at pos (1 indexed)
+		// gets value at pos (0 indexed)
 		const double getValue(int pos);
+
+		// gets value at pos (0 indexed)
+		void setValue(double val, int pos);
 
 		// returns first value of vector
 		const double getFirst();
@@ -218,22 +222,38 @@ namespace LinearAlgebraLibrary {
 		// gets the min value in vector
 		const double getMin();
 
+		// returns true if every element is zero
+		const bool allZeros();
+
+		// returns true if every element is one
+		const bool allOnes();
+
+		// returns true is size == 0
+		const bool isEmpty();
+
 		// returns true if vector is a unit vector
 		const bool isUnitVec();
 
-		// computes the project of this vector onto vectorOn
-		Vec proj(Vec vectorOn);
+		// Checks if this and vect are equal
+		const bool areEqual(Vec& vect);
 
-		void print(); //needed?
+		// computes the project of this vector onto vectorOn, must be size 2 or 3
+		Vec proj(Vec vectorOn);
 
 		// apply a function to each element in vector to modify it, fn must take in double and return double
 		void apply(std::function<double(double)> fn);
+
+		// primts all elements
+		void print();
+
+		// computes the triple scalar product between 3 vectors, must all be 3 dim
+		double tripleScalarProduct(Vec vector2, Vec vector3);
 
 	};
 
 	// 2x1 Transformations (dilation, reflection, rotation)
 
-		// reflect vector over Y-axis
+	// reflect vector over Y-axis
 	Matrix refY(Matrix& mat);
 
 	// reflect vector over X-axis
@@ -259,16 +279,5 @@ namespace LinearAlgebraLibrary {
 
 	// helper to get matrix without row and column
 	Matrix getSubMatrix(Matrix& origMatrix, int rowToExclude, int columnToExclude);
-
-	// Creates and returns and Identity matrix of size
-	Matrix createIdentity(int size);
-
-	// computes the triple scalar product between 3 vectors
-	Vec tripleScalarProduct(Vec vector1, Vec vector2, Vec vector3);
-
-	// Computes the least-squares solution
-	// mat must be mxn, vect b must be mx1
-	// returns a px1 matrix
-	Matrix leastSquares(Matrix mat, Vec b);
 
 }
