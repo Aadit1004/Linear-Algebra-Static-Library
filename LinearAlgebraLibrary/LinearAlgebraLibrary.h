@@ -91,10 +91,13 @@ namespace LinearAlgebraLibrary {
 		const int getNullity();
 
 		// Returns the Column Space of the matrix
-		Matrix getCol();
+		Matrix getColSpace();
 
 		// Returns the Null Space of the matrix
-		Matrix getNul();
+		Matrix getNulSpace();
+
+		// returns true if matrix is a row or column vector, false otherwise
+		const bool isVector();
 
 		// Is matrix a square nxn matrix
 		const bool isSquareMatrix();
@@ -104,9 +107,6 @@ namespace LinearAlgebraLibrary {
 
 		// Returns true if matrix rows are linearly independent, false otherwise
 		const bool isLinearInd();
-
-		// returns true if matrix is a row or column vector, false otherwise
-		const bool isVector();
 
 		// returns true if square matrix and columns are lin ind
 		const bool isInvertible();

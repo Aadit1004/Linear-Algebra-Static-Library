@@ -432,7 +432,7 @@ namespace LinearAlgebraLibraryUnitTests
 			LinearAlgebraLibrary::Matrix testMatrix(testVec1);
 			std::vector<std::vector<double>> testVec2{ {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0} };
 			LinearAlgebraLibrary::Matrix testMatrix2(testVec2);
-			Assert::IsTrue(testMatrix.getCol().areEqual(testMatrix2));
+			Assert::IsTrue(testMatrix.getColSpace().areEqual(testMatrix2));
 		}
 
 		TEST_METHOD(MatrixGetColLinDep)
@@ -441,7 +441,7 @@ namespace LinearAlgebraLibraryUnitTests
 			LinearAlgebraLibrary::Matrix testMatrix(testVec);
 			std::vector<std::vector<double>> testVec2{ {1.0, 0.0}, {0.0, 1.0}, {0.0, 0.0} };
 			LinearAlgebraLibrary::Matrix testMatrix2(testVec2);
-			Assert::IsTrue(testMatrix.getCol().areEqual(testMatrix2));
+			Assert::IsTrue(testMatrix.getColSpace().areEqual(testMatrix2));
 		}
 
 		TEST_METHOD(MatrixGetNulLinInd)
@@ -449,7 +449,7 @@ namespace LinearAlgebraLibraryUnitTests
 			std::vector<std::vector<double>> testVec1{ {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0} };
 			LinearAlgebraLibrary::Matrix testMatrix(testVec1);
 			// TO DO
-			Assert::IsTrue(false);
+			Assert::Fail();
 		}
 
 		TEST_METHOD(MatrixGetNulLinDep)
@@ -457,7 +457,7 @@ namespace LinearAlgebraLibraryUnitTests
 			std::vector<std::vector<double>> testVec{ {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 0.0} };
 			LinearAlgebraLibrary::Matrix testMatrix(testVec);
 			// TO DO
-			Assert::IsTrue(false);
+			Assert::Fail();
 		}
 
 		TEST_METHOD(MatrixIsVectorRowCase)
@@ -483,28 +483,18 @@ namespace LinearAlgebraLibraryUnitTests
 
 		TEST_METHOD(MatrixIsInvertibleSquareMatrix)
 		{
-			try {
-				std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {3.0, 4.0} };
-				LinearAlgebraLibrary::Matrix testMatrix(testVec);
-				Assert::AreEqual(-2.0, getDeterminant(testMatrix));
-				Assert::IsTrue(testMatrix.isInvertible());
-			}
-			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
-				Assert::Fail();
-			}
+			std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {3.0, 4.0} };
+			LinearAlgebraLibrary::Matrix testMatrix(testVec);
+			Assert::AreEqual(-2.0, getDeterminant(testMatrix));
+			Assert::IsTrue(testMatrix.isInvertible());
+	
 		}
 
 		TEST_METHOD(MatrixIsInvertibleNonSquareMatrix)
 		{
-			try {
-				std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0} };
-				LinearAlgebraLibrary::Matrix testMatrix(testVec);
-				bool testBool = testMatrix.isInvertible();
-				Assert::Fail();
-			}
-			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
-				// Exception should have been caught
-			}
+			std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0} };
+			LinearAlgebraLibrary::Matrix testMatrix(testVec);
+			Assert::IsFalse(testMatrix.isInvertible());
 		}
 
 		TEST_METHOD(MatrixGetTransposeSquareMatrix)
@@ -734,28 +724,166 @@ namespace LinearAlgebraLibraryUnitTests
 		TEST_METHOD(MatrixRefLinIndSquare)
 		{
 			// 3 x 3
-			Assert::Fail(); // stub
+			std::vector<std::vector<double>> testVec{ {0.0, -1.0, -4.0}, {2.0, 4.0, 6.0}, {3.0, 0.0, -1.0} };
+			LinearAlgebraLibrary::Matrix testMatrix(testVec);
+			testMatrix.ref();
+			std::vector<std::vector<double>> retVec{ {2.0, 4.0, 6.0}, {0.0, -1.0, -4.0}, {0.0, 0.0, 14.0} };
+			LinearAlgebraLibrary::Matrix retMat(retVec);
+			Assert::IsTrue(testMatrix.areEqual(retMat));
+			Assert::IsTrue(testMatrix.isLinearInd());
 		}
 
 		TEST_METHOD(MatrixRefLinIndNonSquare)
 		{
 			// 3 x 2
-			Assert::Fail(); // stub
+			std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {4.0, 3.0}, {5.0, 6.0} };
+			LinearAlgebraLibrary::Matrix testMatrix(testVec);
+			testMatrix.ref();
+			std::vector<std::vector<double>> retVec{ {1.0, 2.0}, {0.0, -5.0}, {0.0, 0.0} };
+			LinearAlgebraLibrary::Matrix retMat(retVec);
+			Assert::IsTrue(testMatrix.areEqual(retMat));
+			Assert::IsTrue(testMatrix.isLinearInd());
 		}
 
 		TEST_METHOD(MatrixRefLinDepSquare)
 		{
 			// 3 x 3
-			Assert::Fail(); // stub
+			std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} };
+			LinearAlgebraLibrary::Matrix testMatrix(testVec);
+			testMatrix.ref();
+			std::vector<std::vector<double>> retVec{ {1.0, 2.0, 3.0}, {0.0, -3.0, -6.0}, {0.0, 0.0, 0.0} };
+			LinearAlgebraLibrary::Matrix retMat(retVec);
+			Assert::IsTrue(testMatrix.areEqual(retMat));
+			Assert::IsFalse(testMatrix.isLinearInd());
 		}
 
 		TEST_METHOD(MatrixRefLinDepNonSquare)
 		{
 			// 2 x 3
-			Assert::Fail(); // stub
+			std::vector<std::vector<double>> testVec{ {1.0, 2.0, 2.0}, {4.0, 3.0, 3.0} };
+			LinearAlgebraLibrary::Matrix testMatrix(testVec);
+			testMatrix.ref();
+			std::vector<std::vector<double>> retVec{ {1.0, 2.0, 2.0}, {0.0, -5.0, -5.0} };
+			LinearAlgebraLibrary::Matrix retMat(retVec);
+			Assert::IsTrue(testMatrix.areEqual(retMat));
+			Assert::IsFalse(testMatrix.isLinearInd());
 		}
 
-		
+		TEST_METHOD(MatrixSetUpperTriangleNonSquare)
+		{
+			try {
+				std::vector<std::vector<double>> testVec{ {1.0}, {2.0} };
+				LinearAlgebraLibrary::Matrix testMat(testVec);
+				testMat.setUpperTriangular();
+				Assert::Fail();
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				// Exception should have been caught
+			}
+		}
+
+		TEST_METHOD(MatrixSetUpperTriangleNormal)
+		{
+			try {
+				std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} };
+				LinearAlgebraLibrary::Matrix testMat(testVec);
+				Assert::IsFalse(testMat.isTriangularMatrix());
+				testMat.setUpperTriangular();
+				Assert::IsTrue(testMat.isTriangularMatrix());
+				std::vector<std::vector<double>> testVec2{ {1.0, 2.0, 3.0}, {0.0, 5.0, 6.0}, {0.0, 0.0, 9.0} };
+				LinearAlgebraLibrary::Matrix testMat2(testVec2);
+				Assert::IsTrue(testMat.areEqual(testMat2));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+		}
+
+		TEST_METHOD(MatrixSetLowerTriangleNonSquare)
+		{
+			try {
+				std::vector<std::vector<double>> testVec{ {1.0}, {2.0} };
+				LinearAlgebraLibrary::Matrix testMat(testVec);
+				testMat.setLowerTriangular();
+				Assert::Fail();
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				// Exception should have been caught
+			}
+		}
+
+		TEST_METHOD(MatrixSetLowerTriangleNormal)
+		{
+			try {
+				std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} };
+				LinearAlgebraLibrary::Matrix testMat(testVec);
+				Assert::IsFalse(testMat.isTriangularMatrix());
+				testMat.setLowerTriangular();
+				Assert::IsTrue(testMat.isTriangularMatrix());
+				std::vector<std::vector<double>> testVec2{ {1.0, 0.0, 0.0}, {5.0, 5.0, 0.0}, {7.0, 8.0, 9.0} };
+				LinearAlgebraLibrary::Matrix testMat2(testVec2);
+				Assert::IsTrue(testMat.areEqual(testMat2));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+		}
+
+		TEST_METHOD(MatrixGetRowExceptionCase)
+		{
+			try {
+				std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} };
+				LinearAlgebraLibrary::Matrix testMat(testVec);
+				LinearAlgebraLibrary::Matrix test = testMat.getRow(-2);
+				Assert::Fail();
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				// Exception should have been caught
+			}
+		}
+
+		TEST_METHOD(MatrixGetRowNormalCase)
+		{
+			try {
+				std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} };
+				LinearAlgebraLibrary::Matrix testMat(testVec);
+				LinearAlgebraLibrary::Matrix test = testMat.getRow(2);
+				std::vector<std::vector<double>> testVec2{ {7.0, 8.0, 9.0} };
+				LinearAlgebraLibrary::Matrix testMat2(testVec2);
+				Assert::IsTrue(test.areEqual(testMat2));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+		}
+
+		TEST_METHOD(MatrixGetColumnExceptionCase)
+		{
+			try {
+				std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} };
+				LinearAlgebraLibrary::Matrix testMat(testVec);
+				LinearAlgebraLibrary::Matrix test = testMat.getColumn(-3);
+				Assert::Fail();
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				// Exception should have been caught
+			}
+		}
+
+		TEST_METHOD(MatrixGetColumnNormalCase)
+		{
+			try {
+				std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} };
+				LinearAlgebraLibrary::Matrix testMat(testVec);
+				LinearAlgebraLibrary::Matrix test = testMat.getColumn(1);
+				std::vector<std::vector<double>> testVec2{ {2.0}, {5.0}, {8.0} };
+				LinearAlgebraLibrary::Matrix testMat2(testVec2);
+				Assert::IsTrue(test.areEqual(testMat2));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+		}
 
 
 
@@ -768,7 +896,13 @@ namespace LinearAlgebraLibraryUnitTests
 
 
 
-		TEST_METHOD(MatricRefYExceptionCase)
+
+
+
+
+
+
+		TEST_METHOD(RefYExceptionCase)
 		{
 			try {
 				std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {3.0, 4.0} };
@@ -782,7 +916,7 @@ namespace LinearAlgebraLibraryUnitTests
 
 		}
 
-		TEST_METHOD(MatricRefYNormalCase)
+		TEST_METHOD(RefYNormalCase)
 		{
 			try {
 				std::vector<std::vector<double>> testVec{ {1.0}, {2.0} }; // 2 x 1
@@ -798,7 +932,7 @@ namespace LinearAlgebraLibraryUnitTests
 
 		}
 
-		TEST_METHOD(MatricRefXExceptionCase)
+		TEST_METHOD(RefXExceptionCase)
 		{
 			try {
 				std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {3.0, 4.0} };
@@ -812,7 +946,7 @@ namespace LinearAlgebraLibraryUnitTests
 
 		}
 
-		TEST_METHOD(MatricRefXNormalCase)
+		TEST_METHOD(RefXNormalCase)
 		{
 			try {
 				std::vector<std::vector<double>> testVec{ {1.0}, {2.0} }; // 2 x 1
@@ -828,7 +962,7 @@ namespace LinearAlgebraLibraryUnitTests
 
 		}
 
-		TEST_METHOD(MatricRefYXExceptionCase)
+		TEST_METHOD(RefYXExceptionCase)
 		{
 			try {
 				std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {3.0, 4.0} };
@@ -842,7 +976,7 @@ namespace LinearAlgebraLibraryUnitTests
 
 		}
 
-		TEST_METHOD(MatricRefYXNormalCase)
+		TEST_METHOD(RefYXNormalCase)
 		{
 			try {
 				std::vector<std::vector<double>> testVec{ {1.0}, {2.0} }; // 2 x 1
@@ -858,7 +992,7 @@ namespace LinearAlgebraLibraryUnitTests
 
 		}
 
-		TEST_METHOD(MatricRot90ExceptionCase)
+		TEST_METHOD(Rot90ExceptionCase)
 		{
 			try {
 				std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {3.0, 4.0} };
@@ -872,7 +1006,7 @@ namespace LinearAlgebraLibraryUnitTests
 
 		}
 
-		TEST_METHOD(MatricRot90NormalCase)
+		TEST_METHOD(Rot90NormalCase)
 		{
 			try {
 				std::vector<std::vector<double>> testVec{ {1.0}, {2.0} }; // 2 x 1
@@ -888,7 +1022,7 @@ namespace LinearAlgebraLibraryUnitTests
 
 		}
 
-		TEST_METHOD(MatricRot180ExceptionCase)
+		TEST_METHOD(Rot180ExceptionCase)
 		{
 			try {
 				std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {3.0, 4.0} };
@@ -902,7 +1036,7 @@ namespace LinearAlgebraLibraryUnitTests
 
 		}
 
-		TEST_METHOD(MatricRot180NormalCase)
+		TEST_METHOD(Rot180NormalCase)
 		{
 			try {
 				std::vector<std::vector<double>> testVec{ {1.0}, {2.0} }; // 2 x 1
@@ -918,7 +1052,7 @@ namespace LinearAlgebraLibraryUnitTests
 
 		}
 
-		TEST_METHOD(MatricRot270ExceptionCase)
+		TEST_METHOD(Rot270ExceptionCase)
 		{
 			try {
 				std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {3.0, 4.0} };
@@ -932,7 +1066,7 @@ namespace LinearAlgebraLibraryUnitTests
 
 		}
 
-		TEST_METHOD(MatricRot270NormalCase)
+		TEST_METHOD(Rot270NormalCase)
 		{
 			try {
 				std::vector<std::vector<double>> testVec{ {1.0}, {2.0} }; // 2 x 1
@@ -947,7 +1081,7 @@ namespace LinearAlgebraLibraryUnitTests
 			}
 
 		}
-		TEST_METHOD(MatrixGetDeterminantNonSquare)
+		TEST_METHOD(GetDeterminantNonSquare)
 		{
 			try {
 				LinearAlgebraLibrary::Matrix testMatrix(4, 5);
@@ -960,7 +1094,7 @@ namespace LinearAlgebraLibraryUnitTests
 
 		}
 
-		TEST_METHOD(MatrixGetDeterminant2x2Square)
+		TEST_METHOD(GetDeterminant2x2Square)
 		{
 			try {
 				std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {3.0, 4.0} };
@@ -973,7 +1107,7 @@ namespace LinearAlgebraLibraryUnitTests
 
 		}
 
-		TEST_METHOD(MatrixGetDeterminant3x3Square)
+		TEST_METHOD(GetDeterminant3x3Square)
 		{
 			try {
 				std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} };
@@ -986,7 +1120,7 @@ namespace LinearAlgebraLibraryUnitTests
 
 		}
 
-		TEST_METHOD(MatrixGetDeterminant5x5Square)
+		TEST_METHOD(GetDeterminant5x5Square)
 		{
 			try {
 				std::vector<std::vector<double>> testVec{ {3.0, 0.0, 0.0, 3.0, 0.0}, {-3.0, 0.0, -2.0, 0.0, 0.0},
@@ -997,7 +1131,6 @@ namespace LinearAlgebraLibraryUnitTests
 			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
 				Assert::Fail();
 			}
-
 		}
 	};
 }

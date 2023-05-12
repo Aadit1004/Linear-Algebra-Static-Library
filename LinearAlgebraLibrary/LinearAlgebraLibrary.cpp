@@ -253,21 +253,21 @@ const double LinearAlgebraLibrary::Matrix::getSmallestValue() {
 }
 
 const int LinearAlgebraLibrary::Matrix::getRank() {
-	return this->getCol().getNumColumns();
+	return this->getColSpace().getNumColumns();
 }
 
 
 const int LinearAlgebraLibrary::Matrix::getNullity() {
-	return this->getNul().getNumColumns();
+	return this->getNulSpace().getNumColumns();
 }
 
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getCol() {
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getColSpace() {
 	LinearAlgebraLibrary::Matrix stub(1);
 	return stub;
 	// throw exception ?
 }
 
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getNul() {
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getNulSpace() {
 	LinearAlgebraLibrary::Matrix stub(1);
 	return stub;
 }
