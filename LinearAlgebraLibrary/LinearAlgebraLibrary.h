@@ -115,13 +115,13 @@ namespace LinearAlgebraLibrary {
 		Matrix getTranspose();
 
 		// Return the addition from this matrix and mat if possible
-		Matrix add(Matrix mat);
+		Matrix add(Matrix& mat);
 
 		// Return the subtraction from this matrix and mat if possible
-		Matrix sub(Matrix mat);
+		Matrix sub(Matrix& mat);
 
 		// Return the multiplication from this matrix and mat if possible
-		Matrix mul(Matrix mat);
+		Matrix mul(Matrix& mat);
 
 		// Compute and return the Row Echelon Form of the matrix
 		Matrix ref();
@@ -131,29 +131,6 @@ namespace LinearAlgebraLibrary {
 
 		// Print the Matrix (cout)
 		void print(); //needed?
-
-
-		// 2x1 Transformations (dilation, reflection, rotation)
-
-		// reflect vector over Y-axis
-		Matrix refY();
-
-		// reflect vector over X-axis
-		Matrix refX();
-
-		// reflect vector over y=x lines
-		Matrix refYX();
-
-		// rotate 90 degrees clockwise
-		Matrix rot90();
-
-		// rotate 180 degrees clockwise
-		Matrix rot180();
-
-		// rotate 270 degrees clockwise
-		Matrix rot270();
-
-		Matrix customMatTransform(Matrix transformMat);
 
 		// apply a function to each element in matrix to modify it, fn must take in double and return double
 		void apply(std::function<double(double)> fn);
@@ -174,7 +151,7 @@ namespace LinearAlgebraLibrary {
 		Matrix getColumn(int column);
 
 		// returs true if this and mat are same dim and all elems are the same
-		const bool areEqual(LinearAlgebraLibrary::Matrix mat);
+		const bool areEqual(LinearAlgebraLibrary::Matrix& mat);
 
 	};
 
@@ -183,6 +160,7 @@ namespace LinearAlgebraLibrary {
 	private:
 
 		int size;
+		int lastPos;
 		std::vector<double> vecData;
 
 	public:
@@ -213,6 +191,9 @@ namespace LinearAlgebraLibrary {
 
 		// subtracts two vectors
 		Vec sub(Vec vector);
+
+		// remove last element
+		void removeLast();
 
 		// Set full vector filled with 1s
 		void setOnes();
@@ -249,6 +230,29 @@ namespace LinearAlgebraLibrary {
 		void apply(std::function<double(double)> fn);
 
 	};
+
+	// 2x1 Transformations (dilation, reflection, rotation)
+
+		// reflect vector over Y-axis
+	Matrix refY(Matrix& mat);
+
+	// reflect vector over X-axis
+	Matrix refX(Matrix& mat);
+
+	// reflect vector over y=x lines
+	Matrix refYX(Matrix& mat);
+
+	// rotate 90 degrees clockwise
+	Matrix rot90(Matrix& mat);
+
+	// rotate 180 degrees clockwise
+	Matrix rot180(Matrix& mat);
+
+	// rotate 270 degrees clockwise
+	Matrix rot270(Matrix& mat);
+
+	// applies 2x2 custom transformation on 2x1 matrix
+	Matrix customMatTransform(Matrix& origMat, Matrix& transformMat);
 
 	// Get determinant if a square matrix
 	double getDeterminant(Matrix mat);

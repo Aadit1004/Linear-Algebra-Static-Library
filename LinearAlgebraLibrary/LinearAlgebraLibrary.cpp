@@ -298,7 +298,7 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getTranspose() {
 	return stub;
 }
 
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::add(Matrix mat) {
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::add(Matrix& mat) {
 	if (this->rows != mat.getNumRows() || this->columns != mat.getNumColumns()) {
 		throw LinearAlgebraLibException("Matrices are not the same dimensions.");
 	}
@@ -315,7 +315,7 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::add(Matrix mat) {
 	}
 }
 
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::sub(Matrix mat) {
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::sub(Matrix& mat) {
 	if (this->rows != mat.getNumRows() || this->columns != mat.getNumColumns()) {
 		throw LinearAlgebraLibException("Matrices are not the same dimensions.");
 	}
@@ -332,7 +332,7 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::sub(Matrix mat) {
 	}
 }
 
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::mul(Matrix mat) {
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::mul(Matrix& mat) {
 	if (this->columns != mat.getNumRows()) {
 		throw LinearAlgebraLibException("Matrices cannot be multiplied.");
 	}
@@ -426,44 +426,6 @@ void LinearAlgebraLibrary::Matrix::print() {
 	}
 }
 
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::refY() {
-	if (rows != 2 && columns != 1) {
-
-	}
-	LinearAlgebraLibrary::Matrix stub(1, 1);
-	return stub;
-}
-
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::refX() {
-	LinearAlgebraLibrary::Matrix stub(1, 1);
-	return stub;
-}
-
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::refYX() {
-	LinearAlgebraLibrary::Matrix stub(1, 1);
-	return stub;
-}
-
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::rot90() {
-	LinearAlgebraLibrary::Matrix stub(1, 1);
-	return stub;
-}
-
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::rot180() {
-	LinearAlgebraLibrary::Matrix stub(1, 1);
-	return stub;
-}
-
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::rot270() {
-	Matrix stub(1, 1);
-	return stub;
-}
-
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::customMatTransform(LinearAlgebraLibrary::Matrix transformMat) {
-	Matrix stub(1, 1);
-	return stub;
-}
-
 void LinearAlgebraLibrary::Matrix::setUpperTriangular() {
 	if (rows != columns) {
 		throw LinearAlgebraLibException("Matrix must be square matrix");
@@ -506,7 +468,7 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getColumn(int column)
 	return stub;
 }
 
-const bool LinearAlgebraLibrary::Matrix::areEqual(LinearAlgebraLibrary::Matrix mat) {
+const bool LinearAlgebraLibrary::Matrix::areEqual(LinearAlgebraLibrary::Matrix& mat) {
 	if (this->getNumRows() != mat.getNumRows() || this->getNumColumns() != mat.getNumColumns()) return false;
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < columns; j++) {
@@ -525,7 +487,70 @@ const bool LinearAlgebraLibrary::Matrix::areEqual(LinearAlgebraLibrary::Matrix m
 
 
 
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::refY(Matrix& mat) {
+	if (mat.getNumRows() != 2 || mat.getNumColumns() != 1) {
+		throw LinearAlgebraLibrary::LinearAlgebraLibException("Matrix must be 2 x 1 dimension.");
+	}
+	std::vector<std::vector<double>> reflectOverY{ {-1.0, 0.0}, {0.0, 1.0} };
+	LinearAlgebraLibrary::Matrix reflectYTransformMat(reflectOverY);
+	LinearAlgebraLibrary::Matrix retMat = reflectYTransformMat.mul(mat);
+	return retMat;
+}
 
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::refX(Matrix& mat) { 
+	if (mat.getNumRows() != 2 || mat.getNumColumns() != 1) {
+		throw LinearAlgebraLibrary::LinearAlgebraLibException("Matrix must be 2 x 1 dimension.");
+	}
+	std::vector<std::vector<double>> reflectOverX{ {1.0, 0.0}, {0.0, -1.0} };
+	LinearAlgebraLibrary::Matrix reflectXTransformMat(reflectOverX);
+	LinearAlgebraLibrary::Matrix retMat = reflectXTransformMat.mul(mat);
+	return retMat;
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::refYX(Matrix& mat) {
+	if (mat.getNumRows() != 2 || mat.getNumColumns() != 1) {
+		throw LinearAlgebraLibrary::LinearAlgebraLibException("Matrix must be 2 x 1 dimension.");
+	}
+	std::vector<std::vector<double>> reflectOverYX{ {0.0, 1.0}, {1.0, 0.0} };
+	LinearAlgebraLibrary::Matrix ReflectYXTransformMat(reflectOverYX);
+	LinearAlgebraLibrary::Matrix retMat = ReflectYXTransformMat.mul(mat);
+	return retMat;
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::rot90(Matrix& mat) {
+	if (mat.getNumRows() != 2 || mat.getNumColumns() != 1) {
+		throw LinearAlgebraLibrary::LinearAlgebraLibException("Matrix must be 2 x 1 dimension.");
+	}
+	std::vector<std::vector<double>> rotate90{ {0.0, -1.0}, {1.0, 0.0} };
+	LinearAlgebraLibrary::Matrix rotate90Mat(rotate90);
+	LinearAlgebraLibrary::Matrix retMat = rotate90Mat.mul(mat);
+	return retMat;
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::rot180(Matrix& mat) {
+	if (mat.getNumRows() != 2 || mat.getNumColumns() != 1) {
+		throw LinearAlgebraLibrary::LinearAlgebraLibException("Matrix must be 2 x 1 dimension.");
+	}
+	std::vector<std::vector<double>> rotate180{ {-1.0, 0.0}, {0.0, -1.0} };
+	LinearAlgebraLibrary::Matrix rotate180Mat(rotate180);
+	LinearAlgebraLibrary::Matrix retMat = rotate180Mat.mul(mat);
+	return retMat;
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::rot270(Matrix& mat) {
+	if (mat.getNumRows() != 2 || mat.getNumColumns() != 1) {
+		throw LinearAlgebraLibrary::LinearAlgebraLibException("Matrix must be 2 x 1 dimension.");
+	}
+	std::vector<std::vector<double>> rotate270{ {0.0, 1.0}, {-1.0, 0.0} };
+	LinearAlgebraLibrary::Matrix rotate270Mat(rotate270);
+	LinearAlgebraLibrary::Matrix retMat = rotate270Mat.mul(mat);
+	return retMat;
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::customMatTransform(Matrix& origMat, Matrix& transformMat) {
+	Matrix stub(1, 1);
+	return stub;
+}
 
 double LinearAlgebraLibrary::getDeterminant(Matrix mat) {
 	if (mat.getNumRows() != mat.getNumColumns()) {
