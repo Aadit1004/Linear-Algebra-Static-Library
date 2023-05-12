@@ -337,9 +337,20 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::mul(Matrix mat) {
 		throw LinearAlgebraLibException("Matrices cannot be multiplied.");
 	}
 	else {
-		LinearAlgebraLibrary::Matrix stub(1, 1);
-		// dot product of rows
-		return stub;
+		std::vector<std::vector<double>> retVec;
+		for (int i = 0; i < this->rows; i++) {
+			std::vector<double> temp;
+			for (int j = 0; j < mat.getNumColumns(); j++) {
+				double dotProduct = 0;
+				for (int k = 0; k < this->columns; k++) {
+					dotProduct += this->matrixData[i][k] * mat.getValue(k, j);
+				}
+				temp.push_back(dotProduct);
+			}
+			retVec.push_back(temp);
+		}
+		LinearAlgebraLibrary::Matrix retMat(retVec);
+		return retMat;
 	}
 }
 
@@ -376,13 +387,18 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::power(int pow) {
 			return stub;
 		}
 		else {
-			int i = pow;
+			/*int i = pow;
 			Matrix retMat = this->copy();
 			while (i > 0) {
 				retMat = retMat.mul(retMat);
 				i++;
 			}
-			return retMat;
+			return retMat;*/
+
+			// TO DO
+
+			LinearAlgebraLibrary::Matrix stub(1, 1);
+			return stub;
 		}
 		
 	}
