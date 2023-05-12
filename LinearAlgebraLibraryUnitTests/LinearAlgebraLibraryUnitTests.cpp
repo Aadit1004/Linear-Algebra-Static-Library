@@ -525,11 +525,211 @@ namespace LinearAlgebraLibraryUnitTests
 			Assert::IsTrue(testMatrix1.getTranspose().areEqual(testMatrix2));
 		}
 
+		TEST_METHOD(MatrixAddDifferentDim)
+		{
+			try {
+				std::vector<std::vector<double>> testVec1{ {1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0} };
+				LinearAlgebraLibrary::Matrix testMatrix1(testVec1);
+				std::vector<std::vector<double>> testVec2{ {1.0, 3.6}, {3.8, 24.2} };
+				LinearAlgebraLibrary::Matrix testMatrix2(testVec2);
+				LinearAlgebraLibrary::Matrix test = testMatrix1.add(testMatrix2);
+				Assert::Fail();
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				// Exception should have been caught
+			}
+			
+			
+		}
+
+		TEST_METHOD(MatrixAddSquareMatrix)
+		{
+			try {
+				std::vector<std::vector<double>> testVec1{ {1.0, 2.0}, {3.0, 4.0} };
+				LinearAlgebraLibrary::Matrix testMatrix1(testVec1);
+				std::vector<std::vector<double>> testVec2{ {5.0, 6.0}, {7.0, 8.0} };
+				LinearAlgebraLibrary::Matrix testMatrix2(testVec2);
+				LinearAlgebraLibrary::Matrix testRet = testMatrix1.add(testMatrix2);
+				std::vector<std::vector<double>> retVec{ {6.0, 8.0}, {10.0, 12.0} };
+				LinearAlgebraLibrary::Matrix retMat(retVec);
+				Assert::IsTrue(testRet.areEqual(retMat));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+		}
+
+		TEST_METHOD(MatrixAddNonSquareMatrix)
+		{
+			try {
+				std::vector<std::vector<double>> testVec1{ {1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0} };
+				LinearAlgebraLibrary::Matrix testMatrix1(testVec1);
+				std::vector<std::vector<double>> testVec2{ {1.0, 3.6}, {3.8, 24.2}, {256.5, -44.2} };
+				LinearAlgebraLibrary::Matrix testMatrix2(testVec2);
+				LinearAlgebraLibrary::Matrix testRet = testMatrix1.add(testMatrix2);
+				std::vector<std::vector<double>> retVec{ {2.0, 5.6}, {6.8, 28.2}, {261.5, -38.2} };
+				LinearAlgebraLibrary::Matrix retMat(retVec);
+				Assert::IsTrue(testRet.areEqual(retMat));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+		}
+
+		TEST_METHOD(MatrixSubDifferentDim)
+		{
+			try {
+				std::vector<std::vector<double>> testVec1{ {1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0} };
+				LinearAlgebraLibrary::Matrix testMatrix1(testVec1);
+				std::vector<std::vector<double>> testVec2{ {1.0, 3.6}, {3.8, 24.2} };
+				LinearAlgebraLibrary::Matrix testMatrix2(testVec2);
+				LinearAlgebraLibrary::Matrix test = testMatrix1.sub(testMatrix2);
+				Assert::Fail();
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				// Exception should have been caught
+			}
 
 
+		}
 
+		TEST_METHOD(MatrixSubSquareMatrix)
+		{
+			try {
+				std::vector<std::vector<double>> testVec1{ {1.0, 2.0}, {-3.0, 4.0} };
+				LinearAlgebraLibrary::Matrix testMatrix1(testVec1);
+				std::vector<std::vector<double>> testVec2{ {15.3, -3.6}, {3.8, 24.2} };
+				LinearAlgebraLibrary::Matrix testMatrix2(testVec2);
+				LinearAlgebraLibrary::Matrix testRet = testMatrix1.sub(testMatrix2);
+				std::vector<std::vector<double>> retVec{ {-14.3, 5.6}, {-6.8, -20.2} };
+				LinearAlgebraLibrary::Matrix retMat(retVec);
+				Assert::IsTrue(testRet.areEqual(retMat));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+		}
 
+		TEST_METHOD(MatrixSubNonSquareMatrix)
+		{
+			try {
+				std::vector<std::vector<double>> testVec1{ {1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0} };
+				LinearAlgebraLibrary::Matrix testMatrix1(testVec1);
+				std::vector<std::vector<double>> testVec2{ {0.5, 0.6}, {1.8, 2.2}, {20.0, 3.0} };
+				LinearAlgebraLibrary::Matrix testMatrix2(testVec2);
+				LinearAlgebraLibrary::Matrix testRet = testMatrix1.sub(testMatrix2);
+				std::vector<std::vector<double>> retVec{ {0.5, 1.4}, {1.2, 1.8}, {-15.0, 3.0} };
+				LinearAlgebraLibrary::Matrix retMat(retVec);
+				Assert::IsTrue(testRet.areEqual(retMat));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+		}
 
+		TEST_METHOD(MatrixMulIncorrectDimCase)
+		{
+			// m x n * m x n
+			try {
+				std::vector<std::vector<double>> testVec1{ {1.0}, {2.0} }; // 2 x 1
+				LinearAlgebraLibrary::Matrix testMatrix1(testVec1);
+				std::vector<std::vector<double>> testVec2{ {1.0, 2.0} }; // 1 x 2
+				LinearAlgebraLibrary::Matrix testMatrix2(testVec2);
+				LinearAlgebraLibrary::Matrix testRet = testMatrix1.mul(testMatrix2);
+				Assert::Fail();
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				// Exception should have been caught
+			}
+			
+		}
+
+		TEST_METHOD(MatrixMulBothSquare)
+		{
+			// n x n * n x n
+			try {
+				std::vector<std::vector<double>> testVec1{ {1.0, 2.0}, {3.0, 4.0} }; // 2 x 2
+				LinearAlgebraLibrary::Matrix testMatrix1(testVec1);
+				std::vector<std::vector<double>> testVec2{ {5.0, 6.0}, {7.0, 8.0} }; // 2 x 2
+				LinearAlgebraLibrary::Matrix testMatrix2(testVec2);
+				LinearAlgebraLibrary::Matrix testRet = testMatrix1.mul(testMatrix2);
+				std::vector<std::vector<double>> retVec{ {19.0, 22.0}, {43.0, 50.0}};
+				LinearAlgebraLibrary::Matrix retMat(retVec);
+				Assert::IsTrue(testRet.areEqual(retMat));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+		}
+
+		TEST_METHOD(MatrixMulNotSquare)
+		{
+			// m x n * n x p
+			try {
+				std::vector<std::vector<double>> testVec1{ {1.0}, {2.0} }; // 2 x 1
+				LinearAlgebraLibrary::Matrix testMatrix1(testVec1);
+				std::vector<std::vector<double>> testVec2{ {3.0, 4.0} }; // 1 x 2
+				LinearAlgebraLibrary::Matrix testMatrix2(testVec2);
+				LinearAlgebraLibrary::Matrix testRet = testMatrix1.mul(testMatrix2);
+				std::vector<std::vector<double>> retVec{ {3.0, 4.0}, {6.0, 8.0} }; // 2 x 2
+				LinearAlgebraLibrary::Matrix retMat(retVec);
+				Assert::IsTrue(testRet.areEqual(retMat));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+		}
+
+		TEST_METHOD(MatrixPowerNonSquare)
+		{
+			try {
+				std::vector<std::vector<double>> testVec1{ {1.0}, {2.0} }; // 2 x 1
+				LinearAlgebraLibrary::Matrix testMatrix1(testVec1);
+				LinearAlgebraLibrary::Matrix testRet = testMatrix1.power(2);
+				Assert::Fail();
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				// Exception should have been caught
+			}
+		}
+
+		TEST_METHOD(MatrixPowerZero)
+		{
+			try {
+				std::vector<std::vector<double>> testVec1{ {1.0, 2.0}, {3.0, 4.0} };
+				LinearAlgebraLibrary::Matrix testMatrix1(testVec1);
+				LinearAlgebraLibrary::Matrix testRet = testMatrix1.power(0);
+				Assert::IsTrue(testRet.isIdentity());
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+		}
+
+		TEST_METHOD(MatrixPowerGreaterThanZero)
+		{
+			try {
+				std::vector<std::vector<double>> testVec1{ {1.0, 2.0}, {3.0, 4.0} };
+				LinearAlgebraLibrary::Matrix testMatrix1(testVec1);
+				LinearAlgebraLibrary::Matrix testRet = testMatrix1.power(2);
+				std::vector<std::vector<double>> testVec2{ {7.0, 10.0}, {15.0, 22.0} };
+				LinearAlgebraLibrary::Matrix testMatrix2(testVec2);
+				Assert::IsTrue(testRet.areEqual(testMatrix2));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+		}
+
+		TEST_METHOD(MatrixApplyFn)
+		{
+			std::vector<std::vector<double>> testVec1{ {1.0, 2.0}, {3.0, 4.0} };
+			LinearAlgebraLibrary::Matrix testMatrix1(testVec1);
+			testMatrix1.apply([](double x) {return pow(x, 2);});
+			std::vector<std::vector<double>> retVec{ {1.0, 4.0}, {9.0, 16.0} };
+			LinearAlgebraLibrary::Matrix retMat(retVec);
+			Assert::IsTrue(testMatrix1.areEqual(retMat));
+		}
 
 
 

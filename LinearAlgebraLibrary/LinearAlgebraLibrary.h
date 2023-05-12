@@ -26,6 +26,8 @@ namespace LinearAlgebraLibrary {
 		int columns;
 		std::vector<std::vector<double>> matrixData;
 
+		Matrix copy();
+
 	public:
 
 		// Constructor (must be > 0)
@@ -125,7 +127,7 @@ namespace LinearAlgebraLibrary {
 		Matrix ref();
 
 		// Takes this matrix and raises it to a power (must be square?)
-		Matrix power(int exp);
+		Matrix power(int pow);
 
 		// Print the Matrix (cout)
 		void print(); //needed?
@@ -150,6 +152,8 @@ namespace LinearAlgebraLibrary {
 
 		// rotate 270 degrees clockwise
 		Matrix rot270();
+
+		Matrix customMatTransform(Matrix transformMat);
 
 		// apply a function to each element in matrix to modify it, fn must take in double and return double
 		void apply(std::function<double(double)> fn);

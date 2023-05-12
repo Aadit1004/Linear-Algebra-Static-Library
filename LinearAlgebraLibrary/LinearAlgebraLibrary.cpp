@@ -286,6 +286,7 @@ const bool LinearAlgebraLibrary::Matrix::isLinearInd() {
 }
 
 const bool LinearAlgebraLibrary::Matrix::isInvertible() {
+	if (rows != columns) return false;
 	std::vector<std::vector<double>> temp = matrixData;
 	Matrix tempMat(temp);
 	double tempDet = getDeterminant(tempMat);
@@ -303,13 +304,13 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::add(Matrix mat) {
 	}
 	else {
 		std::vector<std::vector<double>> temp;
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < columns; j++) {
-				temp[i][j] = this->matrixData[i][j] + mat.getValue(i, j);
+		for (int i = 0; i < this->rows; i++) {
+			temp.push_back(std::vector<double>());
+			for (int j = 0; j < this->columns; j++) {
+				temp[i].push_back(this->matrixData[i][j] + mat.getValue(i, j));
 			}
 		}
-		//LinearAlgebraLibrary::Matrix retMat(temp);
-		LinearAlgebraLibrary::Matrix retMat(1, 1);
+		LinearAlgebraLibrary::Matrix retMat(temp);
 		return retMat;
 	}
 }
@@ -321,34 +322,83 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::sub(Matrix mat) {
 	else {
 		std::vector<std::vector<double>> temp;
 		for (int i = 0; i < rows; i++) {
+			temp.push_back(std::vector<double>());
 			for (int j = 0; j < columns; j++) {
-				temp[i][j] = this->matrixData[i][j] - mat.getValue(i, j);
+				temp[i].push_back(this->matrixData[i][j] - mat.getValue(i, j));
 			}
 		}
-		//LinearAlgebraLibrary::Matrix retMat(temp);
-		LinearAlgebraLibrary::Matrix retMat(1, 1);
+		LinearAlgebraLibrary::Matrix retMat(temp);
 		return retMat;
 	}
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::mul(Matrix mat) {
-	LinearAlgebraLibrary::Matrix stub(1, 1);
-	return stub;
+	if (this->columns != mat.getNumRows()) {
+		throw LinearAlgebraLibException("Matrices cannot be multiplied.");
+	}
+	else {
+		LinearAlgebraLibrary::Matrix stub(1, 1);
+		// dot product of rows
+		return stub;
+	}
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::copy() {
+	std::vector<std::vector<double>> temp;
+	for (int i = 0; i < rows; i++) {
+		std::vector<double> rowVec;
+		for (int j = 0; j < columns; j++) {
+			rowVec.push_back(matrixData[i][j]);
+		}
+		temp.push_back(rowVec);
+	}
+	Matrix retMat(temp);
+	return retMat;
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::power(int pow) {
+	if (rows != columns) {
+		throw LinearAlgebraLibException("Matrix must be square matrix");
+	}
+	else {
+		if (pow == 0) {
+			// copy matrix and set identity and return
+			Matrix retMat = this->copy();
+			retMat.setIdentity();
+			return retMat;
+		}
+		else if (pow == 1) {
+			return this->copy();
+		}
+		else if (pow < 0) {
+			// add negative test pow case later after get inverse.
+			LinearAlgebraLibrary::Matrix stub(1, 1);
+			return stub;
+		}
+		else {
+			int i = pow;
+			Matrix retMat = this->copy();
+			while (i > 0) {
+				retMat = retMat.mul(retMat);
+				i++;
+			}
+			return retMat;
+		}
+		
+	}
+}
+
+void LinearAlgebraLibrary::Matrix::apply(std::function<double(double)> fn) {
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			matrixData[i][j] = fn(matrixData[i][j]);
+		}
+	}
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::ref() {
 	LinearAlgebraLibrary::Matrix stub(1, 1);
 	return stub;
-}
-
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::power(int exp) {
-	if (rows != columns) {
-		throw LinearAlgebraLibException("Matrix must be square matrix");
-	}
-	else {
-		LinearAlgebraLibrary::Matrix stub(1, 1);
-		return stub;
-	}
 }
 
 void LinearAlgebraLibrary::Matrix::print() {
@@ -361,6 +411,9 @@ void LinearAlgebraLibrary::Matrix::print() {
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::refY() {
+	if (rows != 2 && columns != 1) {
+
+	}
 	LinearAlgebraLibrary::Matrix stub(1, 1);
 	return stub;
 }
@@ -386,16 +439,13 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::rot180() {
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::rot270() {
-	LinearAlgebraLibrary::Matrix stub(1, 1);
+	Matrix stub(1, 1);
 	return stub;
 }
 
-void LinearAlgebraLibrary::Matrix::apply(std::function<double(double)> fn) {
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < columns; j++) {
-			matrixData[i][j] = fn(matrixData[i][j]);
-		}
-	}
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::customMatTransform(LinearAlgebraLibrary::Matrix transformMat) {
+	Matrix stub(1, 1);
+	return stub;
 }
 
 void LinearAlgebraLibrary::Matrix::setUpperTriangular() {
@@ -421,8 +471,18 @@ const bool LinearAlgebraLibrary::Matrix::isTriangularMatrix() {
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getRow(int row) {
-	LinearAlgebraLibrary::Matrix stub(1, 1);
-	return stub;
+	if (row < 0 || row >= this->rows) {
+		throw LinearAlgebraLibException("Row value not in matrix.");
+	}
+	else {
+		std::vector<std::vector<double>> tempVec;
+		tempVec.push_back(std::vector<double>());
+		for (int i = 0; i < columns; i++) {
+			tempVec[0].push_back(matrixData[row][i]);
+		}
+		Matrix retMat(tempVec);
+		return retMat;
+	}
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getColumn(int column) {
@@ -459,10 +519,9 @@ double LinearAlgebraLibrary::getDeterminant(Matrix mat) {
 		if (mat.allZeros()) return 0.0;
 		if (mat.getNumRows() == 1) return mat.getValue(0, 0);
 		if (mat.getNumRows() == 2) return ((mat.getValue(0, 0) * mat.getValue(1, 1)) - (mat.getValue(0, 1) * mat.getValue(1, 0)));
-		// compute determinant using laplace expansion for greater than 2x2 matrices
+		// compute determinant using laplace expansion (cofactor expansion) for greater than 2x2 matrices
 		double retval = 0.0;
 		for (int j = 0; j < mat.getNumColumns(); j++) {
-			getSubMatrix(mat, 0, j);
 			retval += ((j % 2 == 0) ? 1.0 : -1.0) * mat.getValue(0, j) * getDeterminant(getSubMatrix(mat, 0, j));
 		}
 		return retval;
