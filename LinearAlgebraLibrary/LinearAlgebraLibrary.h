@@ -27,6 +27,8 @@ namespace LinearAlgebraLibrary {
 		std::vector<std::vector<double>> matrixData;
 
 		Matrix copy();
+		bool isUpper();
+		bool isLower();
 
 	public:
 
@@ -159,7 +161,7 @@ namespace LinearAlgebraLibrary {
 
 	private:
 
-		int size;
+		int vecSize;
 		int lastPos;
 		std::vector<double> vecData;
 

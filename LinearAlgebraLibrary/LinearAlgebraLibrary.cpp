@@ -258,7 +258,7 @@ const int LinearAlgebraLibrary::Matrix::getRank() {
 
 
 const int LinearAlgebraLibrary::Matrix::getNullity() {
-	return this->getNulSpace().getNumColumns();
+	return this->getNulSpace().getNumColumns(); // check if { {0.0} };
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getColSpace() {
@@ -382,23 +382,22 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::power(int pow) {
 			return this->copy();
 		}
 		else if (pow < 0) {
-			// add negative test pow case later after get inverse.
+			// add negative test pow case later after get inverse fn.
+			// get inv and take it to the abs(pow)
 			LinearAlgebraLibrary::Matrix stub(1, 1);
 			return stub;
 		}
 		else {
-			/*int i = pow;
-			Matrix retMat = this->copy();
-			while (i > 0) {
-				retMat = retMat.mul(retMat);
-				i++;
+			// use exponentiation by squaring for powers greater than 1
+			if (pow % 2 == 0) { // if even power
+				Matrix halfPower = this->power(pow / 2);
+				return halfPower.mul(halfPower);
 			}
-			return retMat;*/
-
-			// TO DO
-
-			LinearAlgebraLibrary::Matrix stub(1, 1);
-			return stub;
+			else { // if odd power
+				Matrix halfPower = this->power((pow - 1) / 2); // compute for (pow - 1 / 2)
+				halfPower = halfPower.mul(halfPower);
+				return this->mul(halfPower);
+			}
 		}
 		
 	}
@@ -431,7 +430,14 @@ void LinearAlgebraLibrary::Matrix::setUpperTriangular() {
 		throw LinearAlgebraLibException("Matrix must be square matrix");
 	}
 	else {
-
+		if (rows == 1) return;
+		for (int i = 1; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				if (i > j) {
+					matrixData[i][j] = 0.0;
+				}
+			}
+		}
 	}
 }
 
@@ -440,12 +446,42 @@ void LinearAlgebraLibrary::Matrix::setLowerTriangular() {
 		throw LinearAlgebraLibException("Matrix must be square matrix");
 	}
 	else {
-
+		if (rows == 1) return;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 1; j < columns; j++) {
+				if (j > i) {
+					matrixData[i][j] = 0.0;
+				}
+			}
+		}
 	}
 }
 
 const bool LinearAlgebraLibrary::Matrix::isTriangularMatrix() {
-	return false; // stub
+	if (rows != columns) return false;
+	return (isUpper() || isLower());
+}
+
+bool LinearAlgebraLibrary::Matrix::isUpper() {
+	for (int i = 1; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			if (i > j) {
+				if (matrixData[i][j] != 0.0) return false;
+			}
+		}
+	}
+	return true;
+}
+
+bool LinearAlgebraLibrary::Matrix::isLower() {
+	for (int i = 1; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			if (j > i) {
+				if (matrixData[i][j] != 0.0) return false;
+			}
+		}
+	}
+	return true;
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getRow(int row) {
@@ -464,8 +500,18 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getRow(int row) {
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getColumn(int column) {
-	LinearAlgebraLibrary::Matrix stub(1, 1);
-	return stub;
+	if (column < 0 || column >= this->columns) {
+		throw LinearAlgebraLibException("Column value not in matrix.");
+	}
+	else {
+		std::vector<std::vector<double>> tempVec;
+		for (int i = 0; i < rows; i++) {
+			tempVec.push_back(std::vector<double>());
+			tempVec[i].push_back(matrixData[i][column]);
+		}
+		Matrix retMat(tempVec);
+		return retMat;
+	}
 }
 
 const bool LinearAlgebraLibrary::Matrix::areEqual(LinearAlgebraLibrary::Matrix& mat) {
@@ -477,6 +523,37 @@ const bool LinearAlgebraLibrary::Matrix::areEqual(LinearAlgebraLibrary::Matrix& 
 	}
 	return true;
 }
+
+LinearAlgebraLibrary::Vec::Vec(int size) {
+	if (size < 0) {
+		throw LinearAlgebraLibException("Size cannot be negative.");
+	}
+	else {
+		if (size == 0) {
+			vecSize = 0;
+			lastPos = -1;
+			std::vector<double> temp{};
+			vecData = temp;
+		}
+		else {
+			vecSize = size;
+			lastPos = size - 1;
+			int temp = size;
+			while (temp > 0) {
+				vecData.push_back(0.0);
+			}
+		}
+	}
+}
+
+LinearAlgebraLibrary::Vec::Vec(std::vector<double> data) {
+	vecData = data;
+	vecSize = data.size();
+	lastPos = vecSize - 1;
+}
+
+
+
 
 
 
