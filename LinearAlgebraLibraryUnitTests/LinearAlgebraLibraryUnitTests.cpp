@@ -829,7 +829,7 @@ namespace LinearAlgebraLibraryUnitTests
 			}
 		}
 
-		TEST_METHOD(MatrixSetLowerTriangleNormal)
+		TEST_METHOD(MatrixSetLowerTriangleNormal) 
 		{
 			try {
 				std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} };
@@ -837,7 +837,7 @@ namespace LinearAlgebraLibraryUnitTests
 				Assert::IsFalse(testMat.isTriangularMatrix());
 				testMat.setLowerTriangular();
 				Assert::IsTrue(testMat.isTriangularMatrix());
-				std::vector<std::vector<double>> testVec2{ {1.0, 0.0, 0.0}, {5.0, 5.0, 0.0}, {7.0, 8.0, 9.0} };
+				std::vector<std::vector<double>> testVec2{ {1.0, 0.0, 0.0}, {4.0, 5.0, 0.0}, {7.0, 8.0, 9.0} };
 				LinearAlgebraLibrary::Matrix testMat2(testVec2);
 				Assert::IsTrue(testMat.areEqual(testMat2));
 			}
@@ -1025,9 +1025,10 @@ namespace LinearAlgebraLibraryUnitTests
 			std::vector<double> tempVector1{ 1.0, 2.0, 2.0 };
 			LinearAlgebraLibrary::Vec testVec1(tempVector1);
 			LinearAlgebraLibrary::Vec temp = testVec1.getUnitVec();
-			std::vector<double> tempVector2{ (1.0 / 3.0), (2.0 / 3.0), (2.0 / 3.0) };
-			LinearAlgebraLibrary::Vec testVec2(tempVector2);
-			Assert::IsTrue(temp.areEqual(testVec2));
+			Assert::AreEqual((1.0 / 3.0), temp.getValue(0));
+			Assert::AreEqual((2.0 / 3.0), temp.getValue(1)); 
+			Assert::AreEqual((2.0 / 3.0), temp.getValue(2));
+			Assert::AreEqual(1.0, temp.getMag());
 			Assert::IsTrue(temp.isUnitVec());
 		}
 
@@ -1056,7 +1057,7 @@ namespace LinearAlgebraLibraryUnitTests
 				LinearAlgebraLibrary::Vec temp = testVec1.add(testVec2);
 				std::vector<double> tempVector3{ 3.0, 6.0, 6.0 };
 				LinearAlgebraLibrary::Vec testVec3(tempVector3);
-				Assert::IsTrue(temp.areEqual(testVec3));
+				Assert::IsTrue(temp.areEqual(testVec3)); 
 
 			}
 			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
@@ -1252,10 +1253,9 @@ namespace LinearAlgebraLibraryUnitTests
 				std::vector<double> tempVector2{ 4.0, 5.0, 6.0 };
 				LinearAlgebraLibrary::Vec testVec2(tempVector2);
 				LinearAlgebraLibrary::Vec retTest = testVec.proj3d(testVec2);
-
-				std::vector<double> tempVector3{ (4.0 * (32.0 / 77.0)), (4.0 * (32.0 / 77.0)), (6.0 * (32.0 / 77.0))};
-				LinearAlgebraLibrary::Vec testVec3(tempVector3);
-				Assert::IsTrue(retTest.areEqual(testVec3));
+				Assert::AreEqual(2.0 * (32.0 / 77.0), retTest.getValue(0));
+				Assert::AreEqual(4.0 * (32.0 / 77.0), retTest.getValue(1));
+				Assert::AreEqual(6.0 * (32.0 / 77.0), retTest.getValue(2));
 			}
 			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
 				Assert::Fail();
@@ -1285,7 +1285,7 @@ namespace LinearAlgebraLibraryUnitTests
 				std::vector<double> testVec3{ 3.0 };
 				LinearAlgebraLibrary::Vec vector3(testVec3);
 				LinearAlgebraLibrary::Vec temp = vector1.tripleScalarProduct(vector2, vector3);
-				Assert::Fail();
+				Assert::Fail(); 
 			}
 			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
 				// Exception should have been caught
@@ -1295,14 +1295,14 @@ namespace LinearAlgebraLibraryUnitTests
 		TEST_METHOD(VecTripleScalarProductNormal)
 		{
 			try {
-				std::vector<double> testVec1{ 1.0, 2.0, 3.0};
+				std::vector<double> testVec1{ 1.0, 1.0, 2.0};
 				LinearAlgebraLibrary::Vec vector1(testVec1);
-				std::vector<double> testVec2{ 4.0, 5.0, 6.0 };
+				std::vector<double> testVec2{ 3.0, 1.0, 3.0 };
 				LinearAlgebraLibrary::Vec vector2(testVec2);
-				std::vector<double> testVec3{ 7.0, 8.0, 9.0 };
+				std::vector<double> testVec3{ 1.0, 3.0, 3.0 };
 				LinearAlgebraLibrary::Vec vector3(testVec3);
-				double temp = vector1.tripleScalarProduct(vector2, vector3);
-				Assert::AreEqual(0.0, temp);
+				double tempRetVal = vector1.tripleScalarProduct(vector2, vector3);
+				Assert::AreEqual(-2.0, tempRetVal);
 			}
 			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
 				Assert::Fail();

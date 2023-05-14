@@ -459,10 +459,8 @@ void LinearAlgebraLibrary::Matrix::setLowerTriangular() {
 	else {
 		if (rows == 1) return;
 		for (int i = 0; i < rows; i++) {
-			for (int j = 1; j < columns; j++) {
-				if (j > i) {
+			for (int j = i + 1; j < columns; j++) {
 					matrixData[i][j] = 0.0;
-				}
 			}
 		}
 	}
@@ -602,7 +600,7 @@ LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::cross(Vec vector) {
 }
 
 double LinearAlgebraLibrary::Vec::getMag() {
-	if (this->vecSize) return 0.0;
+	if (this->vecSize == 0) return 0.0;
 	double retVal = 0.0;
 	for (int i = 0; i < vecSize; i++) {
 		retVal += pow(this->vecData[i], 2);
@@ -619,7 +617,7 @@ LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::getUnitVec() {
 		double mag = this->getMag();
 		Vec retVec = this->copy();
 		for (int i = 0; i < vecSize; i++) {
-			retVec.setValue(retVec.getValue(i) * mag, i);
+			retVec.setValue(retVec.getValue(i) / mag, i);
 		}
 		return retVec;
 	}
@@ -687,9 +685,8 @@ void LinearAlgebraLibrary::Vec::setZeros() {
 }
 
 void LinearAlgebraLibrary::Vec::scalar(double scalarMultiple) {
-	if (vecSize == 0) return;
-	for (double elem : vecData) {
-		elem *= scalarMultiple;
+	for (int i = 0; i < vecSize; i++) {
+		vecData[i] = (vecData[i] * scalarMultiple);
 	}
 }
 
@@ -778,7 +775,8 @@ const bool LinearAlgebraLibrary::Vec::isEmpty() {
 const bool LinearAlgebraLibrary::Vec::areEqual(Vec& vect) {
 	if (this->vecSize != vect.getSize()) return false;
 	for (int i = 0; i < vecSize; i++) {
-		if (this->vecData[i] != vect.getValue(i)) return false;
+		//if (this->vecData[i] != vect.getValue(i)) return false;
+		if (std::abs(this->vecData[i] - vect.getValue(i)) > 1e-9) return false;
 	}
 	return true;
 }
@@ -822,7 +820,6 @@ void LinearAlgebraLibrary::Vec::print() {
 	}
 }
 
-// computes the triple scalar product between 3 vectors, must all be 3 dim
 double LinearAlgebraLibrary::Vec::tripleScalarProduct(Vec vector2, Vec vector3) {
 	if (this->vecSize != 3 || vector2.getSize() != 3 || vector3.getSize() != 3) {
 		throw LinearAlgebraLibException("Vectors must be size 3.");
