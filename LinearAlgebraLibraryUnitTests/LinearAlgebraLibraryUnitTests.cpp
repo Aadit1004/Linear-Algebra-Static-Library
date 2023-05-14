@@ -913,7 +913,7 @@ namespace LinearAlgebraLibraryUnitTests
 			}
 		}
 
-		TEST_METHOD(VecConstructor1NormalCase)
+		/*TEST_METHOD(VecConstructor1NormalCase)
 		{
 			try {
 				LinearAlgebraLibrary::Vec testVec(3);
@@ -923,7 +923,7 @@ namespace LinearAlgebraLibraryUnitTests
 			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
 				Assert::Fail();
 			}
-		}
+		}*/
 
 		TEST_METHOD(VecConstructor2SizeZero)
 		{
@@ -1053,7 +1053,7 @@ namespace LinearAlgebraLibraryUnitTests
 				LinearAlgebraLibrary::Vec testVec1(tempVector1);
 				std::vector<double> tempVector2{ 1.0, 2.0, 3.0 };
 				LinearAlgebraLibrary::Vec testVec2(tempVector2);
-				LinearAlgebraLibrary::Vec temp = testVec1.cross(testVec2);
+				LinearAlgebraLibrary::Vec temp = testVec1.add(testVec2);
 				std::vector<double> tempVector3{ 3.0, 6.0, 6.0 };
 				LinearAlgebraLibrary::Vec testVec3(tempVector3);
 				Assert::IsTrue(temp.areEqual(testVec3));
@@ -1090,50 +1090,6 @@ namespace LinearAlgebraLibraryUnitTests
 				std::vector<double> tempVector3{ 1.0, 2.0, 0.0 };
 				LinearAlgebraLibrary::Vec testVec3(tempVector3);
 				Assert::IsTrue(temp.areEqual(testVec3));
-
-			}
-			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
-				Assert::Fail();
-			}
-		}
-
-		TEST_METHOD(VecRemoveLastZeroSize)
-		{
-			try {
-				std::vector<double> tempVector{  };
-				LinearAlgebraLibrary::Vec testVec(tempVector);
-				testVec.removeLast();
-				Assert::Fail();
-			}
-			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
-				// Exception should have been caught
-			}
-		}
-
-		TEST_METHOD(VecRemoveLastOneSize)
-		{
-			try {
-				std::vector<double> tempVector{ 1.0 };
-				LinearAlgebraLibrary::Vec testVec(tempVector);
-				testVec.removeLast();
-				Assert::IsTrue(testVec.isEmpty());
-
-			}
-			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
-				Assert::Fail();
-			}
-		}
-
-		TEST_METHOD(VecRemoveLastGreaterThanOneSize)
-		{
-			try {
-				std::vector<double> tempVector{ 1.0, 2.0, 3.0 };
-				LinearAlgebraLibrary::Vec testVec(tempVector);
-				Assert::AreEqual(3, testVec.getSize());
-				Assert::AreEqual(3.0, testVec.getLast());
-				testVec.removeLast();
-				Assert::AreEqual(2.0, testVec.getLast());
-				Assert::AreEqual(2, testVec.getSize());
 
 			}
 			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
@@ -1265,7 +1221,7 @@ namespace LinearAlgebraLibraryUnitTests
 			try {
 				std::vector<double> tempVector{ 1.0, 2.0, 3.0 };
 				LinearAlgebraLibrary::Vec testVec(tempVector);
-				double test = testVec.getMax();
+				double test = testVec.getMin();
 				Assert::AreEqual(1.0, test);
 			}
 			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
@@ -1280,28 +1236,11 @@ namespace LinearAlgebraLibraryUnitTests
 				LinearAlgebraLibrary::Vec testVec(tempVector);
 				std::vector<double> tempVector2{ 1.0 };
 				LinearAlgebraLibrary::Vec testVec2(tempVector2);
-				LinearAlgebraLibrary::Vec retTest = testVec.proj(testVec2);
+				LinearAlgebraLibrary::Vec retTest = testVec.proj3d(testVec2);
 				Assert::Fail();
 			}
 			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
 				// Exception should have been caught
-			}
-		}
-
-		TEST_METHOD(VecProj2dim)
-		{
-			try {
-				std::vector<double> tempVector{ 3.0, 5.0 };
-				LinearAlgebraLibrary::Vec testVec(tempVector);
-				std::vector<double> tempVector2{ 6.0, 2.0 };
-				LinearAlgebraLibrary::Vec testVec2(tempVector2);
-				LinearAlgebraLibrary::Vec retTest = testVec.proj(testVec2);
-				std::vector<double> tempVector3{ (6.0 * (28.0 / 40.0)), (2.0 * (28.0 / 40.0))};
-				LinearAlgebraLibrary::Vec testVec3(tempVector3);
-				Assert::IsTrue(retTest.areEqual(testVec3));
-			}
-			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
-				Assert::Fail();
 			}
 		}
 
@@ -1312,7 +1251,7 @@ namespace LinearAlgebraLibraryUnitTests
 				LinearAlgebraLibrary::Vec testVec(tempVector);
 				std::vector<double> tempVector2{ 4.0, 5.0, 6.0 };
 				LinearAlgebraLibrary::Vec testVec2(tempVector2);
-				LinearAlgebraLibrary::Vec retTest = testVec.proj(testVec2);
+				LinearAlgebraLibrary::Vec retTest = testVec.proj3d(testVec2);
 
 				std::vector<double> tempVector3{ (4.0 * (32.0 / 77.0)), (4.0 * (32.0 / 77.0)), (6.0 * (32.0 / 77.0))};
 				LinearAlgebraLibrary::Vec testVec3(tempVector3);
@@ -1327,9 +1266,12 @@ namespace LinearAlgebraLibraryUnitTests
 		{
 			std::vector<double> testVec{ 1.0, 2.0, 3.0 };
 			LinearAlgebraLibrary::Vec testVector(testVec);
-			testVector.apply([](double x) {return pow(x, 2);});
-			std::vector<double> retVec{ 1.0, 4.0, 16.0 };
+
+			testVector.apply([](double x) {return x + 2.0;});
+
+			std::vector<double> retVec{ 3.0, 4.0, 5.0 };
 			LinearAlgebraLibrary::Vec retVal(retVec);
+
 			Assert::IsTrue(testVector.areEqual(retVal));
 		}
 

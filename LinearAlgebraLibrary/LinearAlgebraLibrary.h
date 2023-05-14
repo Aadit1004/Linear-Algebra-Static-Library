@@ -240,7 +240,7 @@ namespace LinearAlgebraLibrary {
 		const bool areEqual(Vec& vect);
 
 		// computes the project of this vector onto vectorOn, must be size 2 or 3
-		Vec proj(Vec vectorOn);
+		Vec proj3d(Vec vectorOn);
 
 		// apply a function to each element in vector to modify it, fn must take in double and return double
 		void apply(std::function<double(double)> fn);

@@ -525,10 +525,6 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getColumn(int column)
 	}
 }
 
-
-// Vec class methods:
-
-
 const bool LinearAlgebraLibrary::Matrix::areEqual(LinearAlgebraLibrary::Matrix& mat) {
 	if (this->getNumRows() != mat.getNumRows() || this->getNumColumns() != mat.getNumColumns()) return false;
 	for (int i = 0; i < rows; i++) {
@@ -538,6 +534,10 @@ const bool LinearAlgebraLibrary::Matrix::areEqual(LinearAlgebraLibrary::Matrix& 
 	}
 	return true;
 }
+
+
+// Vec class methods:
+
 
 LinearAlgebraLibrary::Vec::Vec(std::vector<double> data) {
 	vecData = data;
@@ -553,8 +553,8 @@ LinearAlgebraLibrary::Vec::Vec(int size) {
 		if (size == 0) {
 			vecSize = 0;
 			lastPos = -1;
-			std::vector<double> temp{};
-			vecData = temp;
+			//std::vector<double> temp{};
+			//vecData = temp;
 		}
 		else {
 			vecSize = size;
@@ -581,7 +581,7 @@ double LinearAlgebraLibrary::Vec::dot(Vec vector) {
 }
 
 int LinearAlgebraLibrary::Vec::getSize() {
-	return this->vecSize;
+	return vecSize;
 }
 
 LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::cross(Vec vector) {
@@ -607,8 +607,7 @@ double LinearAlgebraLibrary::Vec::getMag() {
 	for (int i = 0; i < vecSize; i++) {
 		retVal += pow(this->vecData[i], 2);
 	}
-	retVal = sqrt(retVal);
-	return retVal;
+	return sqrt(retVal);
 }
 
 LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::getUnitVec() {
@@ -624,6 +623,10 @@ LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::getUnitVec() {
 		}
 		return retVec;
 	}
+}
+
+const bool LinearAlgebraLibrary::Vec::isUnitVec() {
+	return (this->getMag() == 1.0);
 }
 
 LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::copy() {
@@ -671,15 +674,15 @@ LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::sub(Vec vector) {
 
 void LinearAlgebraLibrary::Vec::setOnes() {
 	if (vecSize == 0) return;
-	for (double elem : vecData) {
-		elem = 1.0;
+	for (int i = 0; i < vecSize; i++) {
+		vecData[i] = 1.0;
 	}
 }
 
 void LinearAlgebraLibrary::Vec::setZeros() {
 	if (vecSize == 0) return;
-	for (double elem : vecData) {
-		elem = 0.0;
+	for (int i = 0; i < vecSize; i++) {
+		vecData[i] = 0.0;
 	}
 }
 
@@ -754,16 +757,16 @@ const double LinearAlgebraLibrary::Vec::getMin() {
 
 const bool LinearAlgebraLibrary::Vec::allZeros() {
 	if (vecSize == 0) return false;
-	for (double elem : vecData) {
-		if (elem != 0.0) return false;
+	for (int i = 0; i < vecSize; i++) {
+		if (vecData[i] != 0.0) return false;
 	}
 	return true;
 }
 
 const bool LinearAlgebraLibrary::Vec::allOnes() {
 	if (vecSize == 0) return false;
-	for (double elem : vecData) {
-		if (elem != 1.0) return false;
+	for (int i = 0; i < vecSize; i++) {
+		if (vecData[i] != 1.0) return false;
 	}
 	return true;
 }
@@ -780,23 +783,28 @@ const bool LinearAlgebraLibrary::Vec::areEqual(Vec& vect) {
 	return true;
 }
 
-// computes the project of this vector onto vectorOn, must be size 2 or 3
-LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::proj(Vec vectorOn) {
+// computes the project of this vector onto vectorOn, must be size 3
+LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::proj3d(Vec vectorOn) {
 	if (this->vecSize != 2 || vectorOn.getSize() != 2) {
-		throw LinearAlgebraLibException("Vectors must be size 2 or 3.");
+		throw LinearAlgebraLibException("Vectors must be size 3.");
 	} else if (this->vecSize != 3 || vectorOn.getSize() != 3) {
-		throw LinearAlgebraLibException("Vectors must be size 2 or 3.");
+		throw LinearAlgebraLibException("Vectors must be size 3.");
 	}
 	else {
-		// todo
+		double num = this->dot(vectorOn);
+		double den = pow(vectorOn.getMag(), 2);
+		Vec tempCopy = vectorOn.copy();
+		int scale = (num / den);
+		tempCopy.scalar(scale);
+		return tempCopy;
 	}
 }
 
 void LinearAlgebraLibrary::Vec::apply(std::function<double(double)> fn) {
 	if (vecSize == 0) return;
 	else {
-		for (double elem : vecData) {
-			elem = fn(elem);
+		for (int i = 0; i < vecSize; i++) {
+			vecData[i] = fn(vecData[i]);
 		}
 	}
 }
@@ -820,7 +828,9 @@ double LinearAlgebraLibrary::Vec::tripleScalarProduct(Vec vector2, Vec vector3) 
 		throw LinearAlgebraLibException("Vectors must be size 3.");
 	}
 	else {
-		// todo
+		Vec temp = vector2.cross(vector3);
+		double retVal = this->dot(temp);
+		return retVal;
 	}
 }
 
