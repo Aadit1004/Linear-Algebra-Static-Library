@@ -267,14 +267,46 @@ const int LinearAlgebraLibrary::Matrix::getNullity() {
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getColSpace() {
-	LinearAlgebraLibrary::Matrix stub(1);
-	return stub;
-	// throw exception ?
+	LinearAlgebraLibrary::Matrix retMat = this->ref();
+	std::vector<int> pivotColumns;
+	for (int j = 0; j < retMat.getNumColumns(); j++) { // find the columns which have a pivot and save it to a vec
+		for (int i = 0; i < retMat.getNumRows(); i++) {
+			if (retMat.getValue(i, j) != 0.0) {
+				pivotColumns.push_back(j); // store column val in vector
+				break;
+			}
+		}
+	}
+	std::vector<std::vector<double>> colSpaceVec;
+	for (int j : pivotColumns) { // go through the columns of pivot columns
+		std::vector<double> colVec(this->getNumRows());
+		for (int i = 0; i < this->getNumRows(); i++) {
+			colVec[i] = this->getValue(i, j);
+		}
+		colSpaceVec.push_back(colVec);
+	}
+
+	return LinearAlgebraLibrary::Matrix(colSpaceVec); 
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getNulSpace() {
-	LinearAlgebraLibrary::Matrix stub(1);
-	return stub;
+	LinearAlgebraLibrary::Matrix retMat = this->ref();
+	std::vector<std::vector<double>> retVec;
+
+	// find pivot columns
+	std::vector<int> pivotCols;
+	for (int i = 0; i < retMat.getNumRows(); i++) {
+		for (int j = 0; j < retMat.getNumColumns(); j++) {
+			if (retMat.getValue(i, j) != 0.0) {
+				pivotCols.push_back(j);
+				break;
+			}
+		}
+	}
+	
+
+
+	return LinearAlgebraLibrary::Matrix(0); // stub
 }
 
 const bool LinearAlgebraLibrary::Matrix::isSquareMatrix() {
@@ -423,8 +455,47 @@ void LinearAlgebraLibrary::Matrix::apply(std::function<double(double)> fn) {
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::ref() {
-	LinearAlgebraLibrary::Matrix stub(1, 1);
-	return stub;
+	Matrix retMat = this->copy();
+	int pivotCol = 0;
+	for (int i = 0; i < retMat.getNumRows(); i++) {
+		if (pivotCol > retMat.getNumColumns()) break;
+		int currentRow = i;
+		while (retMat.getValue(currentRow, pivotCol) == 0.0) { 
+			// the leading entry in the row is 0.0, then swap lower row
+			currentRow++; // increase row pointer until get to a pivot != 0.0
+			if (currentRow == retMat.getNumRows()) { // end of matrix
+				currentRow = i;
+				pivotCol++;
+				if (pivotCol == retMat.getNumColumns()) return retMat; // if none, return
+			}
+		}
+		// swap row at i and currentRow
+		retMat.swapRow(currentRow, i);
+		// multiply row by 1/(leading value) to get leading value to be 1.0
+		double leadingVal = retMat.getValue(i, pivotCol);
+		for (int j = 0; j < retMat.getNumColumns(); j++) {
+			retMat.setValue(retMat.getValue(i, j) / leadingVal, i, j);
+		}
+		// elim values below pivot
+		for (int k = 0; k < retMat.getNumRows(); k++) {
+			if (k == i) continue; // skip row currently at
+			double elimNum = retMat.getValue(k, pivotCol);
+			for (int p = 0; p < retMat.getNumColumns(); p++) {
+				double val = retMat.getValue(k, p) - (elimNum * retMat.getValue(i, p));
+				retMat.setValue(val, k, p);
+			}
+		}
+		pivotCol++;
+	}
+	return retMat;
+}
+
+void LinearAlgebraLibrary::Matrix::swapRow(int rowOne, int rowTwo) {
+	for (int i = 0; i < columns; i++) {
+		double temp = matrixData[rowOne][i];
+		matrixData[rowOne][i] = matrixData[rowTwo][i];
+		matrixData[rowTwo][i] = temp;
+	}
 }
 
 void LinearAlgebraLibrary::Matrix::print() {
@@ -539,7 +610,7 @@ const bool LinearAlgebraLibrary::Matrix::areEqual(LinearAlgebraLibrary::Matrix& 
 
 LinearAlgebraLibrary::Vec::Vec(std::vector<double> data) {
 	vecData = data;
-	vecSize = data.size();
+	vecSize = (int) data.size();
 	lastPos = vecSize - 1;
 }
 
@@ -792,7 +863,7 @@ LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::proj3d(Vec vectorOn) {
 		double num = this->dot(vectorOn);
 		double den = pow(vectorOn.getMag(), 2);
 		Vec tempCopy = vectorOn.copy();
-		int scale = (num / den);
+		double scale = (num / den);
 		tempCopy.scalar(scale);
 		return tempCopy;
 	}

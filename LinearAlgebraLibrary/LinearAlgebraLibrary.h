@@ -29,6 +29,7 @@ namespace LinearAlgebraLibrary {
 		Matrix copy();
 		bool isUpper();
 		bool isLower();
+		void swapRow(int rowOne, int rowTwo);
 
 	public:
 
