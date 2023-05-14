@@ -32,14 +32,14 @@ namespace LinearAlgebraLibrary {
 
 	public:
 
+		// Constructor with given values (must be > 0)
+		Matrix(std::vector<std::vector<double>> data);
+		
 		// Constructor (must be > 0)
 		Matrix(int m, int n);
 
 		// Constructor for Square Matrix (must be > 0)
 		Matrix(int n);
-
-		// Constructor with given values (must be > 0)
-		Matrix(std::vector<std::vector<double>> data);
 
 		// get number of elements in matrix
 		const int getNumElem();
@@ -78,7 +78,7 @@ namespace LinearAlgebraLibrary {
 		const bool allZeros();
 
 		// returns true if every element is one
-		const bool allOnes();
+		const bool allOnes(); 
 
 		// Returns largest value in matrix
 		const double getLargestValue();
@@ -111,7 +111,7 @@ namespace LinearAlgebraLibrary {
 		const bool isLinearInd();
 
 		// returns true if square matrix and columns are lin ind
-		const bool isInvertible();
+		const bool isInvertible(); 
 
 		// Get transpose of matrix
 		Matrix getTranspose();
@@ -141,7 +141,7 @@ namespace LinearAlgebraLibrary {
 		void setUpperTriangular();
 
 		// set lower left triangle to values and uper right values to 0, must be square // triangular matrix
-		void setLowerTriangular();
+		void setLowerTriangular(); 
 
 		// returns true if matrix is a upper right or lower left special triangle // triangular matrix
 		const bool isTriangularMatrix();
@@ -153,7 +153,7 @@ namespace LinearAlgebraLibrary {
 		Matrix getColumn(int column);
 
 		// returs true if this and mat are same dim and all elems are the same
-		const bool areEqual(Matrix& mat);
+		const bool areEqual(Matrix& mat); 
 
 	};
 
@@ -167,11 +167,11 @@ namespace LinearAlgebraLibrary {
 
 	public:
 
-		// Constructor, must be size greater than or equal to 0
-		Vec(int size);
-
 		// Constructor with given data, must be size greater than or equal to 0
 		Vec(std::vector<double> data);
+		
+		// Constructor, must be size greater than or equal to 0
+		Vec(int size);
 
 		// computers the dot product and returns it as a double pointer
 		double dot(Vec vector);
@@ -188,14 +188,14 @@ namespace LinearAlgebraLibrary {
 		// gets the unit vector of this vector
 		Vec getUnitVec();
 
+		// returns a copy of this vec
+		Vec copy();
+
 		// add two vectors
 		Vec add(Vec vector);
 
 		// subtracts two vectors
-		Vec sub(Vec vector);
-
-		// remove last element, must be size >= 1
-		void removeLast();
+		Vec sub(Vec vector); 
 
 		// Set full vector filled with 1s
 		void setOnes();
@@ -222,7 +222,7 @@ namespace LinearAlgebraLibrary {
 		const double getMax();
 
 		// gets the min value in vector
-		const double getMin();
+		const double getMin(); 
 
 		// returns true if every element is zero
 		const bool allZeros();

@@ -5,6 +5,42 @@
 #include "framework.h"
 #include "LinearAlgebraLibrary.h"
 
+
+// Matrix class methods:
+
+
+LinearAlgebraLibrary::Matrix::Matrix(std::vector<std::vector<double>> data) {
+	// check if any vectors are size 0
+	if (data.size() == 0) {
+		throw LinearAlgebraLibException("Given data must have size > 0");
+	}
+	else {
+		for (std::vector<double> vec : data) {
+			if (vec.size() == 0) {
+				throw LinearAlgebraLibException("Given data must have size > 0");
+			}
+		}
+	}
+	int tempSize = (int)data[0].size();
+	bool notBox = false;
+	int i = 0;
+	while (i < data.size()) {
+		if (data[i].size() != tempSize) { // check if given data is a mxn dim matrix
+			notBox = true;
+			break;
+		}
+		i++;
+	}
+	if (notBox) {
+		throw LinearAlgebraLibException("Given matrix is not an mxn dimension matrix.");
+	}
+	else {
+		rows = (int)data.size();
+		columns = (int)data[0].size();
+		matrixData = data;
+	}
+}
+
 LinearAlgebraLibrary::Matrix::Matrix(int m, int n) {
 	if (n <= 0 || m <= 0) {
 		throw LinearAlgebraLibException("Given dimension must be positive real number.");
@@ -36,37 +72,6 @@ LinearAlgebraLibrary::Matrix::Matrix(int n) {
 				matrixData[i].push_back(0.0);
 			}
 		}
-	}
-}
-
-LinearAlgebraLibrary::Matrix::Matrix(std::vector<std::vector<double>> data) {
-	// check if any vectors are size 0
-	if (data.size() == 0) {
-		throw LinearAlgebraLibException("Given data must have size > 0");
-	}
-	else {
-		for (std::vector<double> vec : data) {
-			if (vec.size() == 0) {
-				throw LinearAlgebraLibException("Given data must have size > 0");
-			}
-		}
-	}
-	int tempSize = (int) data[0].size();
-	bool notBox = false;
-	int i = 0;
-	while (i < data.size()) {
-		if (data[i].size() != tempSize) { // check if given data is a mxn dim matrix
-			notBox = true;
-			break;
-		}
-		i++;
-	}
-	if (notBox) {
-		throw LinearAlgebraLibException("Given matrix is not an mxn dimension matrix.");
-	} else {
-		rows = (int) data.size();
-		columns = (int) data[0].size();
-		matrixData = data;
 	}
 }
 
@@ -277,12 +282,12 @@ const bool LinearAlgebraLibrary::Matrix::isSquareMatrix() {
 }
 
 const bool LinearAlgebraLibrary::Matrix::isVector() {
-	return (rows == 1 || columns == 1); // test is rowvec,colvec, & not vec
+	return (rows == 1 || columns == 1); // test is rowvec,colvec, or not vec
 }
 
 const bool LinearAlgebraLibrary::Matrix::isLinearInd() {
 	if (columns > rows) return false;
-	return false; // stub
+	return (this->columns == this->getColSpace().getNumColumns());
 }
 
 const bool LinearAlgebraLibrary::Matrix::isInvertible() {
@@ -294,8 +299,14 @@ const bool LinearAlgebraLibrary::Matrix::isInvertible() {
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getTranspose() {
-	LinearAlgebraLibrary::Matrix stub(1, 1);
-	return stub;
+	// [i][j] = [j][i]
+	Matrix retMat(this->columns, this->rows);
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			retMat.setValue(this->matrixData[i][j], j, i);
+		}
+	}
+	return retMat;
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::add(Matrix& mat) {
@@ -514,6 +525,10 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getColumn(int column)
 	}
 }
 
+
+// Vec class methods:
+
+
 const bool LinearAlgebraLibrary::Matrix::areEqual(LinearAlgebraLibrary::Matrix& mat) {
 	if (this->getNumRows() != mat.getNumRows() || this->getNumColumns() != mat.getNumColumns()) return false;
 	for (int i = 0; i < rows; i++) {
@@ -522,6 +537,12 @@ const bool LinearAlgebraLibrary::Matrix::areEqual(LinearAlgebraLibrary::Matrix& 
 		}
 	}
 	return true;
+}
+
+LinearAlgebraLibrary::Vec::Vec(std::vector<double> data) {
+	vecData = data;
+	vecSize = data.size();
+	lastPos = vecSize - 1;
 }
 
 LinearAlgebraLibrary::Vec::Vec(int size) {
@@ -546,22 +567,265 @@ LinearAlgebraLibrary::Vec::Vec(int size) {
 	}
 }
 
-LinearAlgebraLibrary::Vec::Vec(std::vector<double> data) {
-	vecData = data;
-	vecSize = data.size();
-	lastPos = vecSize - 1;
+double LinearAlgebraLibrary::Vec::dot(Vec vector) {
+	if (this->vecSize != vector.vecSize) {
+		throw LinearAlgebraLibException("Vectors must be the same size.");
+	}
+	else {
+		double retVal = 0;
+		for (int i = 0; i < this->vecSize; i++) {
+			retVal += (this->vecData[i] * vector.getValue(i));
+		}
+		return retVal;
+	}
+}
+
+int LinearAlgebraLibrary::Vec::getSize() {
+	return this->vecSize;
+}
+
+LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::cross(Vec vector) {
+	if (this->vecSize != 3 || vector.getSize() != 3) {
+		throw LinearAlgebraLibException("Vectors must be size 3.");
+	} 
+	else {
+		std::vector<double> retVal{};
+		double firstVal = (this->vecData[1] * vector.getValue(2)) - (this->vecData[2] * vector.getValue(1));
+		double secondVal = 0 - (this->vecData[0] * vector.getValue(2)) - (this->vecData[2] * vector.getValue(0));
+		double thirdVal = (this->vecData[0] * vector.getValue(1)) - (this->vecData[1] * vector.getValue(0));
+		retVal.push_back(firstVal);
+		retVal.push_back(secondVal);
+		retVal.push_back(thirdVal);
+		Vec retVec(retVal);
+		return retVec;
+	}
+}
+
+double LinearAlgebraLibrary::Vec::getMag() {
+	if (this->vecSize) return 0.0;
+	double retVal = 0.0;
+	for (int i = 0; i < vecSize; i++) {
+		retVal += pow(this->vecData[i], 2);
+	}
+	retVal = sqrt(retVal);
+	return retVal;
+}
+
+LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::getUnitVec() {
+	if (vecSize == 0) {
+		Vec temp(0);
+		return temp;
+	}
+	else {
+		double mag = this->getMag();
+		Vec retVec = this->copy();
+		for (int i = 0; i < vecSize; i++) {
+			retVec.setValue(retVec.getValue(i) * mag, i);
+		}
+		return retVec;
+	}
+}
+
+LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::copy() {
+	if (vecSize == 0) {
+		Vec temp(0);
+		return temp;
+	}
+	else {
+		std::vector<double> temp;
+		for (int i = 0; i < vecSize; i++) {
+			temp.push_back(this->vecData[i]);
+		}
+		Vec retVector(temp);
+		return retVector;
+	}
+}
+
+LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::add(Vec vector) {
+	if (vecSize != vector.getSize()) {
+		throw LinearAlgebraLibException("Vectors must be the same size.");
+	}
+	else {
+		std::vector<double> temp;
+		for (int i = 0; i < this->vecSize; i++) {
+			temp.push_back(vecData[i] + vector.getValue(i));
+		}
+		Vec retVec(temp);
+		return retVec;
+	}
+}
+
+LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::sub(Vec vector) {
+	if (vecSize != vector.getSize()) {
+		throw LinearAlgebraLibException("Vectors must be the same size.");
+	}
+	else {
+		std::vector<double> temp;
+		for (int i = 0; i < this->vecSize; i++) {
+			temp.push_back(vecData[i] - vector.getValue(i));
+		}
+		Vec retVec(temp);
+		return retVec;
+	}
+}
+
+void LinearAlgebraLibrary::Vec::setOnes() {
+	if (vecSize == 0) return;
+	for (double elem : vecData) {
+		elem = 1.0;
+	}
+}
+
+void LinearAlgebraLibrary::Vec::setZeros() {
+	if (vecSize == 0) return;
+	for (double elem : vecData) {
+		elem = 0.0;
+	}
+}
+
+void LinearAlgebraLibrary::Vec::scalar(double scalarMultiple) {
+	if (vecSize == 0) return;
+	for (double elem : vecData) {
+		elem *= scalarMultiple;
+	}
+}
+
+const double LinearAlgebraLibrary::Vec::getValue(int pos) {
+	if (pos < 0 || pos >= vecSize) {
+		throw LinearAlgebraLibException("Position out of bounds of Vector.");
+	}
+	else {
+		return vecData[pos];
+	}
+}
+
+void LinearAlgebraLibrary::Vec::setValue(double val, int pos) {
+	if (pos < 0 || pos >= vecSize) {
+		throw LinearAlgebraLibException("Position out of bounds of Vector.");
+	}
+	else {
+		vecData[pos] = val;
+	}
+}
+
+const double LinearAlgebraLibrary::Vec::getFirst() {
+	if (vecSize == 0) {
+		throw LinearAlgebraLibException("Vector is empty.");
+	}
+	else {
+		return vecData[0];
+	}
+}
+
+const double LinearAlgebraLibrary::Vec::getLast() {
+	if (vecSize == 0) {
+		throw LinearAlgebraLibException("Vector is empty.");
+	}
+	else {
+		return vecData[lastPos];
+	}
+}
+
+const double LinearAlgebraLibrary::Vec::getMax() {
+	if (vecSize == 0) {
+		throw LinearAlgebraLibException("Vector is empty.");
+	}
+	else {
+		double tempMax = vecData[0];
+		for (int i = 1; i < vecSize; i++) {
+			tempMax = (vecData[i] > tempMax) ? vecData[i] : tempMax;
+		}
+		return tempMax;
+	}
+}
+
+const double LinearAlgebraLibrary::Vec::getMin() {
+	if (vecSize == 0) {
+		throw LinearAlgebraLibException("Vector is empty.");
+	}
+	else {
+		double tempMin = vecData[0];
+		for (int i = 1; i < vecSize; i++) {
+			tempMin = (vecData[i] < tempMin) ? vecData[i] : tempMin;
+		}
+		return tempMin;
+	}
+}
+
+const bool LinearAlgebraLibrary::Vec::allZeros() {
+	if (vecSize == 0) return false;
+	for (double elem : vecData) {
+		if (elem != 0.0) return false;
+	}
+	return true;
+}
+
+const bool LinearAlgebraLibrary::Vec::allOnes() {
+	if (vecSize == 0) return false;
+	for (double elem : vecData) {
+		if (elem != 1.0) return false;
+	}
+	return true;
+}
+
+const bool LinearAlgebraLibrary::Vec::isEmpty() {
+	return (vecSize == 0);
+}
+
+const bool LinearAlgebraLibrary::Vec::areEqual(Vec& vect) {
+	if (this->vecSize != vect.getSize()) return false;
+	for (int i = 0; i < vecSize; i++) {
+		if (this->vecData[i] != vect.getValue(i)) return false;
+	}
+	return true;
+}
+
+// computes the project of this vector onto vectorOn, must be size 2 or 3
+LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::proj(Vec vectorOn) {
+	if (this->vecSize != 2 || vectorOn.getSize() != 2) {
+		throw LinearAlgebraLibException("Vectors must be size 2 or 3.");
+	} else if (this->vecSize != 3 || vectorOn.getSize() != 3) {
+		throw LinearAlgebraLibException("Vectors must be size 2 or 3.");
+	}
+	else {
+		// todo
+	}
+}
+
+void LinearAlgebraLibrary::Vec::apply(std::function<double(double)> fn) {
+	if (vecSize == 0) return;
+	else {
+		for (double elem : vecData) {
+			elem = fn(elem);
+		}
+	}
+}
+
+void LinearAlgebraLibrary::Vec::print() {
+	if (vecSize == 0) {
+		std::cout << " " << std::endl;
+		return;
+	}
+	else {
+		for (int i = 0; i < vecSize; i++) {
+			std::cout << vecData[i] << " ";
+		}
+		std::cout << std::endl;
+	}
+}
+
+// computes the triple scalar product between 3 vectors, must all be 3 dim
+double LinearAlgebraLibrary::Vec::tripleScalarProduct(Vec vector2, Vec vector3) {
+	if (this->vecSize != 3 || vector2.getSize() != 3 || vector3.getSize() != 3) {
+		throw LinearAlgebraLibException("Vectors must be size 3.");
+	}
+	else {
+		// todo
+	}
 }
 
 
-
-
-
-
-
-
-
-
-
+// Other methods:
 
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::refY(Matrix& mat) {
