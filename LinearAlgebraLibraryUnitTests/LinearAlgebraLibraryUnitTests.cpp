@@ -913,7 +913,7 @@ namespace LinearAlgebraLibraryUnitTests
 			}
 		}
 
-		/*TEST_METHOD(VecConstructor1NormalCase)
+		TEST_METHOD(VecConstructor1NormalCase)
 		{
 			try {
 				LinearAlgebraLibrary::Vec testVec(3);
@@ -921,9 +921,9 @@ namespace LinearAlgebraLibraryUnitTests
 				Assert::AreEqual(3, testVec.getSize());
 			}
 			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
-				Assert::Fail();
+				Assert::Fail(); 
 			}
-		}*/
+		}
 
 		TEST_METHOD(VecConstructor2SizeZero)
 		{

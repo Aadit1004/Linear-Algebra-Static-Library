@@ -304,7 +304,7 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getNulSpace() {
 		}
 	}
 	
-
+	// TO DO
 
 	return LinearAlgebraLibrary::Matrix(0); // stub
 }
@@ -622,14 +622,11 @@ LinearAlgebraLibrary::Vec::Vec(int size) {
 		if (size == 0) {
 			vecSize = 0;
 			lastPos = -1;
-			//std::vector<double> temp{};
-			//vecData = temp;
 		}
 		else {
 			vecSize = size;
 			lastPos = size - 1;
-			int temp = size;
-			while (temp > 0) {
+			for (int i = 0; i < vecSize; i++) {
 				vecData.push_back(0.0);
 			}
 		}
@@ -967,8 +964,13 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::rot270(Matrix& mat) {
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::customMatTransform(Matrix& origMat, Matrix& transformMat) {
-	Matrix stub(1, 1);
-	return stub;
+	if (origMat.getNumRows() != 2 || origMat.getNumColumns() != 1) {
+		throw LinearAlgebraLibException("Original Matrix must be 2x1 matrix.");
+	}
+	if (transformMat.getNumRows() != 2 || transformMat.getNumColumns() != 2) {
+		throw LinearAlgebraLibException("Transform Matrix must be 2x2 matrix.");
+	}
+	return LinearAlgebraLibrary::Matrix(transformMat.mul(origMat));
 }
 
 double LinearAlgebraLibrary::getDeterminant(Matrix mat) {

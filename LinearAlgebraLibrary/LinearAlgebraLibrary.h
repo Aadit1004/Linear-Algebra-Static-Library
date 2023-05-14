@@ -33,6 +33,8 @@ namespace LinearAlgebraLibrary {
 
 	public:
 
+		// Constructors
+
 		// Constructor with given values (must be > 0)
 		Matrix(std::vector<std::vector<double>> data);
 		
@@ -42,11 +44,7 @@ namespace LinearAlgebraLibrary {
 		// Constructor for Square Matrix (must be > 0)
 		Matrix(int n);
 
-		// get number of elements in matrix
-		const int getNumElem();
-
-		// Get value from pos (0 indexed)
-		const double getValue(int rowNum, int colNum);
+		// Set functions
 
 		// Set value at pos
 		void setValue(double value, int rowNum, int colNum);
@@ -69,23 +67,37 @@ namespace LinearAlgebraLibrary {
 		// Sets matrix to identity matrix to size of lower dim
 		void setIdentity();
 
+		// set upper right triangle to values and bottom left values to 0, must be square // triangular matrix
+		void setUpperTriangular();
+
+		// set lower left triangle to values and uper right values to 0, must be square // triangular matrix
+		void setLowerTriangular();
+
+		// Get functions
+
+		// get number of elements in matrix
+		const int getNumElem();
+
+		// Get value from pos (0 indexed)
+		const double getValue(int rowNum, int colNum);
+
 		// Get number of rows
 		const int getNumRows();
 
 		// Get number of columns
 		const int getNumColumns();
 
-		// returns true if every element is zero
-		const bool allZeros();
-
-		// returns true if every element is one
-		const bool allOnes(); 
-
 		// Returns largest value in matrix
 		const double getLargestValue();
 
 		// returns smallest value in matrix
-		const double getSmallestValue(); 
+		const double getSmallestValue();
+
+		// return the given row (0 indexed) as a matrix
+		Matrix getRow(int row);
+
+		// return the given column (0 indexed) as a matrix
+		Matrix getColumn(int column);
 
 		// returns the rank of the matrix (dimension of Col space)
 		const int getRank();
@@ -98,6 +110,20 @@ namespace LinearAlgebraLibrary {
 
 		// Returns the Null Space of the matrix, returns 1 x 1 matrix of 0 if not existance
 		Matrix getNulSpace();
+
+		// Get transpose of matrix
+		Matrix getTranspose();
+
+		// returns true if matrix is a upper right or lower left special triangle // triangular matrix
+		const bool isTriangularMatrix();
+
+		// Bool functions
+
+		// returns true if every element is zero
+		const bool allZeros();
+
+		// returns true if every element is one
+		const bool allOnes();
 
 		// returns true if matrix is a row or column vector, false otherwise
 		const bool isVector();
@@ -114,8 +140,10 @@ namespace LinearAlgebraLibrary {
 		// returns true if square matrix and columns are lin ind
 		const bool isInvertible(); 
 
-		// Get transpose of matrix
-		Matrix getTranspose();
+		// returs true if this and mat are same dim and all elems are the same
+		const bool areEqual(Matrix& mat);
+
+		// Other functions
 
 		// Return the addition from this matrix and mat if possible
 		Matrix add(Matrix& mat); 
@@ -133,28 +161,10 @@ namespace LinearAlgebraLibrary {
 		Matrix power(int pow);
 
 		// Print the Matrix (cout)
-		void print(); //needed?
+		void print();
 
 		// apply a function to each element in matrix to modify it, fn must take in double and return double
 		void apply(std::function<double(double)> fn);
-
-		// set upper right triangle to values and bottom left values to 0, must be square // triangular matrix
-		void setUpperTriangular();
-
-		// set lower left triangle to values and uper right values to 0, must be square // triangular matrix
-		void setLowerTriangular(); 
-
-		// returns true if matrix is a upper right or lower left special triangle // triangular matrix
-		const bool isTriangularMatrix();
-
-		// return the given row (0 indexed) as a matrix
-		Matrix getRow(int row);
-
-		// return the given column (0 indexed) as a matrix
-		Matrix getColumn(int column);
-
-		// returs true if this and mat are same dim and all elems are the same
-		const bool areEqual(Matrix& mat); 
 
 	};
 
@@ -168,35 +178,18 @@ namespace LinearAlgebraLibrary {
 
 	public:
 
+		// Constructor functions
+
 		// Constructor with given data, must be size greater than or equal to 0
 		Vec(std::vector<double> data);
 		
 		// Constructor, must be size greater than or equal to 0
 		Vec(int size);
 
-		// computers the dot product and returns it as a double pointer
-		double dot(Vec vector);
+		// Set functions
 
-		// Returns size of Vec
-		int getSize();
-
-		// computes cross product with another vector, must be in R3
-		Vec cross(Vec vector);
-
-		// returns magnitude of vector, rounds to 2 decimal places
-		double getMag();
-
-		// gets the unit vector of this vector
-		Vec getUnitVec();
-
-		// returns a copy of this vec
-		Vec copy();
-
-		// add two vectors
-		Vec add(Vec vector);
-
-		// subtracts two vectors
-		Vec sub(Vec vector); 
+		// gets value at pos (0 indexed)
+		void setValue(double val, int pos);
 
 		// Set full vector filled with 1s
 		void setOnes();
@@ -204,14 +197,10 @@ namespace LinearAlgebraLibrary {
 		// Set full vector filled with 0s
 		void setZeros();
 
-		// multiplies all elements by scalarMultiple
-		void scalar(double scalarMultiple);
+		// Get functions
 
 		// gets value at pos (0 indexed)
 		const double getValue(int pos);
-
-		// gets value at pos (0 indexed)
-		void setValue(double val, int pos);
 
 		// returns first value of vector
 		const double getFirst();
@@ -223,7 +212,18 @@ namespace LinearAlgebraLibrary {
 		const double getMax();
 
 		// gets the min value in vector
-		const double getMin(); 
+		const double getMin();
+
+		// gets the unit vector of this vector
+		Vec getUnitVec();
+
+		// Returns size of Vec
+		int getSize();
+
+		// returns magnitude of vector, rounds to 2 decimal places
+		double getMag();
+
+		// Bool functions
 
 		// returns true if every element is zero
 		const bool allZeros();
@@ -239,6 +239,26 @@ namespace LinearAlgebraLibrary {
 
 		// Checks if this and vect are equal
 		const bool areEqual(Vec& vect);
+
+		// Other functions
+
+		// returns a copy of this vec
+		Vec copy();
+
+		// add two vectors
+		Vec add(Vec vector);
+
+		// subtracts two vectors
+		Vec sub(Vec vector); 
+
+		// multiplies all elements by scalarMultiple
+		void scalar(double scalarMultiple);
+
+		// computes cross product with another vector, must be in R3
+		Vec cross(Vec vector);
+
+		// computers the dot product and returns it as a double pointer
+		double dot(Vec vector);
 
 		// computes the project of this vector onto vectorOn, must be size 3
 		Vec proj3d(Vec vectorOn);
