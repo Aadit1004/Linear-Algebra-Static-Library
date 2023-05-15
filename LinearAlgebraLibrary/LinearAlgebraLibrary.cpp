@@ -363,6 +363,7 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getInverse() {
 	if (!this->isInvertible()) {
 		throw LinearAlgebraLibException("Matrix is not invertible.");
 	}
+	
 	return LinearAlgebraLibrary::Matrix(1); // stub
 }
 
@@ -459,8 +460,12 @@ const bool LinearAlgebraLibrary::Matrix::isInvertible() {
 const bool LinearAlgebraLibrary::Matrix::areEqual(LinearAlgebraLibrary::Matrix& mat) {
 	if (this->getNumRows() != mat.getNumRows() || this->getNumColumns() != mat.getNumColumns()) return false;
 	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < columns; j++) {
+		/*for (int j = 0; j < columns; j++) {
 			if (matrixData[i][j] != mat.getValue(i, j)) return false;
+		}*/
+		const double tol = 1e-6;
+		for (int j = 0; j < columns; j++) {
+			if (std::abs(matrixData[i][j] - mat.getValue(i, j)) > tol) return false;
 		}
 	}
 	return true;
@@ -530,15 +535,30 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::ref() {
 	Matrix retMat = this->copy();
 	int pivotCol = 0;
 	for (int i = 0; i < retMat.getNumRows(); i++) {
-		if (pivotCol > retMat.getNumColumns()) break;
+		if (pivotCol >= retMat.getNumColumns()) break;
 		int currentRow = i;
 		while (retMat.getValue(currentRow, pivotCol) == 0.0) {
 			// the leading entry in the row is 0.0, then swap lower row
 			currentRow++; // increase row pointer until get to a pivot != 0.0
 			if (currentRow == retMat.getNumRows()) { // end of matrix
-				currentRow = i;
-				pivotCol++;
-				if (pivotCol == retMat.getNumColumns()) return retMat; // if none, return
+				// check if the entire column is 0.0
+				bool columnIsZero = true;
+				for (int k = i; k < retMat.getNumRows(); k++) {
+					if (retMat.getValue(k, pivotCol) != 0.0) {
+						columnIsZero = false;
+						break;
+					}
+				}
+				if (columnIsZero) {
+					pivotCol++; // move to next column
+					currentRow = i;
+					if (pivotCol == retMat.getNumColumns()) return retMat; // if none, return
+				}
+				else {
+					currentRow = i; // reset row pointer
+					pivotCol++; // move to next column
+					if (pivotCol == retMat.getNumColumns()) return retMat; // if none, return
+				}
 			}
 		}
 		// swap row at i and currentRow
@@ -936,9 +956,13 @@ void LinearAlgebraLibrary::Vec::print() {
 	}
 	else {
 		for (int i = 0; i < vecSize; i++) {
-			std::cout << vecData[i] << " ";
+			if (i == vecSize - 1) {
+				std::cout << vecData[i] << std::endl;
+			}
+			else {
+				std::cout << vecData[i] << ", ";
+			}
 		}
-		std::cout << std::endl;
 	}
 }
 

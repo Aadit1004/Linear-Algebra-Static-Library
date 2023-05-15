@@ -440,8 +440,9 @@ namespace LinearAlgebraLibraryUnitTests
 			std::vector<std::vector<double>> testVec{ {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 0.0} };
 			LinearAlgebraLibrary::Matrix testMatrix(testVec);
 			std::vector<std::vector<double>> testVec2{ {1.0, 0.0}, {0.0, 1.0}, {0.0, 0.0} };
-			LinearAlgebraLibrary::Matrix testMatrix2(testVec2);
-			Assert::IsTrue(testMatrix.getColSpace().areEqual(testMatrix2));
+			LinearAlgebraLibrary::Matrix expectedMat(testVec2);
+			LinearAlgebraLibrary::Matrix colSpaceMatrix = testMatrix.getColSpace();
+			Assert::IsTrue(colSpaceMatrix.areEqual(expectedMat));
 		}
 
 		TEST_METHOD(MatrixGetNulLinInd)
@@ -483,6 +484,15 @@ namespace LinearAlgebraLibraryUnitTests
 			Assert::IsFalse(testMatrix.isVector());
 		}
 
+		TEST_METHOD(MatrixGetInverseExceptionCase) 
+		{
+			Assert::Fail(); // stub
+		}
+		
+		TEST_METHOD(MatrixGetInverseNormalCase) 
+		{
+			Assert::Fail(); // stub
+		}
 		TEST_METHOD(MatrixIsInvertibleSquareMatrix)
 		{
 			std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {3.0, 4.0} };
@@ -753,13 +763,13 @@ namespace LinearAlgebraLibraryUnitTests
 		TEST_METHOD(MatrixRefLinIndNonSquare)
 		{
 			// 3 x 2
-			std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {4.0, 3.0}, {5.0, 6.0} };
+			std::vector<std::vector<double>> testVec{ {3.0, 2.0}, {4.0, 5.0}, {3.0, 5.0} };
 			LinearAlgebraLibrary::Matrix testMatrix(testVec);
 			testMatrix.ref();
-			std::vector<std::vector<double>> retVec{ {1.0, 2.0}, {0.0, -5.0}, {0.0, 0.0} };
+			std::vector<std::vector<double>> retVec{ {3.0, 2.0}, {0.0, (7.0 / 3.0)}, {0.0, 0.0}};
 			LinearAlgebraLibrary::Matrix retMat(retVec);
 			Assert::IsTrue(testMatrix.areEqual(retMat));
-			Assert::IsTrue(testMatrix.isLinearInd());
+			Assert::IsTrue(testMatrix.isLinearInd()); 
 		}
 
 		TEST_METHOD(MatrixRefLinDepSquare)
