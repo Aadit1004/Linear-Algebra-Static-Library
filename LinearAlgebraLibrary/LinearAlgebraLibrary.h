@@ -26,7 +26,6 @@ namespace LinearAlgebraLibrary {
 		int columns;
 		std::vector<std::vector<double>> matrixData;
 
-		Matrix copy();
 		bool isUpper();
 		bool isLower();
 		void swapRow(int rowOne, int rowTwo);
@@ -75,11 +74,11 @@ namespace LinearAlgebraLibrary {
 
 		// Get functions
 
-		// get number of elements in matrix
-		const int getNumElem();
-
 		// Get value from pos (0 indexed)
 		const double getValue(int rowNum, int colNum);
+
+		// get number of elements in matrix
+		const int getNumElem();
 
 		// Get number of rows
 		const int getNumRows();
@@ -111,11 +110,11 @@ namespace LinearAlgebraLibrary {
 		// Returns the Null Space of the matrix, returns 1 x 1 matrix of 0 if not existance
 		Matrix getNulSpace();
 
-		// Get transpose of matrix
+		// returns the transpose of matrix
 		Matrix getTranspose();
 
-		// returns true if matrix is a upper right or lower left special triangle // triangular matrix
-		const bool isTriangularMatrix();
+		// returns the inverse of matrix is able, throws exception if cant
+		Matrix getInverse();
 
 		// Bool functions
 
@@ -133,6 +132,9 @@ namespace LinearAlgebraLibrary {
 
 		// Is matrix an identity matrix
 		const bool isIdentity();
+
+		// returns true if matrix is a upper right or lower left special triangle // triangular matrix
+		const bool isTriangularMatrix();
 
 		// Returns true if matrix rows are linearly independent, false otherwise
 		const bool isLinearInd();
@@ -166,6 +168,12 @@ namespace LinearAlgebraLibrary {
 		// apply a function to each element in matrix to modify it, fn must take in double and return double
 		void apply(std::function<double(double)> fn);
 
+		// multiplies all elements by scalarMultiple
+		void scalar(double scalarMultiple);
+
+		// returns a copy of this matrix
+		Matrix copy();
+
 	};
 
 	class Vec {
@@ -191,11 +199,11 @@ namespace LinearAlgebraLibrary {
 		// gets value at pos (0 indexed)
 		void setValue(double val, int pos);
 
-		// Set full vector filled with 1s
-		void setOnes();
-
 		// Set full vector filled with 0s
 		void setZeros();
+
+		// Set full vector filled with 1s
+		void setOnes();
 
 		// Get functions
 

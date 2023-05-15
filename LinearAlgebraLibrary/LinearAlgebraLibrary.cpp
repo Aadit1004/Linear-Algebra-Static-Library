@@ -6,7 +6,7 @@
 #include "LinearAlgebraLibrary.h"
 
 
-// Matrix class methods:
+// Matrix constructor functions
 
 
 LinearAlgebraLibrary::Matrix::Matrix(std::vector<std::vector<double>> data) {
@@ -75,25 +75,16 @@ LinearAlgebraLibrary::Matrix::Matrix(int n) {
 	}
 }
 
-const int LinearAlgebraLibrary::Matrix::getNumElem() {
-	return rows * columns;
-}
 
-const double LinearAlgebraLibrary::Matrix::getValue(int rowNum, int colNum) {
-	if (rowNum >= rows || colNum >= columns || rowNum < 0 || colNum < 0) {
-		throw LinearAlgebraLibException("Position out of bounds of Matrix.");
-	}
-	else {
-		return matrixData[rowNum][colNum];
-	}
-}
+// Matrix set functions
+
 
 void LinearAlgebraLibrary::Matrix::setValue(double value, int rowNum, int colNum) {
 	if (rowNum >= rows || colNum >= columns || rowNum < 0 || colNum < 0) {
 		throw LinearAlgebraLibException("Position out of bounds of Matrix.");
 	}
 	else {
-		matrixData[rowNum][colNum] = (double) value;
+		matrixData[rowNum][colNum] = (double)value;
 	}
 }
 
@@ -113,33 +104,11 @@ void LinearAlgebraLibrary::Matrix::setZeros() {
 	}
 }
 
-const bool LinearAlgebraLibrary::Matrix::allZeros() {
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < columns; j++) {
-			if (matrixData[i][j] != 0.0) {
-				return false;
-			}
-		}
-	}
-	return true;
-}
-
-const bool LinearAlgebraLibrary::Matrix::allOnes() {
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < columns; j++) {
-			if (matrixData[i][j] != 1.0) {
-				return false;
-			}
-		}
-	}
-	return true;
-}
-
 void LinearAlgebraLibrary::Matrix::setRandom() {
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < columns; j++) {
 			int temp = std::rand() % 101;
-			matrixData[i][j] = (double) temp;
+			matrixData[i][j] = (double)temp;
 		}
 	}
 }
@@ -211,22 +180,51 @@ void LinearAlgebraLibrary::Matrix::setIdentity() {
 	}
 }
 
-const bool LinearAlgebraLibrary::Matrix::isIdentity() {
-	if (rows != columns) return false; // must be square
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < columns; j++) {
-			if (i == j) {
-				if (matrixData[i][j] != 1.0) {
-					return false;
-				}
-			} else {
-				if (matrixData[i][j] != 0.0) {
-					return false;
+void LinearAlgebraLibrary::Matrix::setUpperTriangular() {
+	if (rows != columns) {
+		throw LinearAlgebraLibException("Matrix must be square matrix");
+	}
+	else {
+		if (rows == 1) return;
+		for (int i = 1; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				if (i > j) {
+					matrixData[i][j] = 0.0;
 				}
 			}
 		}
 	}
-	return true;
+}
+
+void LinearAlgebraLibrary::Matrix::setLowerTriangular() {
+	if (rows != columns) {
+		throw LinearAlgebraLibException("Matrix must be square matrix");
+	}
+	else {
+		if (rows == 1) return;
+		for (int i = 0; i < rows; i++) {
+			for (int j = i + 1; j < columns; j++) {
+				matrixData[i][j] = 0.0;
+			}
+		}
+	}
+}
+
+
+// Matrix get functions
+
+
+const double LinearAlgebraLibrary::Matrix::getValue(int rowNum, int colNum) {
+	if (rowNum >= rows || colNum >= columns || rowNum < 0 || colNum < 0) {
+		throw LinearAlgebraLibException("Position out of bounds of Matrix.");
+	}
+	else {
+		return matrixData[rowNum][colNum];
+	}
+}
+
+const int LinearAlgebraLibrary::Matrix::getNumElem() {
+	return rows * columns;
 }
 
 const int LinearAlgebraLibrary::Matrix::getNumRows() {
@@ -257,13 +255,45 @@ const double LinearAlgebraLibrary::Matrix::getSmallestValue() {
 	return tempMin;
 }
 
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getRow(int row) {
+	if (row < 0 || row >= this->rows) {
+		throw LinearAlgebraLibException("Row value not in matrix.");
+	}
+	else {
+		std::vector<std::vector<double>> tempVec;
+		tempVec.push_back(std::vector<double>());
+		for (int i = 0; i < columns; i++) {
+			tempVec[0].push_back(matrixData[row][i]);
+		}
+		Matrix retMat(tempVec);
+		return retMat;
+	}
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getColumn(int column) {
+	if (column < 0 || column >= this->columns) {
+		throw LinearAlgebraLibException("Column value not in matrix.");
+	}
+	else {
+		std::vector<std::vector<double>> tempVec;
+		for (int i = 0; i < rows; i++) {
+			tempVec.push_back(std::vector<double>());
+			tempVec[i].push_back(matrixData[i][column]);
+		}
+		Matrix retMat(tempVec);
+		return retMat;
+	}
+}
+
 const int LinearAlgebraLibrary::Matrix::getRank() {
 	return this->getColSpace().getNumColumns();
 }
 
 
 const int LinearAlgebraLibrary::Matrix::getNullity() {
-	return this->getNulSpace().getNumColumns(); // check if { {0.0} };
+	Matrix temp(1);
+	if (this->getNulSpace().areEqual(temp)) return 0; // check if { {0.0} };
+	return this->getNulSpace().getNumColumns();  
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getColSpace() {
@@ -286,7 +316,7 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getColSpace() {
 		colSpaceVec.push_back(colVec);
 	}
 
-	return LinearAlgebraLibrary::Matrix(colSpaceVec); 
+	return LinearAlgebraLibrary::Matrix(colSpaceVec);
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getNulSpace() {
@@ -303,18 +333,114 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getNulSpace() {
 			}
 		}
 	}
-	
-	// TO DO
 
-	return LinearAlgebraLibrary::Matrix(0); // stub
+	if (pivotCols.size() == retMat.getNumColumns()) return LinearAlgebraLibrary::Matrix(1);
+
+	for (int i = 0; i < rows; i++) {
+		std::vector<double> temp;
+		for (int j = 0; j < columns; j++) {
+			// if pivot col, continue to next col
+			if (std::find(pivotCols.begin(), pivotCols.end(), j) == pivotCols.end()) continue; 
+			temp.push_back(retMat.getValue(i, j));
+		}
+		retVec.push_back(temp);
+	}
+	return LinearAlgebraLibrary::Matrix(retVec); // stub
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getTranspose() {
+	// [i][j] = [j][i]
+	Matrix retMat(this->columns, this->rows);
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			retMat.setValue(this->matrixData[i][j], j, i);
+		}
+	}
+	return retMat;
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getInverse() {
+	if (!this->isInvertible()) {
+		throw LinearAlgebraLibException("Matrix is not invertible.");
+	}
+	return LinearAlgebraLibrary::Matrix(1); // stub
+}
+
+
+// Matrix bool functions
+
+
+const bool LinearAlgebraLibrary::Matrix::allZeros() {
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			if (matrixData[i][j] != 0.0) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+const bool LinearAlgebraLibrary::Matrix::allOnes() {
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			if (matrixData[i][j] != 1.0) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+const bool LinearAlgebraLibrary::Matrix::isVector() {
+	return (rows == 1 || columns == 1); // test is rowvec,colvec, or not vec
 }
 
 const bool LinearAlgebraLibrary::Matrix::isSquareMatrix() {
 	return rows == columns;
 }
 
-const bool LinearAlgebraLibrary::Matrix::isVector() {
-	return (rows == 1 || columns == 1); // test is rowvec,colvec, or not vec
+const bool LinearAlgebraLibrary::Matrix::isIdentity() {
+	if (rows != columns) return false; // must be square
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			if (i == j) {
+				if (matrixData[i][j] != 1.0) {
+					return false;
+				}
+			} else {
+				if (matrixData[i][j] != 0.0) {
+					return false;
+				}
+			}
+		}
+	}
+	return true;
+}
+
+const bool LinearAlgebraLibrary::Matrix::isTriangularMatrix() {
+	if (rows != columns) return false;
+	return (isUpper() || isLower());
+}
+
+bool LinearAlgebraLibrary::Matrix::isUpper() {
+	for (int i = 1; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			if (i > j) {
+				if (matrixData[i][j] != 0.0) return false;
+			}
+		}
+	}
+	return true;
+}
+
+bool LinearAlgebraLibrary::Matrix::isLower() {
+	for (int i = 1; i < rows; i++) {
+		for (int j = i + 1; j < columns; j++) {
+			if (matrixData[i][j] != 0.0) return false;
+		}
+	}
+	return true;
 }
 
 const bool LinearAlgebraLibrary::Matrix::isLinearInd() {
@@ -330,16 +456,19 @@ const bool LinearAlgebraLibrary::Matrix::isInvertible() {
 	return (tempDet != 0.0);
 }
 
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getTranspose() {
-	// [i][j] = [j][i]
-	Matrix retMat(this->columns, this->rows);
+const bool LinearAlgebraLibrary::Matrix::areEqual(LinearAlgebraLibrary::Matrix& mat) {
+	if (this->getNumRows() != mat.getNumRows() || this->getNumColumns() != mat.getNumColumns()) return false;
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < columns; j++) {
-			retMat.setValue(this->matrixData[i][j], j, i);
+			if (matrixData[i][j] != mat.getValue(i, j)) return false;
 		}
 	}
-	return retMat;
+	return true;
 }
+
+
+// Matrix other functions
+
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::add(Matrix& mat) {
 	if (this->rows != mat.getNumRows() || this->columns != mat.getNumColumns()) {
@@ -397,70 +526,13 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::mul(Matrix& mat) {
 	}
 }
 
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::copy() {
-	std::vector<std::vector<double>> temp;
-	for (int i = 0; i < rows; i++) {
-		std::vector<double> rowVec;
-		for (int j = 0; j < columns; j++) {
-			rowVec.push_back(matrixData[i][j]);
-		}
-		temp.push_back(rowVec);
-	}
-	Matrix retMat(temp);
-	return retMat;
-}
-
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::power(int pow) {
-	if (rows != columns) {
-		throw LinearAlgebraLibException("Matrix must be square matrix");
-	}
-	else {
-		if (pow == 0) {
-			// copy matrix and set identity and return
-			Matrix retMat = this->copy();
-			retMat.setIdentity();
-			return retMat;
-		}
-		else if (pow == 1) {
-			return this->copy();
-		}
-		else if (pow < 0) {
-			// add negative test pow case later after get inverse fn.
-			// get inv and take it to the abs(pow)
-			LinearAlgebraLibrary::Matrix stub(1, 1);
-			return stub;
-		}
-		else {
-			// use exponentiation by squaring for powers greater than 1
-			if (pow % 2 == 0) { // if even power
-				Matrix halfPower = this->power(pow / 2);
-				return halfPower.mul(halfPower);
-			}
-			else { // if odd power
-				Matrix halfPower = this->power((pow - 1) / 2); // compute for (pow - 1 / 2)
-				halfPower = halfPower.mul(halfPower);
-				return this->mul(halfPower);
-			}
-		}
-		
-	}
-}
-
-void LinearAlgebraLibrary::Matrix::apply(std::function<double(double)> fn) {
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < columns; j++) {
-			matrixData[i][j] = fn(matrixData[i][j]);
-		}
-	}
-}
-
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::ref() {
 	Matrix retMat = this->copy();
 	int pivotCol = 0;
 	for (int i = 0; i < retMat.getNumRows(); i++) {
 		if (pivotCol > retMat.getNumColumns()) break;
 		int currentRow = i;
-		while (retMat.getValue(currentRow, pivotCol) == 0.0) { 
+		while (retMat.getValue(currentRow, pivotCol) == 0.0) {
 			// the leading entry in the row is 0.0, then swap lower row
 			currentRow++; // increase row pointer until get to a pivot != 0.0
 			if (currentRow == retMat.getNumRows()) { // end of matrix
@@ -498,6 +570,42 @@ void LinearAlgebraLibrary::Matrix::swapRow(int rowOne, int rowTwo) {
 	}
 }
 
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::power(int pow) {
+	if (rows != columns) {
+		throw LinearAlgebraLibException("Matrix must be square matrix");
+	}
+	else {
+		if (pow == 0) {
+			// copy matrix and set identity and return
+			Matrix retMat = this->copy();
+			retMat.setIdentity();
+			return retMat;
+		}
+		else if (pow == 1) {
+			return this->copy();
+		}
+		else if (pow < 0) {
+			// add negative test pow case later after get inverse fn.
+			// get inv and take it to the abs(pow)
+			LinearAlgebraLibrary::Matrix stub(1, 1);
+			return stub;
+		}
+		else {
+			// use exponentiation by squaring for powers greater than 1
+			if (pow % 2 == 0) { // if even power
+				Matrix halfPower = this->power(pow / 2);
+				return halfPower.mul(halfPower);
+			}
+			else { // if odd power
+				Matrix halfPower = this->power((pow - 1) / 2); // compute for (pow - 1 / 2)
+				halfPower = halfPower.mul(halfPower);
+				return this->mul(halfPower);
+			}
+		}
+
+	}
+}
+
 void LinearAlgebraLibrary::Matrix::print() {
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < columns; j++) {
@@ -507,105 +615,37 @@ void LinearAlgebraLibrary::Matrix::print() {
 	}
 }
 
-void LinearAlgebraLibrary::Matrix::setUpperTriangular() {
-	if (rows != columns) {
-		throw LinearAlgebraLibException("Matrix must be square matrix");
-	}
-	else {
-		if (rows == 1) return;
-		for (int i = 1; i < rows; i++) {
-			for (int j = 0; j < columns; j++) {
-				if (i > j) {
-					matrixData[i][j] = 0.0;
-				}
-			}
-		}
-	}
-}
-
-void LinearAlgebraLibrary::Matrix::setLowerTriangular() {
-	if (rows != columns) {
-		throw LinearAlgebraLibException("Matrix must be square matrix");
-	}
-	else {
-		if (rows == 1) return;
-		for (int i = 0; i < rows; i++) {
-			for (int j = i + 1; j < columns; j++) {
-					matrixData[i][j] = 0.0;
-			}
-		}
-	}
-}
-
-const bool LinearAlgebraLibrary::Matrix::isTriangularMatrix() {
-	if (rows != columns) return false;
-	return (isUpper() || isLower());
-}
-
-bool LinearAlgebraLibrary::Matrix::isUpper() {
-	for (int i = 1; i < rows; i++) {
-		for (int j = 0; j < columns; j++) {
-			if (i > j) {
-				if (matrixData[i][j] != 0.0) return false;
-			}
-		}
-	}
-	return true;
-}
-
-bool LinearAlgebraLibrary::Matrix::isLower() {
-	for (int i = 1; i < rows; i++) {
-		for (int j = 0; j < columns; j++) {
-			if (j > i) {
-				if (matrixData[i][j] != 0.0) return false;
-			}
-		}
-	}
-	return true;
-}
-
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getRow(int row) {
-	if (row < 0 || row >= this->rows) {
-		throw LinearAlgebraLibException("Row value not in matrix.");
-	}
-	else {
-		std::vector<std::vector<double>> tempVec;
-		tempVec.push_back(std::vector<double>());
-		for (int i = 0; i < columns; i++) {
-			tempVec[0].push_back(matrixData[row][i]);
-		}
-		Matrix retMat(tempVec);
-		return retMat;
-	}
-}
-
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getColumn(int column) {
-	if (column < 0 || column >= this->columns) {
-		throw LinearAlgebraLibException("Column value not in matrix.");
-	}
-	else {
-		std::vector<std::vector<double>> tempVec;
-		for (int i = 0; i < rows; i++) {
-			tempVec.push_back(std::vector<double>());
-			tempVec[i].push_back(matrixData[i][column]);
-		}
-		Matrix retMat(tempVec);
-		return retMat;
-	}
-}
-
-const bool LinearAlgebraLibrary::Matrix::areEqual(LinearAlgebraLibrary::Matrix& mat) {
-	if (this->getNumRows() != mat.getNumRows() || this->getNumColumns() != mat.getNumColumns()) return false;
+void LinearAlgebraLibrary::Matrix::apply(std::function<double(double)> fn) {
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < columns; j++) {
-			if (matrixData[i][j] != mat.getValue(i, j)) return false;
+			matrixData[i][j] = fn(matrixData[i][j]);
 		}
 	}
-	return true;
+}
+
+void LinearAlgebraLibrary::Matrix::scalar(double scalarMultiple) {
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			this->matrixData[i][j] *= scalarMultiple;
+		}
+	}
+}
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::copy() {
+	std::vector<std::vector<double>> temp;
+	for (int i = 0; i < rows; i++) {
+		std::vector<double> rowVec;
+		for (int j = 0; j < columns; j++) {
+			rowVec.push_back(matrixData[i][j]);
+		}
+		temp.push_back(rowVec);
+	}
+	Matrix retMat(temp);
+	return retMat;
 }
 
 
-// Vec class methods:
+// Vec constructor functions
 
 
 LinearAlgebraLibrary::Vec::Vec(std::vector<double> data) {
@@ -633,115 +673,16 @@ LinearAlgebraLibrary::Vec::Vec(int size) {
 	}
 }
 
-double LinearAlgebraLibrary::Vec::dot(Vec vector) {
-	if (this->vecSize != vector.vecSize) {
-		throw LinearAlgebraLibException("Vectors must be the same size.");
+
+// Vec set functions
+
+
+void LinearAlgebraLibrary::Vec::setValue(double val, int pos) {
+	if (pos < 0 || pos >= vecSize) {
+		throw LinearAlgebraLibException("Position out of bounds of Vector.");
 	}
 	else {
-		double retVal = 0;
-		for (int i = 0; i < this->vecSize; i++) {
-			retVal += (this->vecData[i] * vector.getValue(i));
-		}
-		return retVal;
-	}
-}
-
-int LinearAlgebraLibrary::Vec::getSize() {
-	return vecSize;
-}
-
-LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::cross(Vec vector) {
-	if (this->vecSize != 3 || vector.getSize() != 3) {
-		throw LinearAlgebraLibException("Vectors must be size 3.");
-	} 
-	else {
-		std::vector<double> retVal{};
-		double firstVal = (this->vecData[1] * vector.getValue(2)) - (this->vecData[2] * vector.getValue(1));
-		double secondVal = 0 - (this->vecData[0] * vector.getValue(2)) - (this->vecData[2] * vector.getValue(0));
-		double thirdVal = (this->vecData[0] * vector.getValue(1)) - (this->vecData[1] * vector.getValue(0));
-		retVal.push_back(firstVal);
-		retVal.push_back(secondVal);
-		retVal.push_back(thirdVal);
-		Vec retVec(retVal);
-		return retVec;
-	}
-}
-
-double LinearAlgebraLibrary::Vec::getMag() {
-	if (this->vecSize == 0) return 0.0;
-	double retVal = 0.0;
-	for (int i = 0; i < vecSize; i++) {
-		retVal += pow(this->vecData[i], 2);
-	}
-	return sqrt(retVal);
-}
-
-LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::getUnitVec() {
-	if (vecSize == 0) {
-		Vec temp(0);
-		return temp;
-	}
-	else {
-		double mag = this->getMag();
-		Vec retVec = this->copy();
-		for (int i = 0; i < vecSize; i++) {
-			retVec.setValue(retVec.getValue(i) / mag, i);
-		}
-		return retVec;
-	}
-}
-
-const bool LinearAlgebraLibrary::Vec::isUnitVec() {
-	return (this->getMag() == 1.0);
-}
-
-LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::copy() {
-	if (vecSize == 0) {
-		Vec temp(0);
-		return temp;
-	}
-	else {
-		std::vector<double> temp;
-		for (int i = 0; i < vecSize; i++) {
-			temp.push_back(this->vecData[i]);
-		}
-		Vec retVector(temp);
-		return retVector;
-	}
-}
-
-LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::add(Vec vector) {
-	if (vecSize != vector.getSize()) {
-		throw LinearAlgebraLibException("Vectors must be the same size.");
-	}
-	else {
-		std::vector<double> temp;
-		for (int i = 0; i < this->vecSize; i++) {
-			temp.push_back(vecData[i] + vector.getValue(i));
-		}
-		Vec retVec(temp);
-		return retVec;
-	}
-}
-
-LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::sub(Vec vector) {
-	if (vecSize != vector.getSize()) {
-		throw LinearAlgebraLibException("Vectors must be the same size.");
-	}
-	else {
-		std::vector<double> temp;
-		for (int i = 0; i < this->vecSize; i++) {
-			temp.push_back(vecData[i] - vector.getValue(i));
-		}
-		Vec retVec(temp);
-		return retVec;
-	}
-}
-
-void LinearAlgebraLibrary::Vec::setOnes() {
-	if (vecSize == 0) return;
-	for (int i = 0; i < vecSize; i++) {
-		vecData[i] = 1.0;
+		vecData[pos] = val;
 	}
 }
 
@@ -752,11 +693,16 @@ void LinearAlgebraLibrary::Vec::setZeros() {
 	}
 }
 
-void LinearAlgebraLibrary::Vec::scalar(double scalarMultiple) {
+void LinearAlgebraLibrary::Vec::setOnes() {
+	if (vecSize == 0) return;
 	for (int i = 0; i < vecSize; i++) {
-		vecData[i] = (vecData[i] * scalarMultiple);
+		vecData[i] = 1.0;
 	}
 }
+
+
+// Vec get functions
+
 
 const double LinearAlgebraLibrary::Vec::getValue(int pos) {
 	if (pos < 0 || pos >= vecSize) {
@@ -764,15 +710,6 @@ const double LinearAlgebraLibrary::Vec::getValue(int pos) {
 	}
 	else {
 		return vecData[pos];
-	}
-}
-
-void LinearAlgebraLibrary::Vec::setValue(double val, int pos) {
-	if (pos < 0 || pos >= vecSize) {
-		throw LinearAlgebraLibException("Position out of bounds of Vector.");
-	}
-	else {
-		vecData[pos] = val;
 	}
 }
 
@@ -820,6 +757,39 @@ const double LinearAlgebraLibrary::Vec::getMin() {
 	}
 }
 
+
+LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::getUnitVec() {
+	if (vecSize == 0) {
+		Vec temp(0);
+		return temp;
+	}
+	else {
+		double mag = this->getMag();
+		Vec retVec = this->copy();
+		for (int i = 0; i < vecSize; i++) {
+			retVec.setValue(retVec.getValue(i) / mag, i);
+		}
+		return retVec;
+	}
+}
+
+int LinearAlgebraLibrary::Vec::getSize() {
+	return vecSize;
+}
+
+double LinearAlgebraLibrary::Vec::getMag() {
+	if (this->vecSize == 0) return 0.0;
+	double retVal = 0.0;
+	for (int i = 0; i < vecSize; i++) {
+		retVal += pow(this->vecData[i], 2);
+	}
+	return sqrt(retVal);
+}
+
+
+// Vec bool functions
+
+
 const bool LinearAlgebraLibrary::Vec::allZeros() {
 	if (vecSize == 0) return false;
 	for (int i = 0; i < vecSize; i++) {
@@ -840,6 +810,10 @@ const bool LinearAlgebraLibrary::Vec::isEmpty() {
 	return (vecSize == 0);
 }
 
+const bool LinearAlgebraLibrary::Vec::isUnitVec() {
+	return (this->getMag() == 1.0);
+}
+
 const bool LinearAlgebraLibrary::Vec::areEqual(Vec& vect) {
 	if (this->vecSize != vect.getSize()) return false;
 	for (int i = 0; i < vecSize; i++) {
@@ -849,13 +823,93 @@ const bool LinearAlgebraLibrary::Vec::areEqual(Vec& vect) {
 	return true;
 }
 
-// computes the project of this vector onto vectorOn, must be size 3
-LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::proj3d(Vec vectorOn) {
-	if (this->vecSize != 2 || vectorOn.getSize() != 2) {
-		throw LinearAlgebraLibException("Vectors must be size 3.");
-	} else if (this->vecSize != 3 || vectorOn.getSize() != 3) {
+
+// Vec other functions
+
+
+LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::copy() {
+	if (vecSize == 0) {
+		Vec temp(0);
+		return temp;
+	}
+	else {
+		std::vector<double> temp;
+		for (int i = 0; i < vecSize; i++) {
+			temp.push_back(this->vecData[i]);
+		}
+		Vec retVector(temp);
+		return retVector;
+	}
+}
+
+LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::add(Vec vector) {
+	if (vecSize != vector.getSize()) {
+		throw LinearAlgebraLibException("Vectors must be the same size.");
+	}
+	else {
+		std::vector<double> temp;
+		for (int i = 0; i < this->vecSize; i++) {
+			temp.push_back(vecData[i] + vector.getValue(i));
+		}
+		Vec retVec(temp);
+		return retVec;
+	}
+}
+
+LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::sub(Vec vector) {
+	if (vecSize != vector.getSize()) {
+		throw LinearAlgebraLibException("Vectors must be the same size.");
+	}
+	else {
+		std::vector<double> temp;
+		for (int i = 0; i < this->vecSize; i++) {
+			temp.push_back(vecData[i] - vector.getValue(i));
+		}
+		Vec retVec(temp);
+		return retVec;
+	}
+}
+
+void LinearAlgebraLibrary::Vec::scalar(double scalarMultiple) {
+	for (int i = 0; i < vecSize; i++) {
+		vecData[i] = (vecData[i] * scalarMultiple);
+	}
+}
+
+LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::cross(Vec vector) {
+	if (this->vecSize != 3 || vector.getSize() != 3) {
 		throw LinearAlgebraLibException("Vectors must be size 3.");
 	}
+	else {
+		std::vector<double> retVal;
+		double firstVal = (this->vecData[1] * vector.getValue(2)) - (this->vecData[2] * vector.getValue(1));
+		double secondVal = 0 - ((this->vecData[0] * vector.getValue(2)) - (this->vecData[2] * vector.getValue(0)));
+		double thirdVal = (this->vecData[0] * vector.getValue(1)) - (this->vecData[1] * vector.getValue(0));
+		retVal.push_back(firstVal);
+		retVal.push_back(secondVal);
+		retVal.push_back(thirdVal);
+		return LinearAlgebraLibrary::Vec(retVal);
+	}
+}
+
+double LinearAlgebraLibrary::Vec::dot(Vec vector) {
+	if (this->vecSize != vector.vecSize) {
+		throw LinearAlgebraLibException("Vectors must be the same size.");
+	}
+	else {
+		double retVal = 0;
+		for (int i = 0; i < this->vecSize; i++) {
+			retVal += (this->vecData[i] * vector.getValue(i));
+		}
+		return retVal;
+	}
+}
+
+// computes the project of this vector onto vectorOn, must be size 3
+LinearAlgebraLibrary::Vec LinearAlgebraLibrary::Vec::proj3d(Vec vectorOn) {
+	if (this->vecSize != 3 || vectorOn.getSize() != 3) {
+		throw LinearAlgebraLibException("Vectors must be size 3.");
+	} 
 	else {
 		double num = this->dot(vectorOn);
 		double den = pow(vectorOn.getMag(), 2);
@@ -900,7 +954,7 @@ double LinearAlgebraLibrary::Vec::tripleScalarProduct(Vec vector2, Vec vector3) 
 }
 
 
-// Other methods:
+// Other functions
 
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::refY(Matrix& mat) {
