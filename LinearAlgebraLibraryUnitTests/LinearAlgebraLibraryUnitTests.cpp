@@ -494,12 +494,37 @@ namespace LinearAlgebraLibraryUnitTests
 
 		TEST_METHOD(MatrixGetInverseExceptionCase) 
 		{
-			Assert::Fail(); // stub
+			try {
+				std::vector<std::vector<double>> testVec{ {1.0, 0.0, 0.0}, {1.0, 0.0, 0.0} };
+				LinearAlgebraLibrary::Matrix testMatrix(testVec);
+				LinearAlgebraLibrary::Matrix retMat = testMatrix.getInverse();
+				Assert::Fail();
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				// Exception should have been caught
+			}
 		}
 		
 		TEST_METHOD(MatrixGetInverseNormalCase) 
 		{
-			Assert::Fail(); // stub
+			try {
+				std::vector<std::vector<double>> testVec{ {2.0, 1.0, 1.0}, {3.0, 2.0, 1.0}, {2.0, 1.0, 2.0} };
+				LinearAlgebraLibrary::Matrix testMatrix(testVec);
+				LinearAlgebraLibrary::Matrix retMat = testMatrix.getInverse();
+				Assert::IsTrue(testMatrix.isInvertible()); 
+				Assert::AreEqual(3.0, retMat.getValue(0, 0));
+				Assert::AreEqual(-1.0, retMat.getValue(0, 1));
+				Assert::AreEqual(-1.0, retMat.getValue(0, 2));
+				Assert::AreEqual(-4.0, retMat.getValue(1, 0));
+				Assert::AreEqual(2.0, retMat.getValue(1, 1));
+				Assert::AreEqual(1.0, retMat.getValue(1, 2));
+				Assert::AreEqual(-1.0, retMat.getValue(2, 0));
+				Assert::AreEqual(0.0, retMat.getValue(2, 1));
+				Assert::AreEqual(1.0, retMat.getValue(2, 2));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
 		}
 		TEST_METHOD(MatrixIsInvertibleSquareMatrix)
 		{

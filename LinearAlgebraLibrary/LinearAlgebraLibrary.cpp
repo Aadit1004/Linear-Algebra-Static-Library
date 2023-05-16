@@ -355,10 +355,34 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getInverse() {
 	if (!this->isInvertible()) {
 		throw LinearAlgebraLibException("Matrix is not invertible.");
 	}
-	
-	return LinearAlgebraLibrary::Matrix(1); // stub
+	else {
+		if (this->getNumRows() == 1) return this->copy(); // if 1x1
+		Matrix retMat(this->getNumRows(), this->getNumColumns());
+		Matrix newMat = this->augmentMat().rref();
+		for (int i = 0; i < retMat.getNumRows(); i++) {
+			for (int j = 0; j < retMat.getNumColumns(); j++) {
+				retMat.setValue(newMat.getValue(i, j + this->getNumRows()), i, j);
+			}
+		}
+		return retMat;
+	}
 }
 
+
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::augmentMat() {
+	Matrix retMat(this->getNumRows(), this->getNumRows() * 2);
+	for (int i = 0; i < this->getNumRows(); i++) {
+		for (int j = this->getNumRows(); j < this->getNumRows() * 2; j++) {
+			retMat.setValue((i == j) ? 1.0 : 0.0, i, j); // set right square matrix to identity matrix
+		}
+	}
+	for (int i = 0; i < this->getNumRows(); i++) {
+		for (int j = 0; j < this->getNumColumns(); j++) {
+			retMat.setValue(this->getValue(i, j), i, j);
+		}
+	}
+	return retMat;
+}
 
 // Matrix bool functions
 
@@ -454,10 +478,7 @@ const bool LinearAlgebraLibrary::Matrix::isLinearInd() {
 
 const bool LinearAlgebraLibrary::Matrix::isInvertible() {
 	if (rows != columns) return false;
-	std::vector<std::vector<double>> temp = matrixData;
-	Matrix tempMat(temp);
-	double tempDet = getDeterminant(tempMat);
-	return (tempDet != 0.0);
+	return (getDeterminant(this->copy()) != 0.0);
 }
 
 const bool LinearAlgebraLibrary::Matrix::areEqual(LinearAlgebraLibrary::Matrix& mat) {

@@ -29,6 +29,7 @@ namespace LinearAlgebraLibrary {
 		bool isUpper();
 		bool isLower();
 		void swapRow(int rowOne, int rowTwo);
+		Matrix augmentMat();
 
 	public:
 
