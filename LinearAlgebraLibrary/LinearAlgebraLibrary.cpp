@@ -297,7 +297,7 @@ const int LinearAlgebraLibrary::Matrix::getNullity() {
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getColSpace() {
-	LinearAlgebraLibrary::Matrix retMat = this->ref();
+	LinearAlgebraLibrary::Matrix retMat = this->rref();
 	std::vector<int> pivotColumns;
 	for (int j = 0; j < retMat.getNumColumns(); j++) { // find the columns which have a pivot and save it to a vec
 		for (int i = 0; i < retMat.getNumRows(); i++) {
@@ -307,45 +307,37 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getColSpace() {
 			}
 		}
 	}
-	std::vector<std::vector<double>> colSpaceVec;
-	for (int j : pivotColumns) { // go through the columns of pivot columns
-		std::vector<double> colVec(this->getNumRows());
+	std::vector<std::vector<double>> colSpaceVec(this->getNumRows(), std::vector<double>(pivotColumns.size()));
+	for (int pivotCol = 0; pivotCol < pivotColumns.size(); pivotCol++) {
 		for (int i = 0; i < this->getNumRows(); i++) {
-			colVec[i] = this->getValue(i, j);
+			colSpaceVec[i][pivotCol] = this->getValue(i, pivotColumns[pivotCol]);
 		}
-		colSpaceVec.push_back(colVec);
 	}
-
 	return LinearAlgebraLibrary::Matrix(colSpaceVec);
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getNulSpace() {
-	LinearAlgebraLibrary::Matrix retMat = this->ref();
-	std::vector<std::vector<double>> retVec;
-
-	// find pivot columns
-	std::vector<int> pivotCols;
-	for (int i = 0; i < retMat.getNumRows(); i++) {
-		for (int j = 0; j < retMat.getNumColumns(); j++) {
+	LinearAlgebraLibrary::Matrix retMat = this->rref();
+	std::vector<int> pivotColumns;
+	for (int j = 0; j < retMat.getNumColumns(); j++) { // find the columns which have a pivot and save it to a vec
+		for (int i = 0; i < retMat.getNumRows(); i++) {
 			if (retMat.getValue(i, j) != 0.0) {
-				pivotCols.push_back(j);
+				pivotColumns.push_back(j); // store column val in vector
 				break;
 			}
 		}
 	}
 
-	if (pivotCols.size() == retMat.getNumColumns()) return LinearAlgebraLibrary::Matrix(1);
+	if (pivotColumns.size() == this->getNumColumns()) return LinearAlgebraLibrary::Matrix(1); // lin ind
 
-	for (int i = 0; i < rows; i++) {
-		std::vector<double> temp;
-		for (int j = 0; j < columns; j++) {
-			// if pivot col, continue to next col
-			if (std::find(pivotCols.begin(), pivotCols.end(), j) == pivotCols.end()) continue; 
-			temp.push_back(retMat.getValue(i, j));
-		}
-		retVec.push_back(temp);
-	}
-	return LinearAlgebraLibrary::Matrix(retVec); // stub
+	std::vector<std::vector<double>> nulSpaceVec(this->getNumRows(), std::vector<double>(this->getNumColumns() - ((double) pivotColumns.size())));
+	int nullity = (double) this->getNumColumns() - pivotColumns.size();
+	int colIndex = 0;
+	for (int j = 0; j < this->getNumColumns(); j++) {
+		if (std::find(pivotColumns.begin(), pivotColumns.end(), j) != pivotColumns.end()) continue; // Skip pivot columns
+		
+	} // TO DOOOO
+	return LinearAlgebraLibrary::Matrix(1);
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getTranspose() {
@@ -412,6 +404,7 @@ const bool LinearAlgebraLibrary::Matrix::isIdentity() {
 			} else {
 				if (matrixData[i][j] != 0.0) {
 					return false;
+					return false;
 				}
 			}
 		}
@@ -446,7 +439,17 @@ bool LinearAlgebraLibrary::Matrix::isLower() {
 
 const bool LinearAlgebraLibrary::Matrix::isLinearInd() {
 	if (columns > rows) return false;
-	return (this->columns == this->getColSpace().getNumColumns());
+	Matrix rrefMatrix = this->rref();
+	std::vector<int> pivotColumns;
+	for (int j = 0; j < rrefMatrix.getNumColumns(); j++) { // find the columns which have a pivot and save it to a vec
+		for (int i = 0; i < rrefMatrix.getNumRows(); i++) {
+			if (rrefMatrix.getValue(i, j) != 0.0) {
+				pivotColumns.push_back(j); // store column val in vector
+				break;
+			}
+		}
+	}
+	return (pivotColumns.size() == columns) ? true : false;
 }
 
 const bool LinearAlgebraLibrary::Matrix::isInvertible() {
@@ -531,7 +534,7 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::mul(Matrix& mat) {
 	}
 }
 
-LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::ref() {
+LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::rref() {
 	Matrix retMat = this->copy();
 	int pivotCol = 0;
 	for (int i = 0; i < retMat.getNumRows(); i++) {
@@ -542,23 +545,9 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::ref() {
 			currentRow++; // increase row pointer until get to a pivot != 0.0
 			if (currentRow == retMat.getNumRows()) { // end of matrix
 				// check if the entire column is 0.0
-				bool columnIsZero = true;
-				for (int k = i; k < retMat.getNumRows(); k++) {
-					if (retMat.getValue(k, pivotCol) != 0.0) {
-						columnIsZero = false;
-						break;
-					}
-				}
-				if (columnIsZero) {
-					pivotCol++; // move to next column
-					currentRow = i;
-					if (pivotCol == retMat.getNumColumns()) return retMat; // if none, return
-				}
-				else {
-					currentRow = i; // reset row pointer
-					pivotCol++; // move to next column
-					if (pivotCol == retMat.getNumColumns()) return retMat; // if none, return
-				}
+				pivotCol++;
+				if (pivotCol == retMat.getNumColumns()) return retMat;
+				currentRow = i;
 			}
 		}
 		// swap row at i and currentRow

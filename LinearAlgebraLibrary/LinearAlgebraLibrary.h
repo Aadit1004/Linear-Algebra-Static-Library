@@ -156,8 +156,8 @@ namespace LinearAlgebraLibrary {
 		// Return the multiplication from this matrix and mat if possible
 		Matrix mul(Matrix& mat);
 
-		// Compute and return the Row Echelon Form of the matrix
-		Matrix ref();
+		// Compute and return the Reduced Row Echelon Form of the matrix
+		Matrix rref();
 
 		// Takes this matrix and raises it to a power (must be square?)
 		Matrix power(int pow);
