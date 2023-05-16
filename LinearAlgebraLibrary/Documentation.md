@@ -821,3 +821,63 @@ Output:
 ```
 
 ## Other Methods
+
+### LinearAlgebraLibrary refY
+
+Reflects *this* Matrix object over the y-axis
+
+Parameters: <br>
+mat
+: Matrix object to reflect over y-axis, must be 2x1 Matrix
+
+Return value: <br>
+The same vector Matrix reflected over the y-axis (Matrix)
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0}, {2.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	LinearAlgebraLibrary::Matrix retMat = refY(mat);
+	retMat.print();
+}
+```
+
+Output:
+```cpp
+-1.0
+2.0
+```
+
+### LinearAlgebraLibrary refX
+
+Reflects *this* Matrix object over the x-axis
+
+Parameters: <br>
+mat
+: Matrix object to reflect over x-axis, must be 2x1 Matrix
+
+Return value: <br>
+The same vector Matrix reflected over the x-axis (Matrix)
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0}, {2.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	LinearAlgebraLibrary::Matrix retMat = refX(mat);
+	retMat.print();
+}
+```
+
+Output:
+```cpp
+1.0
+-2.0
+```

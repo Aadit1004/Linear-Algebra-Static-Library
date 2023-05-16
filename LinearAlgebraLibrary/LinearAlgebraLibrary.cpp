@@ -322,7 +322,7 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getNulSpace() {
 	for (int j = 0; j < retMat.getNumColumns(); j++) { // find the columns which have a pivot and save it to a vec
 		for (int i = 0; i < retMat.getNumRows(); i++) {
 			if (retMat.getValue(i, j) != 0.0) {
-				pivotColumns.push_back(j); // store column val in vector
+				pivotColumns.push_back(j); // store pivot column val in vector
 				break;
 			}
 		}
@@ -330,14 +330,17 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getNulSpace() {
 
 	if (pivotColumns.size() == this->getNumColumns()) return LinearAlgebraLibrary::Matrix(1); // lin ind
 
-	std::vector<std::vector<double>> nulSpaceVec(this->getNumRows(), std::vector<double>(this->getNumColumns() - ((double) pivotColumns.size())));
-	int nullity = (double) this->getNumColumns() - pivotColumns.size();
-	int colIndex = 0;
-	for (int j = 0; j < this->getNumColumns(); j++) {
-		if (std::find(pivotColumns.begin(), pivotColumns.end(), j) != pivotColumns.end()) continue; // Skip pivot columns
-		
-	} // TO DOOOO
-	return LinearAlgebraLibrary::Matrix(1);
+	std::vector<std::vector<double>> retVec;
+	for (int i = 0; i < this->getNumRows(); i++) {
+		std::vector<double> temp;
+		for (int j = 0; j < this->getNumColumns(); j++) {
+			if (std::find(pivotColumns.begin(), pivotColumns.end(), j) != pivotColumns.end()) {
+				temp.push_back(this->getValue(i, j));
+			}
+		}
+		retVec.push_back(temp);
+	}
+	return LinearAlgebraLibrary::Matrix(retVec);
 }
 
 LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getTranspose() {
