@@ -359,12 +359,21 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getInverse() {
 		throw LinearAlgebraLibException("Matrix is not invertible.");
 	}
 	else {
-		if (this->getNumRows() == 1) return this->copy(); // if 1x1
-		Matrix retMat(this->getNumRows(), this->getNumColumns());
-		Matrix newMat = this->augmentMat().rref();
-		for (int i = 0; i < retMat.getNumRows(); i++) {
-			for (int j = 0; j < retMat.getNumColumns(); j++) {
-				retMat.setValue(newMat.getValue(i, j + this->getNumRows()), i, j);
+		int n = this->getNumRows();
+		Matrix retMat(n, n);
+		if (n == 2) {
+			retMat.setValue(this->getValue(1, 1), 0, 0);
+			retMat.setValue(-1 * this->getValue(0, 1), 0, 1);
+			retMat.setValue(-1 * this->getValue(1, 0), 1, 0);
+			retMat.setValue(this->getValue(0, 0), 1, 1);
+			retMat.scalar(1 / (getDeterminant(this->copy())));
+		}
+		else {
+			Matrix newMat = this->augmentMat().rref();
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++) {
+					retMat.setValue(newMat.getValue(i, j + n), i, j);
+				}
 			}
 		}
 		return retMat;
