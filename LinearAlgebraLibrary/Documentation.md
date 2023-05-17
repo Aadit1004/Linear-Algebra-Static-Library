@@ -881,3 +881,224 @@ Output:
 1.0
 -2.0
 ```
+
+### LinearAlgebraLibrary refYX
+
+Reflects *this* Matrix object over the y=x line
+
+Parameters: <br>
+mat
+: Matrix object to reflect over y=x line, must be 2x1 Matrix
+
+Return value: <br>
+The same vector Matrix reflected over the y=x line (Matrix)
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0}, {2.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	LinearAlgebraLibrary::Matrix retMat = refYX(mat);
+	retMat.print();
+}
+```
+
+Output:
+```cpp
+2.0
+1.0
+```
+
+### LinearAlgebraLibrary rot90
+
+Rotates *this* Matrix object 90 degrees counter-clockwise
+
+Parameters: <br>
+mat
+: Matrix object to rotated 90 degrees, must be 2x1 Matrix
+
+Return value: <br>
+The same vector Matrix rotated 90 degrees counter-clockwise (Matrix)
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0}, {2.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	LinearAlgebraLibrary::Matrix retMat = rot90(mat);
+	retMat.print();
+}
+```
+
+Output:
+```cpp
+-2.0
+1.0
+```
+
+### LinearAlgebraLibrary rot180
+
+Rotates *this* Matrix object 180 degrees counter-clockwise
+
+Parameters: <br>
+mat
+: Matrix object to rotated 180 degrees, must be 2x1 Matrix
+
+Return value: <br>
+The same vector Matrix rotated 180 degrees counter-clockwise (Matrix)
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0}, {2.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	LinearAlgebraLibrary::Matrix retMat = rot180(mat);
+	retMat.print();
+}
+```
+
+Output:
+```cpp
+-1.0
+-2.0
+```
+
+### LinearAlgebraLibrary rot270
+
+Rotates *this* Matrix object 270 degrees counter-clockwise
+
+Parameters: <br>
+mat
+: Matrix object to rotated 270 degrees, must be 2x1 Matrix
+
+Return value: <br>
+The same vector Matrix rotated 270 degrees counter-clockwise (Matrix)
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0}, {2.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	LinearAlgebraLibrary::Matrix retMat = rot270(mat);
+	retMat.print();
+}
+```
+
+Output:
+```cpp
+2.0
+-1.0
+```
+
+### LinearAlgebraLibrary customMatTransform
+
+Custom transformation on *this* Matrix 
+
+Parameters: <br>
+origMat
+: Matrix object to transformed, must be 2x1 Matrix
+
+transformMat
+: Matrix object representing a transformation, must be 2x2 Matrix
+
+Return value: <br>
+The same vector Matrix transformed (Matrix)
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0}, {2.0} };
+	LinearAlgebraLibrary::Matrix origMat(temp);
+	std::vector<std::vector<double>> transformVec{ {1.0, 3.0}, {2.0, 5.0} };
+	LinearAlgebraLibrary::Matrix transformMat(transformVec);
+	LinearAlgebraLibrary::Matrix retMat = customMatTransform(origMat, transformMat);
+	retMat.print();
+}
+```
+
+Output:
+```cpp
+7.0
+12.0
+```
+
+### LinearAlgebraLibrary getDeterminant
+
+Gets the [determinant](https://en.wikipedia.org/wiki/Determinant) from *this* Matrix 
+using the [Laplace Expansion](https://en.wikipedia.org/wiki/Laplace_expansion) method
+
+Parameters: <br>
+mat
+: Matrix object to get the determinant, must be a square matrix
+
+Return value: <br>
+The determinant of *this* matrix (double)
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> vec1{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} };
+	LinearAlgebraLibrary::Matrix mat(vec1);
+	double retVal = getDeterminant(mat);
+	std::cout << retVal << std::endl;
+}
+```
+
+Output:
+```cpp
+0.0
+```
+
+### LinearAlgebraLibrary getSubMatrix
+
+Gets the sub-matrix of a Matrix object without the row and column included as param
+
+Parameters: <br>
+origMat
+: Matrix object to get the subMatrix from
+
+rowToExclude
+: row to exclude from origMatrix
+
+columnToExclude
+: column to exclude from origMatrix
+
+Return value: <br>
+Matrix without the row and column param (Matrix)
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> vec1{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} };
+	LinearAlgebraLibrary::Matrix mat(vec1);
+	LinearAlgebraLibrary::Matrix retMat = getSubMatrix(mat, 0, 0);
+	retMat.print();
+}
+```
+
+Output:
+```cpp
+5.0 6.0
+8.0 9.0
+```
