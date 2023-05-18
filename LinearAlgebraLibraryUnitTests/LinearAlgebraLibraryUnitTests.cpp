@@ -1654,6 +1654,18 @@ namespace LinearAlgebraLibraryUnitTests
 				Assert::Fail();
 			}
 		}
+		TEST_METHOD(GetSubMatrix)
+		{
+			std::vector<std::vector<double>> testVec{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} };
+			LinearAlgebraLibrary::Matrix testMatrix(testVec);
+			LinearAlgebraLibrary::Matrix subMat = getSubMatrix(testMatrix, 0, 0);
+			Assert::AreEqual(2, subMat.getNumRows());
+			Assert::AreEqual(2, subMat.getNumColumns());
+			std::vector<std::vector<double>> retVec{ {5.0, 6.0}, {8.0, 9.0} };
+			LinearAlgebraLibrary::Matrix retMat(retVec);
+			Assert::IsTrue(subMat.areEqual(retMat));
+
+		}
 
 	};
 }
