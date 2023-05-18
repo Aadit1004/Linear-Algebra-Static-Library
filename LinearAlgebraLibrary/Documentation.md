@@ -182,6 +182,206 @@ Output:
 0.0 0.0
 ```
 
+### LinearAlgebraLibrary::Matrix setRandom
+
+Sets all elements to a random double from 0.0 to 100.0 in the matrix
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	LinearAlgebraLibrary::Matrix mat(2);
+	mat.print();
+	mat.setRandom();
+	std::cout << std::endl;
+	mat.print();
+}
+```
+
+Output:
+```cpp
+0.0 0.0
+0.0 0.0
+
+22.0 14.0
+84.0 12.0
+```
+
+### LinearAlgebraLibrary::Matrix setSize 1
+
+Resizes the matrix to the given size, will delete values if row or column decreases and will
+add 0.0 as default if row or column increases.
+
+Parameters: <br>
+m
+: # of rows wanted in matrix
+
+n
+: # of columns wanted in matrix
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0}, {3.0, 4.0} }; // 2x2 matrix
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print();
+	mat.setSize(1, 3); // set to a 1x3 matrix
+	std::cout << std::endl;
+	mat.print();
+}
+```
+
+Output:
+```cpp
+1.0 2.0
+3.0 4.0
+
+1.0 2.0 0.0
+```
+
+### LinearAlgebraLibrary::Matrix setSize 1
+
+Resizes the matrix to the given square size, will delete values if row or column decreases and will
+add 0.0 as default if row or column increases. 
+
+Parameters: <br>
+n
+: # of rows and columns wanted in matrix
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0}, {3.0, 4.0} }; // 2x2 matrix
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print();
+	mat.setSize(3); // set to a 3x3 matrix
+	std::cout << std::endl;
+	mat.print();
+}
+```
+
+Output:
+```cpp
+1.0 2.0
+3.0 4.0
+
+1.0 2.0 0.0
+3.0 4.0 0.0
+0.0 0.0 0.0
+```
+
+### LinearAlgebraLibrary::Matrix setIdentity
+
+Sets *this* Matrix object to a [identity matrix](https://en.wikipedia.org/wiki/Identity_matrix). 
+Will set the dimensions to the min of the rows and columns.
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0} }; // 3x2 matrix
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print();
+	mat.setIdentity(); // set to a 3x3 matrix
+	std::cout << std::endl;
+	mat.print();
+}
+```
+
+Output:
+```cpp
+1.0 2.0
+3.0 4.0
+5.0 6.0
+
+1.0 0.0 
+0.0 1.0
+```
+
+### LinearAlgebraLibrary::Matrix setUpperTriangle
+
+Sets *this* Matrix object to a [upper triangular matrix](https://mathworld.wolfram.com/UpperTriangularMatrix.html).
+Must be a square matrix.
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} }; 
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print();
+	mat.setUpperTriangular();
+	std::cout << std::endl;
+	mat.print();
+}
+```
+
+Output:
+```cpp
+1.0 2.0 3.0
+4.0 5.0 6.0
+7.0 8.0 9.0
+
+1.0 2.0 3.0
+0.0 5.0 6.0
+0.0 0.0 9.0
+```
+
+### LinearAlgebraLibrary::Matrix setLowerTriangle
+
+Sets *this* Matrix object to a [upper lower matrix](https://mathworld.wolfram.com/LowerTriangularMatrix.html).
+Must be a square matrix.
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} }; 
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print();
+	mat.setLowerTriangular();
+	std::cout << std::endl;
+	mat.print();
+}
+```
+
+Output:
+```cpp
+1.0 2.0 3.0
+4.0 5.0 6.0
+7.0 8.0 9.0
+
+1.0 0.0 0.0
+4.0 5.0 0.0
+7.0 8.0 9.0
+```
+
 ## Vec Class
 
 ### LinearAlgebraLibrary::Vec Constructor 1
