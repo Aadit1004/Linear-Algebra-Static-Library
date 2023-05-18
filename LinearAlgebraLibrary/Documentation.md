@@ -3,6 +3,185 @@ Documentation for all methods for the library. As of right now, only _doubles_ a
 
 ## Matrix Class
 
+### LinearAlgebraLibrary::Matrix Constructor 1
+
+Constructors a Matrix object with a 2 dimension vector a parameter as the given data
+
+Parameters: <br>
+data 
+: a 2 dimensional vector of doubles. must have at least size 1x1
+
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0}, {3.0, 4.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print();
+}
+```
+
+Output:
+```cpp
+1.0 2.0
+3.0 4.0
+```
+
+### LinearAlgebraLibrary::Matrix Constructor 2
+
+Constructors a Matrix object with the given number of rows and columns. Fills all values with 0.0s
+
+Parameters: <br>
+m
+: # of rows in matrix, must be greater than 0
+
+n
+: # of columns in matrix, must be greater than 0
+
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	LinearAlgebraLibrary::Matrix mat(2, 1);
+	mat.print();
+}
+```
+
+Output:
+```cpp
+0.0
+0.0
+```
+
+### LinearAlgebraLibrary::Matrix Constructor 2
+
+Constructors a square Matrix object with the given number of rows and columns. Fills all values with 0.0s
+
+Parameters: <br>
+n
+: # of rows and columns in matrix, must be greater than 0
+
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	LinearAlgebraLibrary::Matrix mat(3);
+	mat.print();
+}
+```
+
+Output:
+```cpp
+0.0 0.0 0.0
+0.0 0.0 0.0
+0.0 0.0 0.0
+```
+
+### LinearAlgebraLibrary::Matrix setValue
+
+Sets a value in the matrix at the given position
+
+Parameters: <br>
+value
+: the value that you would like to set
+
+rowNum
+: the row number to set the position, 0-indexed
+
+colNum
+: the column number to set the position, 0-indexed
+
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	LinearAlgebraLibrary::Matrix mat(3);
+	std::cout << mat.getValue(1, 1) << std::endl;
+	mat.setValue(3.0, 1, 1);
+	std::cout << mat.getValue(1, 1) << std::endl;
+}
+```
+
+Output:
+```cpp
+0.0
+3.0
+```
+
+### LinearAlgebraLibrary::Matrix setOnes
+
+Sets all elements to 1.0 in the matrix
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0}, {3.0, 4.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print();
+	mat.setOnes();
+	std::cout << std::endl;
+	mat.print();
+}
+```
+
+Output:
+```cpp
+1.0 2.0
+3.0 4.0
+
+1.0 1.0
+1.0 1.0
+```
+
+### LinearAlgebraLibrary::Matrix setZeros
+
+Sets all elements to 0.0 in the matrix
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0}, {3.0, 4.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print();
+	mat.setZeros();
+	std::cout << std::endl;
+	mat.print();
+}
+```
+
+Output:
+```cpp
+1.0 2.0
+3.0 4.0
+
+0.0 0.0
+0.0 0.0
+```
+
 ## Vec Class
 
 ### LinearAlgebraLibrary::Vec Constructor 1
