@@ -382,6 +382,383 @@ Output:
 7.0 8.0 9.0
 ```
 
+### LinearAlgebraLibrary::Matrix getValue
+
+Gets the value from the given position param.
+
+Parameters: <br>
+rowNum
+: the row number from the position, 0-indexed
+
+colNum
+: the column number from the position, 0-indexed
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} }; 
+	LinearAlgebraLibrary::Matrix mat(temp);
+	std::cout << mat.getValue(1, 2); << std::endl;
+}
+```
+
+Output:
+```cpp
+6.0
+```
+
+### LinearAlgebraLibrary::Matrix getNumElem
+
+Gets the number of elements in the matrix
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} }; 
+	LinearAlgebraLibrary::Matrix mat(temp);
+	std::cout << mat.getNumElem(); << std::endl;
+}
+```
+
+Output:
+```cpp
+9
+```
+
+### LinearAlgebraLibrary::Matrix getNumRows
+
+Gets the number of rows in the matrix
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} }; 
+	LinearAlgebraLibrary::Matrix mat(temp);
+	std::cout << mat.getNumRows(); << std::endl;
+}
+```
+
+Output:
+```cpp
+3
+```
+
+### LinearAlgebraLibrary::Matrix getNumColumns
+
+Gets the number of columns in the matrix
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} }; 
+	LinearAlgebraLibrary::Matrix mat(temp);
+	std::cout << mat.getNumColumns(); << std::endl;
+}
+```
+
+Output:
+```cpp
+3
+```
+
+### LinearAlgebraLibrary::Matrix getLargestValue
+
+Gets the largest number in the matrix
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} }; 
+	LinearAlgebraLibrary::Matrix mat(temp);
+	std::cout << mat.getLargestValue(); << std::endl;
+}
+```
+
+Output:
+```cpp
+9.0
+```
+
+### LinearAlgebraLibrary::Matrix getSmallestValue
+
+Gets the smallest number in the matrix
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} }; 
+	LinearAlgebraLibrary::Matrix mat(temp);
+	std::cout << mat.getSmallestValue(); << std::endl;
+}
+```
+
+Output:
+```cpp
+1.0
+```
+
+### LinearAlgebraLibrary::Matrix getRow
+
+Gets the row from the matrix
+
+Parameters: <br>
+row
+: the row to get from the matrix, 0-indexed
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} }; 
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print()
+	std::cout << std::endl;
+	LinearAlgebraLibrary::Matrix retRow = mat.getRow(1);
+	retRow.print();
+}
+```
+
+Output:
+```cpp
+1.0 2.0 3.0
+4.0 5.0 6.0
+7.0 8.0 9.0
+
+4.0 5.0 6.0
+```
+
+### LinearAlgebraLibrary::Matrix getColumn
+
+Gets the column from the matrix
+
+Parameters: <br>
+column
+: the column to get from the matrix, 0-indexed
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0} }; 
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print()
+	std::cout << std::endl;
+	LinearAlgebraLibrary::Matrix retCol = mat.getColumn(0);
+	retCol.print();
+}
+```
+
+Output:
+```cpp
+1.0 2.0 3.0
+4.0 5.0 6.0
+7.0 8.0 9.0
+
+1.0
+4.0
+7.0
+```
+
+### LinearAlgebraLibrary::Matrix getRank
+
+Gets the [rank](https://en.wikipedia.org/wiki/Rank_(linear_algebra)) of the matrix
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 0.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	std::cout << mat.getRank() << std::endl;
+}
+```
+
+Output:
+```cpp
+2
+```
+
+### LinearAlgebraLibrary::Matrix getNullity
+
+Gets the [nullity](https://www.geeksforgeeks.org/null-space-and-nullity-of-a-matrix/) of the matrix
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 0.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	std::cout << mat.getNullity() << std::endl;
+}
+```
+
+Output:
+```cpp
+1
+```
+
+### LinearAlgebraLibrary::Matrix getColSpace
+
+Gets the [column space](https://medium.com/intuitionmath/what-is-column-space-with-a-machine-learning-example-8f8a8d4ec6c) of the matrix
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 0.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.getColSpace().print();
+}
+```
+
+Output:
+```cpp
+1.0 0.0
+0.0 1.0
+0.0 0.0
+```
+
+### LinearAlgebraLibrary::Matrix getNulSpace
+
+Gets the [nul space](https://www.geeksforgeeks.org/null-space-and-nullity-of-a-matrix/) of the matrix
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 0.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.getNulSpace().print();
+}
+```
+
+Output:
+```cpp
+0.0
+0.0
+0.0
+```
+
+### LinearAlgebraLibrary::Matrix getTranspose
+
+Gets the [transpose](https://en.wikipedia.org/wiki/Transpose) of the matrix
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0} }; // 3x2 matrix
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print();
+	std::cout << std::endl;
+	LinearAlgebraLibrary::Matrix transposeMat = mat.getTranspose(); // 2x3 matrix
+	transposeMat.print();
+}
+```
+
+Output:
+```cpp
+1.0 2.0
+3.0 4.0
+5.0 6.0
+
+1.0 3.0 5.0
+2.0 4.0 6.0
+```
+
+### LinearAlgebraLibrary::Matrix getInverse
+
+Gets the [inverse](https://en.wikipedia.org/wiki/Invertible_matrix) of the matrix, must be a square matrix
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0}, {2.0, 3.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print();
+	std::cout << std::endl;
+	LinearAlgebraLibrary::Matrix invMat = mat.getInverse(); 
+	invMat.print();
+}
+```
+
+Output:
+```cpp
+1.0 2.0
+2.0 3.0
+
+-3.0 2.0
+2.0 -1.0
+```
+
 ## Vec Class
 
 ### LinearAlgebraLibrary::Vec Constructor 1
