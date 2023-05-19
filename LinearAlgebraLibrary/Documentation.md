@@ -759,6 +759,226 @@ Output:
 2.0 -1.0
 ```
 
+### LinearAlgebraLibrary::Matrix allZeros
+
+Returns true if all elements in the matrix are zeros.
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	LinearAlgebraLibrary::Matrix mat(4);
+	std::cout << mat.allZeros() << std::endl;
+}
+```
+
+Output:
+```cpp
+1
+```
+
+### LinearAlgebraLibrary::Matrix allOnes
+
+Returns true if all elements in the matrix are ones.
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	LinearAlgebraLibrary::Matrix mat(4);
+	mat.setOnes();
+	std::cout << mat.allOnes() << std::endl;
+}
+```
+
+Output:
+```cpp
+1
+```
+
+### LinearAlgebraLibrary::Matrix isVector
+
+Returns true if all the matrix is a row or column vector
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0}, {2.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	std::cout << mat.isVector() << std::endl;
+}
+```
+
+Output:
+```cpp
+1
+```
+
+### LinearAlgebraLibrary::Matrix isSquareMatrix
+
+Returns true if *this* Matrix object is a square matrix.
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0}, {3.0, 4.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	std::cout << mat.isSquareMatrix() << std::endl;
+}
+```
+
+Output:
+```cpp
+1
+```
+
+### LinearAlgebraLibrary::Matrix isIdentity
+
+Returns true if *this* Matrix object is an identity matrix.
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0}, {3.0, 4.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.setIdentity();
+	std::cout << mat.isIdentity() << std::endl;
+}
+```
+
+Output:
+```cpp
+1
+```
+
+### LinearAlgebraLibrary::Matrix isTriangularMatrix
+
+Returns true if *this* Matrix object is a lower or upper triangular matrix.
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0}, {3.0, 4.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.setUpperTriangular();
+	std::cout << mat.isTriangularMatrix() << std::endl;
+}
+```
+
+Output:
+```cpp
+1
+```
+
+### LinearAlgebraLibrary::Matrix isLinearInd
+
+Returns true if *this* Matrix object is linearly independent.
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 0.0}, {0.0, 1.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	std::cout << mat.isLinearInd() << std::endl;
+}
+```
+
+Output:
+```cpp
+1
+```
+
+### LinearAlgebraLibrary::Matrix isInvertible
+
+Returns true if *this* Matrix object is linearly independent.
+
+Parameters: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0}, {2.0, 3.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	std::cout << mat.isInvertible() << std::endl;
+}
+```
+
+Output:
+```cpp
+1
+```
+
+### LinearAlgebraLibrary::Matrix areEqual
+
+Returns true if *this* Matrix object is equal to the given matrix param.
+
+Parameters: <br>
+mat
+: The matrix param to compare to *this* matrix
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp1{ {1.0, 2.0}, {2.0, 3.0} };
+	LinearAlgebraLibrary::Matrix mat1(temp1);
+	std::vector<std::vector<double>> temp2{ {1.0, 2.0}, {2.0, 3.0} };
+	LinearAlgebraLibrary::Matrix mat2(temp2);
+	std::cout << mat1.areEqual(mat2) << std::endl;
+}
+```
+
+Output:
+```cpp
+1
+```
+
 ## Vec Class
 
 ### LinearAlgebraLibrary::Vec Constructor 1
