@@ -629,8 +629,8 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::power(int pow) {
 		else if (pow < 0) {
 			// add negative test pow case later after get inverse fn.
 			// get inv and take it to the abs(pow)
-			LinearAlgebraLibrary::Matrix stub(1, 1);
-			return stub;
+			Matrix temp = this->getInverse();
+			return temp.power(std::abs(pow));
 		}
 		else {
 			// use exponentiation by squaring for powers greater than 1

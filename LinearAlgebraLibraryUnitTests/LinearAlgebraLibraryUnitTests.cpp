@@ -521,6 +521,7 @@ namespace LinearAlgebraLibraryUnitTests
 				Assert::Fail();
 			}
 		}
+
 		TEST_METHOD(MatrixIsInvertibleSquareMatrix)
 		{
 			std::vector<std::vector<double>> testVec{ {1.0, 2.0}, {3.0, 4.0} };
@@ -758,6 +759,21 @@ namespace LinearAlgebraLibraryUnitTests
 				LinearAlgebraLibrary::Matrix testMatrix1(testVec1);
 				LinearAlgebraLibrary::Matrix testRet = testMatrix1.power(2);
 				std::vector<std::vector<double>> testVec2{ {7.0, 10.0}, {15.0, 22.0} };
+				LinearAlgebraLibrary::Matrix testMatrix2(testVec2);
+				Assert::IsTrue(testRet.areEqual(testMatrix2));
+			}
+			catch (LinearAlgebraLibrary::LinearAlgebraLibException e) {
+				Assert::Fail();
+			}
+		}
+
+		TEST_METHOD(MatrixPowerNegative)
+		{
+			try {
+				std::vector<std::vector<double>> testVec1{ {1.0, 2.0}, {2.0, 3.0} };
+				LinearAlgebraLibrary::Matrix testMatrix1(testVec1);
+				LinearAlgebraLibrary::Matrix testRet = testMatrix1.power(-2);
+				std::vector<std::vector<double>> testVec2{ {13.0, -8.0}, {-8.0, 5.0} }; 
 				LinearAlgebraLibrary::Matrix testMatrix2(testVec2);
 				Assert::IsTrue(testRet.areEqual(testMatrix2));
 			}

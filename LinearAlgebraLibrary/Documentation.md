@@ -11,7 +11,6 @@ Parameters: <br>
 data 
 : a 2 dimensional vector of doubles. must have at least size 1x1
 
-
 Throws Exception:  <br>
 Yes
 
@@ -59,7 +58,7 @@ Output:
 0.0
 ```
 
-### LinearAlgebraLibrary::Matrix Constructor 2
+### LinearAlgebraLibrary::Matrix Constructor 3
 
 Constructors a square Matrix object with the given number of rows and columns. Fills all values with 0.0s
 
@@ -100,6 +99,8 @@ rowNum
 colNum
 : the column number to set the position, 0-indexed
 
+Return value: <br>
+None
 
 Throws Exception:  <br>
 Yes
@@ -125,6 +126,9 @@ Output:
 Sets all elements to 1.0 in the matrix
 
 Parameters: <br>
+None
+
+Return value: <br>
 None
 
 Throws Exception:  <br>
@@ -158,6 +162,9 @@ Sets all elements to 0.0 in the matrix
 Parameters: <br>
 None
 
+Return value: <br>
+None
+
 Throws Exception:  <br>
 No
 
@@ -187,6 +194,9 @@ Output:
 Sets all elements to a random double from 0.0 to 100.0 in the matrix
 
 Parameters: <br>
+None
+
+Return value: <br>
 None
 
 Throws Exception:  <br>
@@ -224,6 +234,9 @@ m
 n
 : # of columns wanted in matrix
 
+Return value: <br>
+None
+
 Throws Exception:  <br>
 Yes
 
@@ -256,6 +269,9 @@ Parameters: <br>
 n
 : # of rows and columns wanted in matrix
 
+Return value: <br>
+None
+
 Throws Exception:  <br>
 Yes
 
@@ -287,6 +303,9 @@ Sets *this* Matrix object to a [identity matrix](https://en.wikipedia.org/wiki/I
 Will set the dimensions to the min of the rows and columns.
 
 Parameters: <br>
+None
+
+Return value: <br>
 None
 
 Throws Exception:  <br>
@@ -322,6 +341,9 @@ Must be a square matrix.
 Parameters: <br>
 None
 
+Return value: <br>
+None
+
 Throws Exception:  <br>
 Yes
 
@@ -354,6 +376,9 @@ Sets *this* Matrix object to a [upper lower matrix](https://mathworld.wolfram.co
 Must be a square matrix.
 
 Parameters: <br>
+None
+
+Return value: <br>
 None
 
 Throws Exception:  <br>
@@ -393,6 +418,9 @@ rowNum
 colNum
 : the column number from the position, 0-indexed
 
+Return value: <br>
+Value at the given value param (double)
+
 Throws Exception:  <br>
 Yes
 
@@ -416,6 +444,9 @@ Gets the number of elements in the matrix
 
 Parameters: <br>
 None
+
+Return value: <br>
+Number of elements in matrix (int)
 
 Throws Exception:  <br>
 No
@@ -441,6 +472,9 @@ Gets the number of rows in the matrix
 Parameters: <br>
 None
 
+Return value: <br>
+Number of rows in matrix (int)
+
 Throws Exception:  <br>
 No
 
@@ -464,6 +498,9 @@ Gets the number of columns in the matrix
 
 Parameters: <br>
 None
+
+Return value: <br>
+Number of columns in matrix (int)
 
 Throws Exception:  <br>
 No
@@ -489,6 +526,9 @@ Gets the largest number in the matrix
 Parameters: <br>
 None
 
+Return value: <br>
+Largest value in matrix (double)
+
 Throws Exception:  <br>
 No
 
@@ -512,6 +552,9 @@ Gets the smallest number in the matrix
 
 Parameters: <br>
 None
+
+Return value: <br>
+Smallest value in matrix (double)
 
 Throws Exception:  <br>
 No
@@ -537,6 +580,9 @@ Gets the row from the matrix
 Parameters: <br>
 row
 : the row to get from the matrix, 0-indexed
+
+Return value: <br>
+The row from given param pos (Matrix)
 
 Throws Exception:  <br>
 Yes
@@ -569,6 +615,9 @@ Gets the column from the matrix
 Parameters: <br>
 column
 : the column to get from the matrix, 0-indexed
+
+Return value: <br>
+The column from given param pos (Matrix)
 
 Throws Exception:  <br>
 Yes
@@ -603,6 +652,9 @@ Gets the [rank](https://en.wikipedia.org/wiki/Rank_(linear_algebra)) of the matr
 Parameters: <br>
 None
 
+Return value: <br>
+The rank of the matrix (int)
+
 Throws Exception:  <br>
 No
 
@@ -627,6 +679,9 @@ Gets the [nullity](https://www.geeksforgeeks.org/null-space-and-nullity-of-a-mat
 Parameters: <br>
 None
 
+Return value: <br>
+The nullity of the matrix (int)
+
 Throws Exception:  <br>
 No
 
@@ -650,6 +705,9 @@ Gets the [column space](https://medium.com/intuitionmath/what-is-column-space-wi
 
 Parameters: <br>
 None
+
+Return value: <br>
+The column space of matrix (Matrix)
 
 Throws Exception:  <br>
 No
@@ -677,6 +735,9 @@ Gets the [nul space](https://www.geeksforgeeks.org/null-space-and-nullity-of-a-m
 Parameters: <br>
 None
 
+Return value: <br>
+The nul space of the matrix (Matrix)
+
 Throws Exception:  <br>
 No
 
@@ -702,6 +763,9 @@ Gets the [transpose](https://en.wikipedia.org/wiki/Transpose) of the matrix
 
 Parameters: <br>
 None
+
+Return value: <br>
+The transpose of matrix (Matrix)
 
 Throws Exception:  <br>
 No
@@ -735,6 +799,9 @@ Gets the [inverse](https://en.wikipedia.org/wiki/Invertible_matrix) of the matri
 Parameters: <br>
 None
 
+Return value: <br>
+The inverse of the matrix (Matrix)
+
 Throws Exception:  <br>
 Yes
 
@@ -766,6 +833,9 @@ Returns true if all elements in the matrix are zeros.
 Parameters: <br>
 None
 
+Return value: <br>
+True if all values are zeros (bool)
+
 Throws Exception:  <br>
 No
 
@@ -788,6 +858,9 @@ Returns true if all elements in the matrix are ones.
 
 Parameters: <br>
 None
+
+Return value: <br>
+True if all values are ones (bool)
 
 Throws Exception:  <br>
 No
@@ -813,6 +886,9 @@ Returns true if all the matrix is a row or column vector
 Parameters: <br>
 None
 
+Return value: <br>
+True if matrix is a vector (bool)
+
 Throws Exception:  <br>
 No
 
@@ -837,6 +913,9 @@ Returns true if *this* Matrix object is a square matrix.
 Parameters: <br>
 None
 
+Return value: <br>
+True if matrix is square (bool)
+
 Throws Exception:  <br>
 No
 
@@ -860,6 +939,9 @@ Returns true if *this* Matrix object is an identity matrix.
 
 Parameters: <br>
 None
+
+Return value: <br>
+True if the matrix is an identity matrix (bool)
 
 Throws Exception:  <br>
 No
@@ -886,6 +968,9 @@ Returns true if *this* Matrix object is a lower or upper triangular matrix.
 Parameters: <br>
 None
 
+Return value: <br>
+True if matrix is a trangular matrix (bool)
+
 Throws Exception:  <br>
 No
 
@@ -911,6 +996,9 @@ Returns true if *this* Matrix object is linearly independent.
 Parameters: <br>
 None
 
+Return value: <br>
+True if matrix is linearly independent (bool)
+
 Throws Exception:  <br>
 No
 
@@ -934,6 +1022,9 @@ Returns true if *this* Matrix object is linearly independent.
 
 Parameters: <br>
 None
+
+Return value: <br>
+True if matrix is invertible (bool)
 
 Throws Exception:  <br>
 No
@@ -960,6 +1051,9 @@ Parameters: <br>
 mat
 : The matrix param to compare to *this* matrix
 
+Return value: <br>
+True if matrix and given matrix param are equal (bool)
+
 Throws Exception:  <br>
 No
 
@@ -979,6 +1073,308 @@ Output:
 1
 ```
 
+### LinearAlgebraLibrary::Matrix add
+
+Adds *this* Matrix object to the given matrix param.
+
+Parameters: <br>
+mat
+: The matrix param to add to *this* matrix
+
+Return value: <br>
+The sum of both matrices (Matrix)
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp1{ {1.0, 2.0}, {3.0, 4.0} };
+	LinearAlgebraLibrary::Matrix mat1(temp1);
+	std::vector<std::vector<double>> temp2{ {5.0, 6.0}, {7.0, 8.0} };
+	LinearAlgebraLibrary::Matrix mat2(temp2);
+	LinearAlgebraLibrary::Matrix retMat = mat1.add(mat2);
+	retMat.print();
+}
+```
+
+Output:
+```cpp
+6.0 8.0
+10.0 12.0
+```
+
+### LinearAlgebraLibrary::Matrix sub
+
+Subs *this* Matrix object to the given matrix param.
+
+Parameters: <br>
+mat
+: The matrix param to sub to *this* matrix
+
+Return value: <br>
+The difference of both matrices (Matrix)
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp1{ {1.0, 2.0}, {-3.0, 4.0} };
+	LinearAlgebraLibrary::Matrix mat1(temp1);
+	std::vector<std::vector<double>> temp2{ {15.3, -3.6}, {3.8, 24.2} };
+	LinearAlgebraLibrary::Matrix mat2(temp2);
+	LinearAlgebraLibrary::Matrix retMat = mat1.sub(mat2);
+	retMat.print();
+}
+```
+
+Output:
+```cpp
+-14.3 5.6 
+-6.8 -20.2
+```
+
+### LinearAlgebraLibrary::Matrix mul
+
+Multiplies *this* Matrix object to the given matrix param.
+
+Parameters: <br>
+mat
+: The matrix param to multiply to *this* matrix
+
+Return value: <br>
+The product of both matrices (Matrix)
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp1{ {1.0}, {2.0} }; // 2x1 matrix
+	LinearAlgebraLibrary::Matrix mat1(temp1);
+	std::vector<std::vector<double>> temp2{ {3.0, 4.0} }; // 1x2 matrix
+	LinearAlgebraLibrary::Matrix mat2(temp2);
+	LinearAlgebraLibrary::Matrix retMat = mat1.mul(mat2); // 2x2 matrix
+	retMat.print();
+}
+```
+
+Output:
+```cpp
+3.0 4.0
+6.0 8.0
+```
+
+### LinearAlgebraLibrary::Matrix rref
+
+Performs the [row reduced echelon form](https://www.statlect.com/matrix-algebra/reduced-row-echelon-form) on this matrix and returns it. 
+Uses the [Gaussian elimination](https://en.wikipedia.org/wiki/Gaussian_elimination).
+
+Parameters: <br>
+None
+
+Return value: <br>
+The row reduced echelon form of *this* matrix (Matrix)
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {0.0, 1.0, 4.0}, {2.0, 4.0, 6.0}, {3.0, 0.0, 1.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print();
+	std::cout << std::endl;
+	LinearAlgebraLibrary::Matrix retMat = mat.rref();
+	retMat.print();
+}
+```
+
+Output:
+```cpp
+0.0 1.0 4.0
+2.0 4.0 6.0
+3.0 0.0 1.0
+
+1.0 0.0 0.0
+0.0 1.0 0.0
+0.0 0.0 1.0
+```
+
+### LinearAlgebraLibrary::Matrix power
+
+Raises *this* matrix to a given power, must be a square matrix
+
+Parameters: <br>
+pow
+: The power to raise the matrix
+
+Return value: <br>
+The matrix raised to a power (Matrix)
+
+Throws Exception:  <br>
+Yes
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0}, {3.0, 4.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print();
+	std::cout << std::endl;
+	LinearAlgebraLibrary::Matrix retMat = mat.power(2);
+	retMat.print();
+}
+```
+
+Output:
+```cpp
+1.0 2.0
+3.0 4.0
+
+7.0 10.0
+15.0 22.0
+```
+
+### LinearAlgebraLibrary::Matrix print
+
+Prints the elements of *this* matrix
+
+Parameters: <br>
+None
+
+Return value: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0}, {3.0, 4.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print();
+}
+```
+
+Output:
+```cpp
+1.0 2.0
+3.0 4.0
+```
+
+### LinearAlgebraLibrary::Matrix apply
+
+Applies a function to all elements in the matrix
+
+Parameters: <br>
+fn
+: function that takes in double and returns a double
+
+Return value: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0}, {3.0, 4.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print();
+	std::cout << std::endl;
+	mat.apply([](double x) {return pow(x, 2);});
+	mat.print();
+}
+```
+
+Output:
+```cpp
+1.0 2.0
+3.0 4.0
+
+1.0 4.0
+9.0 16.0
+```
+
+### LinearAlgebraLibrary::Matrix scalar
+
+Multiplies all elements by the given scalar param
+
+Parameters: <br>
+scalarMultiple
+: value that will be multiplied to every element, must be a double
+
+Return value: <br>
+None
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {2.0, 5.0}, {5.0, 12.0}, {3.0, 9.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print();
+	std::cout << std::endl;
+	mat.scalar(2.0});
+	mat.print();
+}
+```
+
+Output:
+```cpp
+2.0 5.0
+5.0 12.0
+3.0 9.0
+
+4.0 10.0
+10.0 24.0
+6.0 18.0
+```
+
+### LinearAlgebraLibrary::Matrix copy
+
+Copies *this* matrix object and creates another
+
+Parameters: <br>
+None
+
+Return value: <br>
+Copy of *this* matrix (Matrix)
+
+Throws Exception:  <br>
+No
+
+Example:
+```cpp
+int main() {
+	std::vector<std::vector<double>> temp{ {1.0, 2.0}, {3.0, 4.0} };
+	LinearAlgebraLibrary::Matrix mat(temp);
+	mat.print();
+	std::cout << std::endl;
+	LinearAlgebraLibrary::Matrix retMat = mat.copy();
+	mat.print();
+}
+```
+
+Output:
+```cpp
+1.0 2.0
+3.0 4.0
+
+1.0 2.0
+3.0 4.0
+```
+
 ## Vec Class
 
 ### LinearAlgebraLibrary::Vec Constructor 1
@@ -988,7 +1384,6 @@ Constructors a Vec object with a vector a parameter as the given data
 Parameters: <br>
 data 
 : a vector of doubles
-
 
 Throws Exception:  <br>
 No
@@ -1014,7 +1409,6 @@ Constructors a Vec object with a given size and fills all vector with 0.0
 Parameters: <br>
 size
 : an int containing desired size, requires size greater than or equal to 0
-
 
 Throws Exception:  <br>
 Yes
