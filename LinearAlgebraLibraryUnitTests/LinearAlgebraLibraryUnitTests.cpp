@@ -463,7 +463,7 @@ namespace LinearAlgebraLibraryUnitTests
 		{
 			std::vector<std::vector<double>> testVec{ {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 0.0} };
 			LinearAlgebraLibrary::Matrix testMatrix(testVec);
-			LinearAlgebraLibrary::Matrix temp = testMatrix.getNulSpace();
+			LinearAlgebraLibrary::Matrix temp = testMatrix.getNulSpace(); 
 			Assert::AreEqual(0.0, temp.getValue(0, 0));
 			Assert::AreEqual(0.0, temp.getValue(1, 0));
 			Assert::AreEqual(0.0, temp.getValue(2, 0));
