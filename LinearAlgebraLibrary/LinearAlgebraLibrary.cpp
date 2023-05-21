@@ -330,15 +330,13 @@ LinearAlgebraLibrary::Matrix LinearAlgebraLibrary::Matrix::getNulSpace() {
 
 	if (pivotColumns.size() == this->getNumColumns()) return LinearAlgebraLibrary::Matrix(1); // lin ind
 
-	std::vector<std::vector<double>> retVec; 
+	std::vector<std::vector<double>> retVec(this->getNumRows(), std::vector<double>(this->getNumColumns() - pivotColumns.size()));
 	for (int i = 0; i < this->getNumRows(); i++) {
-		std::vector<double> temp;
 		for (int j = 0; j < this->getNumColumns(); j++) {
 			if (std::find(pivotColumns.begin(), pivotColumns.end(), j) == pivotColumns.end()) {
-				temp.push_back(this->getValue(i, j));
+				retVec[i][j] = this->getValue(i, j);
 			}
 		}
-		retVec.push_back(temp);
 	}
 	return LinearAlgebraLibrary::Matrix(retVec);
 }
